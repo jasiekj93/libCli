@@ -2,13 +2,14 @@
 
 #include <cstddef>
 
-namespace Terminal
+namespace Cli
 {
     template<size_t SIZE>
     class InputBuffer
     {
     public:
         InputBuffer();
+
 
         bool Put(char);
         void Clear();
@@ -18,9 +19,10 @@ namespace Terminal
         bool Delete();
         
         inline const auto Data() const { return _data; }
-        inline const auto Counter() const { return _counter; }
+        inline const auto Count() const { return _count; }
         inline const auto Cursor() const { return _cursor; }
 
+        inline auto operator[](size_t i) const { return _data[i]; }
     private:
         char _data[SIZE];
         size_t _count;
@@ -28,4 +30,4 @@ namespace Terminal
     };
 }
 
-#include <libTerminal/InputBuffer.tpp>
+#include <libCli/InputBuffer.tpp>

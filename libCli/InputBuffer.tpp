@@ -1,11 +1,11 @@
 #pragma once
 
-namespace Terminal
+namespace Cli
 {
     template<size_t SIZE>
     InputBuffer<SIZE>::InputBuffer()
-        : _cursor(0)
-        , _count(0)
+        : _count(0)
+        , _cursor(0)
     {
     }
 
@@ -21,6 +21,7 @@ namespace Terminal
             _count++;
         
         _cursor++;
+        return true;
     }
 
     template<size_t SIZE>
@@ -54,6 +55,7 @@ namespace Terminal
     template<size_t SIZE>
     bool InputBuffer<SIZE>::Delete()
     {
-        if(_cursor)
+        //if(_cursor)
+        return false;
     }
 }
