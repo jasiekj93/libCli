@@ -4,24 +4,21 @@
 # ------------------------------------------------
 
 # Target
-TARGET = libCli
-PLATFORM = ARM
+TARGET = libCppUTest
+#PLATFORM = CortexM7
+PLATFORM = Win32
 
-ifeq ($(PLATFORM), Win32)
-TARGET := $(TARGET)Win32
+ifeq (PLATFORM, Win32)
+TARGET += Win32
 endif
 
 # debug
 DEBUG = 1
-OPT = -O0
-
-# external libraries
-EXTERNAL_NAMES = \
-CppUTest \
+OPT = -Og
 
 # directories
 BUILD_DIR = build/$(TARGET)
-LIB_DIR = lib
+LIB_DIR = lib/$(PLATFORM)
 
 # toolchain
 ifeq ($(PLATFORM), Win32)
@@ -30,6 +27,7 @@ else
 PREFIX = arm-none-eabi-
 endif
 
+CC = $(PREFIX)gcc
 CXX = $(PREFIX)g++
 AS = $(PREFIX)gcc -x assembler-with-cpp
 CP = $(PREFIX)objcopy
@@ -50,17 +48,27 @@ endif
 
 # sources 
 CXX_SOURCES =  \
-$(wildcard $(TARGET)/*.cpp) \
+$(wildcard CppUTest/*.cpp) \
 
 # includes
 CXX_INCLUDES =  \
--I. \
+-Iinclude \
+
+#defines
+ifeq ($(PLATFORM), Win32)
+USE_STD_LIB = 1
+else
+USE_STD_LIB = 0
+endif
+
+CXX_DEFS = \
+-DCPPUTEST_USE_STD_CPP_LIB=$(USE_STD_LIB)
 
 # gcc flags
-CXXFLAGS = $(MCU) $(CXX_DEFS) $(CXX_INCLUDES) $(OPT) -std=c++17 -Wall  
+CXXFLAGS = $(MCU) $(CXX_DEFS) $(CXX_INCLUDES) $(OPT) -std=c++17 -Wall 
 
 ifneq ($(PLATFORM), Win32)
-CXXFLAGS += -fdata-sections -ffunction-sections -ffreestanding -fno-exceptions
+CXXFLAGS += -fdata-sections -ffunction-sections -ffreestanding -fno-exceptions -nostdlib
 endif
 
 ifeq ($(DEBUG), 1)
@@ -70,26 +78,16 @@ endif
 # Generate dependency information
 CXXFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 
-.PHONY: all externals library winLibrary tests print clean
+.PHONY: all print clean
 
 # build all
-all: externals library winLibrary tests
+all: $(LIB_DIR)/$(TARGET).a
 
-externals: 
-	@echo Making external libraries
-	@for library in $(EXTERNAL_NAMES); do \
-		$(MAKE) -C external/$$library ; \
-	done
+print-%: ; @echo $* = $($*)
 
-library: $(LIB_DIR)/$(TARGET).a
-
-winLibrary:
-	$(MAKE) -C . library PLATFORM=Win32
-
-tests:
-	$(MAKE) -C tests
-
-print-%  : ; @echo $* = $($*)
+# list of objects
+OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(CXX_SOURCES:.cpp=.o)))
+vpath %.cpp $(sort $(dir $(CXX_SOURCES)))
 
 # list of C++ objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(CXX_SOURCES:.cpp=.o)))
@@ -110,7 +108,7 @@ $(BUILD_DIR):
 	mkdir -p $@		
 
 $(LIB_DIR):
-	mkdir $@
+	mkdir -p $@
 
 # clean up
 clean:

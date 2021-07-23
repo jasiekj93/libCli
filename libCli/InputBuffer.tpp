@@ -54,6 +54,6 @@ namespace Terminal
     template<size_t SIZE>
     bool InputBuffer<SIZE>::Delete()
     {
-        //TODO
+        if(_cursor)
     }
 }

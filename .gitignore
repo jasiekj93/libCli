@@ -1,0 +1,6 @@
+build
+lib
+test
+
+external/CppUTest/build
+external/CppUTest/lib
