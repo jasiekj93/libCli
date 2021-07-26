@@ -8,7 +8,7 @@ TARGET = testCli
 
 # debug
 DEBUG = 1
-OPT = -Og
+OPT = -O0
 
 # directories
 BUILD_DIR = ../build/$(TARGET)
@@ -22,7 +22,7 @@ LIBRARY_INCLUDES = \
 -I$(TEST_LIB_DIR)/include \
 
 LIBRARY_FLAGS = \
--lCli\
+-lCliWin32\
 -lCppUTest \
 
 LIBRARY_SEARCH_PATH = \
@@ -44,6 +44,7 @@ MCU = -m32
 # sources 
 CXX_SOURCES =  \
 $(wildcard *.cpp) \
+$(wildcard Utils/*.cpp) \
 
 # includes
 CXX_INCLUDES =  \

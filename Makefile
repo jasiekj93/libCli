@@ -50,7 +50,8 @@ endif
 
 # sources 
 CXX_SOURCES =  \
-$(wildcard $(TARGET)/*.cpp) \
+$(wildcard libCli/*.cpp) \
+$(wildcard libCli/Utils/*.cpp) \
 
 # includes
 CXX_INCLUDES =  \
