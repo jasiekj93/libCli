@@ -22,7 +22,7 @@ TEST_GROUP(StringCircularLifoTest)
 
 TEST(StringCircularLifoTest, Constructor)
 {
-    StringCircularLifo<SIZE, DEPTH> queue;
+    StringCircularLifo queue(SIZE, DEPTH);
 
     CHECK_EQUAL(0, queue.Count());
     CHECK(nullptr == queue.Get(0));
@@ -30,7 +30,7 @@ TEST(StringCircularLifoTest, Constructor)
 
 TEST(StringCircularLifoTest, Push_One)
 {
-    StringCircularLifo<SIZE, DEPTH> queue;
+    StringCircularLifo queue(SIZE, DEPTH);
     const char * text = "Hello";
 
     CHECK(queue.Push(text));
@@ -42,7 +42,7 @@ TEST(StringCircularLifoTest, Push_One)
 
 TEST(StringCircularLifoTest, Push_TooBig)
 {
-    StringCircularLifo<SIZE, DEPTH> queue;
+    StringCircularLifo queue(SIZE, DEPTH);
     const char * text = "Very Big Hello";
 
     CHECK_FALSE(queue.Push(text));
@@ -53,7 +53,7 @@ TEST(StringCircularLifoTest, Push_TooBig)
 
 TEST(StringCircularLifoTest, Push_MoreThanDepth)
 {
-    StringCircularLifo<SIZE, DEPTH> queue;
+    StringCircularLifo queue(SIZE, DEPTH);
     const char * texts[] = { 
         "Hello",
         "How",
@@ -72,7 +72,7 @@ TEST(StringCircularLifoTest, Push_MoreThanDepth)
 
 TEST(StringCircularLifoTest, Push_OverwriteTwoTimes)
 {
-    StringCircularLifo<SIZE, DEPTH> queue;
+    StringCircularLifo queue(SIZE, DEPTH);
     const char * texts[] = { 
         "Hello",
         "How",

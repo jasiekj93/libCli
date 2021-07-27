@@ -16,5 +16,5 @@ namespace Cli
         virtual ~IInputLineObserver() {}
 
         virtual void ReceivedInputLineCallback(const char *) = 0;
-    }
+    };
 }

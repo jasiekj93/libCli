@@ -45,6 +45,7 @@ MCU = -m32
 CXX_SOURCES =  \
 $(wildcard *.cpp) \
 $(wildcard Utils/*.cpp) \
+$(wildcard Mock/*.cpp) \
 
 # includes
 CXX_INCLUDES =  \

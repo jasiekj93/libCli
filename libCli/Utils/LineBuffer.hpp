@@ -12,11 +12,11 @@
 
 namespace Cli::Utils
 {
-    template<size_t SIZE>
     class LineBuffer
     {
     public:
-        LineBuffer();
+        LineBuffer(size_t);
+        ~LineBuffer();
 
         bool Put(char);
         bool PutString(const char *);
@@ -37,10 +37,12 @@ namespace Cli::Utils
         void _CopyFrom(const char *);
 
     private:
-        char _data[SIZE + 1];
+        char *_data;
+        const size_t _size;
         size_t _count;
         size_t _cursor;
+
+        LineBuffer(const LineBuffer &) = delete;
+        auto operator=(const LineBuffer &) = delete;
     };
 }
-
-#include <libCli/Utils/LineBuffer.tpp>

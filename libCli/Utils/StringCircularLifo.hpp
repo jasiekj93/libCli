@@ -12,23 +12,27 @@
 
 namespace Cli::Utils
 {
-    template<size_t SIZE, size_t DEPTH>
     class StringCircularLifo
     {
     public:
-        StringCircularLifo();
+        StringCircularLifo(size_t size, size_t depth);
+        ~StringCircularLifo();
 
         bool Push(const char *);
         const char * Get(size_t) const;
         void Clear();
 
-        inline auto Count() const { return _count;}
+        inline auto Count() const { return _count; }
     
     private:
-        char _data[DEPTH][SIZE + 1];
+        const size_t _size;
+        const size_t _depth;
+
+        char **_data;
         int _cursor;
         size_t _count;
+
+        StringCircularLifo(const StringCircularLifo &) = delete;
+        auto operator=(const StringCircularLifo &) = delete;
     };
 };
-
-#include <libCli/Utils/StringCircularLifo.tpp>

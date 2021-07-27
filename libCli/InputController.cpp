@@ -1,67 +1,144 @@
 #include "InputController.hpp"
+#include <cctype>
+#include <cstring>
 
 using namespace Cli;
 
-InputController::InputController(IOutput &output, IInputLineObserver &observer)
+InputController::InputController(IOutputController &output, 
+    IInputLineObserver &observer,
+    Utils::LineBufferWithMemory &buffer)
     : _output(output)
     , _observer(observer)
+    , _buffer(buffer)
 {
 }
 
 void InputController::ReceivedCharCallback(char c)
 {
-    if(_ProcessChar(c) == true)
-        _output.PutChar(c);
+    if(_ProcessControlChar(c) == true)
+        return;
+    
+    if(std::isprint(c))
+    {
+        if(_buffer.Put(c) == true)
+            _output.PutChar(c);
+    }
 }
 
-
-bool InputController::_ProcessChar(char c)
+void InputController::ReceivedStringCallback(const char *string)
 {
-    if(c == '\n')
-        return _ProcessNewLine();
-    else if(_controlChar.Count() > 0 || c == ControlCharacter::ESCAPE_CHAR)
-        return _ProcessControlChar(c);
-    else
-        return _ProcessPrintableChar(c);
+    auto length = std::strlen(string);
+
+    for(size_t i = 0; i < length; i++)
+        ReceivedCharCallback(string[i]);
 }
 
 bool InputController::_ProcessControlChar(char c)
 {
-    auto type = _PutControlChar(c);
-
-    switch (type)
-    {
-    case /* constant-expression */:
-        /* code */
-        break;
-    
-    default:
-        break;
-    }
+    if(c == '\e')
+        return _ProcessEscapeChar();
+    else if(c == '\n')
+        return _ProcessNewLine();
+    else if(c == '\b')
+        return _ProcessBackspace();
+    else if(_controlChar.IsNotEmpty())
+        return _ProcessConrolSequence(c);
+    else
+        return false;
 }
 
-ControlCharacter::Type InputController::_PutControlChar(char c)
+bool InputController::_ProcessEscapeChar()
 {
-    auto type = ControlCharacter::Type::Unknown;
-
-    if(c == ControlCharacter::ESCAPE_CHAR)
-    {
-        _controlChar.Clear();
-        _controlChar.Put(c);
-    }
-    else if(_controlChar.Count() > 0)
-    {
-        if(_controlChar.Put(c) == false)
-            _controlChar.Clear();
-        else
-            type = _controlChar.GetType();
-    }
-
-    return type;
+    _controlChar.Clear();
+    _controlChar.Put('\e');
+    return true;
 }
 
 bool InputController::_ProcessNewLine()
 {
+    _output.NewLine();
+    _observer.ReceivedInputLineCallback(_buffer.Data());
+    _buffer.ClearAndMemorize();
 
+    return true;
 }
 
+bool InputController::_ProcessBackspace()
+{
+    if(_buffer.MoveCursorLeft() == true)
+    {
+        _buffer.Delete();
+        _output.Backspace();
+    }
+
+    return true;
+}
+
+bool InputController::_ProcessConrolSequence(char c)
+{
+    _controlChar.Put(c);
+
+    if(_ProcessControlSequenceByType() == true)
+        _controlChar.Clear();
+
+    if(_controlChar.IsFull())
+        _controlChar.Clear();
+    
+    return true;
+}
+
+bool InputController::_ProcessControlSequenceByType()
+{
+    auto type = _controlChar.GetType();
+    
+    switch(type)
+    {
+        case ControlChar::Type::Delete:
+            if(_buffer.Delete() == true)
+                _output.Delete();
+            break;
+        case ControlChar::Type::ArrowLeft:
+            if(_buffer.MoveCursorLeft() == true)
+                _output.MoveCursorLeft();
+            break;
+        case ControlChar::Type::ArrowRight:
+            if (_buffer.MoveCursorRight() == true)
+                _output.MoveCursorRight();
+            break;
+        case ControlChar::Type::End:
+            _MoveEnd();
+            break;
+        case ControlChar::Type::Home:
+            _MoveHome();
+            break;
+        case ControlChar::Type::ArrowUp:
+            if(_buffer.HasPrevious() == true)
+            {
+                _ClearLine();
+                _buffer.SetPrevious();
+                _output.PutString(_buffer.Data());
+            }
+        default:
+            return false;
+    }
+
+    return true;
+}
+
+void InputController::_MoveHome()
+{
+    while(_buffer.MoveCursorLeft())
+        _output.MoveCursorLeft();
+}
+
+void InputController::_MoveEnd()
+{
+    while(_buffer.MoveCursorRight())
+        _output.MoveCursorRight();
+}
+
+void InputController::_ClearLine()
+{
+    _MoveEnd();
+    _output.Backspace(_buffer.Count());
+}

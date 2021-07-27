@@ -7,6 +7,7 @@
  */
 
 #include <libCli/Utils/LineBufferWithMemory.hpp>
+#include <cstring>
 
 #include <CppUTest/CommandLineTestRunner.h>
 
@@ -22,7 +23,7 @@ TEST_GROUP(LineBufferWithMemoryTest)
 
 TEST(LineBufferWithMemoryTest, Constructor)
 {
-    LineBufferWithMemory<DEPTH, SIZE> buffer;
+    LineBufferWithMemory buffer(SIZE, DEPTH);
 
     CHECK_EQUAL(0, buffer.Count());
     CHECK_EQUAL(0, buffer.Cursor());
@@ -30,7 +31,7 @@ TEST(LineBufferWithMemoryTest, Constructor)
 
 TEST(LineBufferWithMemoryTest, SetPrevious)
 {
-    LineBufferWithMemory<DEPTH, SIZE> buffer;
+    LineBufferWithMemory buffer(SIZE, DEPTH);
 
     const char * strings[] =
     {
@@ -55,7 +56,7 @@ TEST(LineBufferWithMemoryTest, SetPrevious)
 
 TEST(LineBufferWithMemoryTest, SetPrevious_NoPrevious)
 {
-    LineBufferWithMemory<DEPTH, SIZE> buffer;
+    LineBufferWithMemory buffer(SIZE, DEPTH);
 
     const char * strings[] =
     {
@@ -70,7 +71,7 @@ TEST(LineBufferWithMemoryTest, SetPrevious_NoPrevious)
 
 TEST(LineBufferWithMemoryTest, SetNext)
 {
-    LineBufferWithMemory<DEPTH, SIZE> buffer;
+    LineBufferWithMemory buffer(SIZE, DEPTH);
 
     const char * strings[] =
     {
@@ -89,7 +90,7 @@ TEST(LineBufferWithMemoryTest, SetNext)
 
 TEST(LineBufferWithMemoryTest, SetCurrent)
 {
-    LineBufferWithMemory<DEPTH, SIZE> buffer;
+    LineBufferWithMemory buffer(SIZE, DEPTH);
 
     const char * strings[] =
     {

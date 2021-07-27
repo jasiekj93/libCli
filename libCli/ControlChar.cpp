@@ -12,6 +12,8 @@ const ControlChar ControlChar::_knownCharacters[ControlChar::KNOWN_TYPES] =
     { '\e', '[', 'D' },
     { '\e', '[', 'C' },
     { '\e', '[', '3', '~' },
+    { '\e', '[', '1', '~' },
+    { '\e', '[', '4', '~' },
 };
 
 ControlChar::ControlChar()
@@ -31,27 +33,31 @@ ControlChar::ControlChar(std::initializer_list<char> list)
     if(list.size() <= MAX_SIZE)
     {
         std::copy(list.begin(), list.end(), std::begin(_data));
-        _count = list.size();
-        _data[_count] = '\0';
+        _data[list.size()] = '\0';
     }
+}
+
+ControlChar::ControlChar(const char *string)
+{
+   std::strcpy(_data, string);
 }
 
 
 bool ControlChar::Put(char c)
 {
-    if(_count == MAX_SIZE)
+    auto length = std::strlen(_data);
+
+    if(length == MAX_SIZE)
         return false;
     
-    _data[_count++] = c;
-    _data[_count] = '\0';
-    
+    _data[length++] = c;
+    _data[length] = '\0';
     return true;
 }
 
 void ControlChar::Clear()
 {
-    _count = 0;
-    _data[_count] = 0;
+    _data[0] = '\0';
 }
 
 ControlChar::Type ControlChar::GetType()
@@ -63,10 +69,23 @@ ControlChar::Type ControlChar::GetType()
     return Type::Unknown;
 }
 
+bool ControlChar::IsFull()
+{
+    return (std::strlen(_data) == MAX_SIZE);
+}
+
+bool ControlChar::IsNotEmpty()
+{
+    return (IsEmpty() == false);
+}
+
+bool ControlChar::IsEmpty()
+{
+    return (std::strlen(_data) == 0);
+}
+
+
 bool ControlChar::operator==(const ControlChar &second)
 {
-    if(this->_count != second._count)
-        return false;
-
     return (std::strcmp(this->_data, second._data) == 0);
 }

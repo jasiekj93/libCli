@@ -17,8 +17,7 @@ namespace Cli
     {
     public:
         static constexpr size_t MAX_SIZE = 4;
-        static constexpr size_t KNOWN_TYPES = 5;
-        static constexpr char ESCAPE_CHAR = '\e';
+        static constexpr size_t KNOWN_TYPES = 7;
 
         enum class Type
         {
@@ -27,30 +26,35 @@ namespace Cli
             ArrowLeft,
             ArrowRight,
             Delete,
+            Home,
+            End,
 
             Unknown,
         };
 
         ControlChar();
         ControlChar(Type);
+        ControlChar(std::initializer_list<char>);
+        ControlChar(const char *);
 
         bool Put(char);
         void Clear();
         Type GetType();
         
-        inline auto Count() const { return _count; }
+        bool IsFull();
+        bool IsNotEmpty();
+        bool IsEmpty();
+        
         inline auto Data() const { return _data; }
         inline auto operator[](size_t i) const { return _data[i]; }
 
         bool operator==(const ControlChar &);
 
     protected:
-        ControlChar(std::initializer_list<char>);
 
     private:
         static const ControlChar _knownCharacters[KNOWN_TYPES];
 
         char _data[MAX_SIZE + 1];
-        size_t _count;
     };
 }

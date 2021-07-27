@@ -7,6 +7,7 @@
  */
 
 #include <libCli/Utils/LineBuffer.hpp>
+#include <cstring>
 
 #include <CppUTest/CommandLineTestRunner.h>
 
@@ -21,7 +22,7 @@ TEST_GROUP(LineBufferTest)
 
 TEST(LineBufferTest, Constructor)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
 
     CHECK_EQUAL(0, buffer.Count());
     CHECK_EQUAL(0, buffer.Cursor());
@@ -29,7 +30,7 @@ TEST(LineBufferTest, Constructor)
 
 TEST(LineBufferTest, AddOneChar)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char a = 'A';
 
     CHECK(buffer.Put(a));
@@ -42,7 +43,7 @@ TEST(LineBufferTest, AddOneChar)
 
 TEST(LineBufferTest, AddString)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char string[] = "Hello";
 
     CHECK(buffer.PutString(string));
@@ -54,7 +55,7 @@ TEST(LineBufferTest, AddString)
 
 TEST(LineBufferTest, AddMoreThanSize)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char c = 'A';
 
     for(size_t i = 0; i < SIZE; i++)
@@ -71,7 +72,7 @@ TEST(LineBufferTest, AddMoreThanSize)
 
 TEST(LineBufferTest, Clear)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char c = 'A';
 
     for(size_t i = 0; i < SIZE; i++)
@@ -88,7 +89,7 @@ TEST(LineBufferTest, Clear)
 
 TEST(LineBufferTest, MoveCursorLeft)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char a = 'A';
     char b = 'B';
 
@@ -104,14 +105,14 @@ TEST(LineBufferTest, MoveCursorLeft)
 
 TEST(LineBufferTest, MoveCursorLeft_IsEmpty)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
 
     CHECK_FALSE(buffer.MoveCursorLeft());
 }
 
 TEST(LineBufferTest, MoveCursorRight)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char a = 'A';
     char b = 'B';
     char c = 'C';
@@ -133,7 +134,7 @@ TEST(LineBufferTest, MoveCursorRight)
 
 TEST(LineBufferTest, MoveCursorRight_IsOnTheEnd)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char a = 'A';
     char b = 'B';
     
@@ -145,7 +146,7 @@ TEST(LineBufferTest, MoveCursorRight_IsOnTheEnd)
 
 TEST(LineBufferTest, Delete)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char a = 'A';
     char b = 'B';
     
@@ -162,7 +163,7 @@ TEST(LineBufferTest, Delete)
 
 TEST(LineBufferTest, Delete_InTheMiddle)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char a = 'A';
     char b = 'B';
     char c = 'C';
@@ -183,7 +184,7 @@ TEST(LineBufferTest, Delete_InTheMiddle)
 
 TEST(LineBufferTest, Delete_OneChar)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char a = 'A';
     
     buffer.Put(a);
@@ -197,14 +198,14 @@ TEST(LineBufferTest, Delete_OneChar)
 
 TEST(LineBufferTest, IsEmpty)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     
     CHECK_FALSE(buffer.Delete());
 }
 
 TEST(LineBufferTest, Delete_OnTheEnd)
 {
-    LineBuffer<SIZE> buffer;
+    LineBuffer buffer(SIZE);
     char a = 'A';
     
     buffer.Put(a);

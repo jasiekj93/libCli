@@ -13,15 +13,18 @@
 
 namespace Cli::Utils
 {
-    template<size_t DEPTH, size_t SIZE>
-    class LineBufferWithMemory : public LineBuffer<SIZE>
+    class LineBufferWithMemory : public LineBuffer
     {
     public:
-        LineBufferWithMemory();
+        LineBufferWithMemory(size_t size, size_t depth);
+        ~LineBufferWithMemory();
 
         bool SetPrevious();
         bool SetNext();
         void SetCurrent();
+
+        bool HasNext();
+        bool HasPrevious();
 
         void ClearAndMemorize();
 
@@ -29,10 +32,14 @@ namespace Cli::Utils
         inline auto ClearMemory() { _lifo.Clear(); }
 
     private:
-        char _currentData[SIZE + 1];
-        StringCircularLifo<SIZE, DEPTH> _lifo;
+        const size_t _size;
+        const size_t _depth;
+
+        char *_currentData;
+        StringCircularLifo _lifo;
         size_t _index;
+
+        LineBufferWithMemory(const LineBufferWithMemory &) = delete;
+        auto operator=(const LineBufferWithMemory &) = delete;
     };
 }
-
-#include <libCli/Utils/LineBufferWithMemory.tpp>

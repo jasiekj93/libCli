@@ -1,0 +1,198 @@
+
+/**
+ * @file InputController.test.cpp
+ * @author Adrian Szczepanski
+ * @date 23-07-2021
+ * @brief 
+ * @details
+ */
+
+#include <libCli/InputController.hpp>
+#include <tests/Mock/InputLineObserver.hpp>
+#include <tests/Mock/OutputController.hpp>
+#include <cstring>
+
+#include <CppUTest/CommandLineTestRunner.h>
+
+using namespace Cli;
+
+static constexpr size_t SIZE = 5;
+static constexpr size_t DEPTH = 3;
+
+Mock::InputLineObserver *inputObserver;
+Mock::OutputController *output;
+Utils::LineBufferWithMemory *buffer;
+
+TEST_GROUP(InputControllerTest)
+{
+    void setup()
+    {
+        inputObserver = new Mock::InputLineObserver(SIZE);
+        output = new Mock::OutputController(SIZE);
+        buffer = new Utils::LineBufferWithMemory(SIZE, DEPTH);
+    }
+
+    void teardown()
+    {
+        delete inputObserver;
+        delete output;
+        delete buffer;
+    }
+};
+
+TEST(InputControllerTest, OneChar)
+{   
+    char c = 'A';
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedCharCallback(c);
+
+    CHECK_EQUAL(c, (*buffer)[0]);
+    CHECK_EQUAL(c, output->line[0]);
+}
+
+TEST(InputControllerTest, OneChar_NotPrintable)
+{
+    char c = '\t';
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedCharCallback(c);
+
+    CHECK_EQUAL(0, buffer->Count());
+    CHECK_EQUAL(0, output->line.Count());
+}
+
+TEST(InputControllerTest, ArrowLeft)
+{
+    char a = 'A';
+    char b = 'B';
+
+    ControlChar arrowLeft(ControlChar::Type::ArrowLeft);
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedCharCallback(a);
+    controller.ReceivedStringCallback(arrowLeft.Data());
+    controller.ReceivedCharCallback(b);
+
+    CHECK_EQUAL(b, (*buffer)[0]);
+    CHECK_EQUAL(b, output->line[0]);
+}
+
+TEST(InputControllerTest, ArrowRight)
+{
+    char a = 'A';
+    char b = 'B';
+
+    ControlChar arrowLeft(ControlChar::Type::ArrowLeft);
+    ControlChar arrowRight(ControlChar::Type::ArrowRight);
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedCharCallback(a);
+    controller.ReceivedStringCallback(arrowLeft.Data());
+    controller.ReceivedStringCallback(arrowRight.Data());
+    controller.ReceivedCharCallback(b);
+
+    CHECK_EQUAL(b, (*buffer)[1]);
+    CHECK_EQUAL(b, output->line[1]);
+}
+
+TEST(InputControllerTest, Home)
+{
+    const char expected[] = "Aext";
+    const char text[] = "Text";
+    char c = 'A';
+
+    ControlChar home(ControlChar::Type::Home);
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedStringCallback(text);
+    controller.ReceivedStringCallback(home.Data());
+    controller.ReceivedCharCallback(c);
+
+    STRCMP_EQUAL(expected, buffer->Data());
+    STRCMP_EQUAL(expected, output->line.Data());
+}
+
+TEST(InputControllerTest, End)
+{
+    const char expected[] = "TextA";
+    const char text[] = "Text";
+    char c = 'A';
+
+    ControlChar home(ControlChar::Type::Home);
+    ControlChar end(ControlChar::Type::End);
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedStringCallback(text);
+    controller.ReceivedStringCallback(home.Data());
+    controller.ReceivedStringCallback(end.Data());
+    controller.ReceivedCharCallback(c);
+
+    STRCMP_EQUAL(expected, buffer->Data());
+    STRCMP_EQUAL(expected, output->line.Data());
+}
+
+TEST(InputControllerTest, Delete)
+{
+    const char expected[] = "ext";
+    const char text[] = "Text";
+
+    ControlChar deleteChar(ControlChar::Type::Delete);
+     ControlChar home(ControlChar::Type::Home);
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedStringCallback(text);
+    controller.ReceivedStringCallback(home.Data());
+    controller.ReceivedStringCallback(deleteChar.Data());
+
+    STRCMP_EQUAL(expected, buffer->Data());
+    STRCMP_EQUAL(expected, output->line.Data());
+}
+
+TEST(InputControllerTest, Backspace)
+{
+    const char expected[] = "Tex";
+    const char text[] = "Text";
+
+    char backspace = '\b';
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedStringCallback(text);
+    controller.ReceivedCharCallback(backspace);
+
+    STRCMP_EQUAL(expected, buffer->Data());
+    STRCMP_EQUAL(expected, output->line.Data());
+}
+
+TEST(InputControllerTest, Enter)
+{
+    const char text[] = "Text";
+    char enter = '\n';
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedStringCallback(text);
+    controller.ReceivedCharCallback(enter);
+
+    CHECK_EQUAL(0, buffer->Count());
+    CHECK_EQUAL(0, output->line.Count());
+    STRCMP_EQUAL(text, output->previousLine);
+}
+
+TEST(InputControllerTest, ArrowUp)
+{
+    //TODO
+}
+
+TEST(InputControllerTest, ArrowDown)
+{
+    //TODO
+}

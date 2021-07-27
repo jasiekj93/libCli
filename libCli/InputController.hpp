@@ -1,31 +1,39 @@
 #pragma once
 
-#include <libCli/IOutput.hpp>
 #include <libCli/IInputLineObserver.hpp>
-#include <libCli/ControlCharacter.hpp>
+#include <libCli/ControlChar.hpp>
 #include <libCli/Utils/LineBufferWithMemory.hpp>
+#include <libCli/IOutputController.hpp>
 
 namespace Cli
 {
     class InputController
     {
     public:
-        InputController(IOutput &, IInputLineObserver &);
+        InputController(IOutputController &, 
+        IInputLineObserver &,
+        Utils::LineBufferWithMemory &);
 
         void ReceivedCharCallback(char);
+        void ReceivedStringCallback(const char *);
 
     protected:
-        bool _ProcessChar(char);
-        bool _ProcessControlChar(char);
+        bool _ProcessControlChar(char c);
+        bool _ProcessEscapeChar();
         bool _ProcessNewLine();
-        bool _ProcessPrintableChar(char);
-        ControlCharacter::Type _PutControlChar(char);
+        bool _ProcessBackspace();
+        bool _ProcessConrolSequence(char c);
+        bool _ProcessControlSequenceByType();
+
+        void _MoveHome();
+        void _MoveEnd();
+        void _ClearLine();
 
     private:
-        IOutput &_output;
+        IOutputController &_output;
         IInputLineObserver &_observer;
+        Utils::LineBufferWithMemory &_buffer;
 
-        ControlCharacter _controlChar;
-        Utils::LineBufferWithMemory<5, 10> _buffer;
+        ControlChar _controlChar;
     };
 }

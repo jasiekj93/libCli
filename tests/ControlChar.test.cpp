@@ -7,6 +7,7 @@
  */
 
 #include <libCli/ControlChar.hpp>
+#include <cstring>
 
 #include <CppUTest/CommandLineTestRunner.h>
 
@@ -21,42 +22,37 @@ TEST_GROUP(ControlCharTest)
 TEST(ControlCharTest, DefaultConstructor)
 {
     ControlChar character;
+
+    CHECK_EQUAL(0, std::strlen(character.Data()));
+    CHECK_EQUAL('\0', character[0]);
 }
 
-TEST(ControlCharTest, Put)
+TEST(ControlCharTest, InitalizerListConstructor)
 {
-    ControlChar character;
-    char a = 'A';
+    ControlChar character{ 'h', 'i' };
 
-    CHECK(character.Put(a));
-    CHECK_EQUAL(1, character.Count());
-    CHECK_EQUAL(a, character[0]);
-    CHECK_EQUAL('\0', character[1]);
+    CHECK_EQUAL(2, std::strlen(character.Data()));
+    CHECK_EQUAL('h', character[0]);
+    CHECK_EQUAL('i', character[1]);
+    CHECK_EQUAL('\0', character[2]);
 }
 
-TEST(ControlCharTest, Put_MoreThanMaxSize)
+TEST(ControlCharTest, StringConstructor)
 {
-    ControlChar character;
-    char a = 'A';
+    ControlChar character("hi");
 
-    for(unsigned int i = 0; i < ControlChar::MAX_SIZE; i++)
-        CHECK(character.Put(a));
-
-    CHECK_FALSE(character.Put(a));
-
-    CHECK_EQUAL(ControlChar::MAX_SIZE, character.Count());
-    CHECK_EQUAL('\0', character[ControlChar::MAX_SIZE]);
+    CHECK_EQUAL(2, std::strlen(character.Data()));
+    CHECK_EQUAL('h', character[0]);
+    CHECK_EQUAL('i', character[1]);
+    CHECK_EQUAL('\0', character[2]);
 }
 
 TEST(ControlCharTest, Clear)
 {
-    ControlChar character;
-    char a = 'A';
-
-    character.Put(a);
+    ControlChar character("hi");
     character.Clear();
 
-    CHECK_EQUAL(0, character.Count());
+    CHECK_EQUAL(0, std::strlen(character.Data()));
     CHECK_EQUAL('\0', character[0]);
 
 }
