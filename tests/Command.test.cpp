@@ -19,6 +19,17 @@ TEST_GROUP(CommandTest)
 
 };
 
+
+TEST(CommandTest, EmptyString)
+{
+    Command command;
+
+    CHECK(command.IsNull());
+    CHECK(nullptr == command.GetName());
+    CHECK_EQUAL(0, command.ArgumentCount());
+}
+
+
 TEST(CommandTest, OnlyName)
 {   
     const char text[] = "hello";
@@ -30,22 +41,39 @@ TEST(CommandTest, OnlyName)
     CHECK_EQUAL(0, command.ArgumentCount());
 }
 
-TEST(CommandTest, EmptyString)
+TEST(CommandTest, OnlyName_SpacesAtBeginning)
+{   
+    const char text[] = "   hello";
+    const char expectedName[] = "hello";
+
+    Command command(text);
+
+    CHECK_FALSE(command.IsNull());
+    STRCMP_EQUAL(expectedName, command.GetName());
+    CHECK_EQUAL(0, command.ArgumentCount());
+}
+
+TEST(CommandTest, TwoWords_NotAnArgument)
 {
-    Command command;
+    const char text[] = "hello world";
+
+    Command command(text);
 
     CHECK(command.IsNull());
     CHECK(nullptr == command.GetName());
     CHECK_EQUAL(0, command.ArgumentCount());
 }
 
-// TEST(CommandTest, TwoWords_NotAnArgument)
+// TEST(CommandTest, OneArgument)
 // {
-//     const char text[] = "hello world";
+//     const char text[] = "hello -a arg";
+//     const char expectedName[] = "hello";
 
 //     Command command(text);
 
-//     CHECK(command.IsNull());
-//     CHECK(nullptr == command.GetName());
-//     CHECK_EQUAL(0, command.ArgumentCount());
+//     CHECK_FALSE(command.IsNull());
+//     STRCMP_EQUAL(expectedName, command.GetName());
+//     CHECK_EQUAL(1, command.ArgumentCount());
+//     CHECK_EQUAL(1, command.ArgumentCount());
 // }
+

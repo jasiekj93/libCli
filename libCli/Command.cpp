@@ -19,17 +19,28 @@ Command::Command(const char *string)
 
     std::strcpy(_data, string);
     
-    _name = _FindWord(_data);
-    
+    _name = std::strtok(_data, " ");
+
     if(_name == nullptr)
         return;
-    
-    auto pointer = _FindEndOfWord(_name);
 
-    if(pointer == nullptr)
-        return;
+    char * token = std::strtok(nullptr, " "); 
 
-    
+    while(token != nullptr)
+    {
+        if(token[0] != '-')
+        {
+            _Clear();
+            return;
+        }
+
+        if(std::strlen(token) == 2)
+        {
+
+        }
+
+        token = std::strtok(nullptr, " ");
+    }
 }
 
 
@@ -48,38 +59,8 @@ size_t Command::ArgumentCount() const
     return 0;
 }
 
-
-char * Command::_FindWord(char *pointer)
-{
-    while((*pointer != '\0') &&
-        (std::isspace(*pointer) == true))
-        pointer++;
-
-    if(*pointer == '\0')
-        return nullptr;
-    else
-        return pointer;
-}
-
-char * Command::_FindEndOfWord(char *pointer)
-{
-    while((*pointer != '\0') &&
-        (std::isgraph(*pointer) == true))
-        pointer++;
-
-    if(*pointer == '\0')
-        return nullptr;
-    else
-        return pointer;
-}
-
-char * Command::_FindArgument(char *)
-{
-    return nullptr;
-}
-
 void Command::_Clear()
 {
-
+    _name = nullptr;
 }
 

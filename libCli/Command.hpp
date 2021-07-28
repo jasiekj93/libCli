@@ -15,9 +15,6 @@ namespace Cli
         size_t ArgumentCount() const;
 
     protected:
-        char *_FindWord(char *);
-        char *_FindEndOfWord(char *);
-        char *_FindArgument(char *);
         void _Clear();
 
     private:
