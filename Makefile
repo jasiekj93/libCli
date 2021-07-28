@@ -20,6 +20,7 @@ EXTERNAL_NAMES = \
 CppUTest \
 
 # directories
+BUILD_ROOT = build
 BUILD_DIR = build/$(TARGET)
 LIB_DIR = lib
 
@@ -112,6 +113,11 @@ $(BUILD_DIR):
 
 $(LIB_DIR):
 	mkdir $@
+
+# clean up
+rebuild:
+	rm -rf $(BUILD_ROOT)
+	$(MAKE) -C .
 
 # clean up
 clean:

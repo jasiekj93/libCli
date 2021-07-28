@@ -118,6 +118,15 @@ bool InputController::_ProcessControlSequenceByType()
                 _buffer.SetPrevious();
                 _output.PutString(_buffer.Data());
             }
+            break;
+        case ControlChar::Type::ArrowDown:
+            if(_buffer.HasNext() == true)
+            {
+                _ClearLine();
+                _buffer.SetNext();
+                _output.PutString(_buffer.Data());
+            }
+            break;
         default:
             return false;
     }

@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-namespace Terminal
+namespace Cli
 {
     template <typename T>
     struct Span

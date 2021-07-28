@@ -144,7 +144,7 @@ TEST(InputControllerTest, Delete)
     const char text[] = "Text";
 
     ControlChar deleteChar(ControlChar::Type::Delete);
-     ControlChar home(ControlChar::Type::Home);
+    ControlChar home(ControlChar::Type::Home);
 
     InputController controller(*output, *inputObserver, *buffer);
 
@@ -189,10 +189,40 @@ TEST(InputControllerTest, Enter)
 
 TEST(InputControllerTest, ArrowUp)
 {
-    //TODO
+    const char text1[] = "Text1";
+    const char text2[] = "Text2";
+    char enter = '\n';
+    ControlChar arrowUp(ControlChar::Type::ArrowUp);
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedStringCallback(text1);
+    controller.ReceivedCharCallback(enter);
+    controller.ReceivedStringCallback(text2);
+    controller.ReceivedStringCallback(arrowUp.Data());
+
+    STRCMP_EQUAL(text1, output->previousLine);
+    STRCMP_EQUAL(text1, output->line.Data());
+    STRCMP_EQUAL(text1, buffer->Data());
 }
 
 TEST(InputControllerTest, ArrowDown)
 {
-    //TODO
+    const char text1[] = "Text1";
+    const char text2[] = "Text2";
+    char enter = '\n';
+    ControlChar arrowUp(ControlChar::Type::ArrowUp);
+    ControlChar arrowDown(ControlChar::Type::ArrowDown);
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedStringCallback(text1);
+    controller.ReceivedCharCallback(enter);
+    controller.ReceivedStringCallback(text2);
+    controller.ReceivedStringCallback(arrowUp.Data());
+    controller.ReceivedStringCallback(arrowDown.Data());
+
+    STRCMP_EQUAL(text1, output->previousLine);
+    STRCMP_EQUAL(text2, output->line.Data());
+    STRCMP_EQUAL(text2, buffer->Data());
 }
