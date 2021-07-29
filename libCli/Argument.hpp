@@ -30,6 +30,8 @@ namespace Cli
 
         inline auto AsString() const { return _value; }
 
+        bool operator==(const Argument &) const;
+
     protected:
         bool _ContainsHexPrefix() const;
         bool _IsDecimal() const;

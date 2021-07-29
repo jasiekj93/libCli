@@ -1,7 +1,7 @@
 #pragma once
 
 #include <libCli/Configuration.hpp>
-#include <libCli/Utils/Buffer.hpp>
+#include <libCli/Utils/ArgumentBuffer.hpp>
 #include <libCli/Argument.hpp>
 
 namespace Cli
@@ -25,6 +25,6 @@ namespace Cli
     private:
         char _data[Configuration::MAX_COMMAND_LENGTH + 1];
         char *_name;
-        Utils::Buffer<Argument, Configuration::MAX_ARGUMENT_COUNT> _arguments;
+        Utils::ArgumentBuffer _arguments;
     };
 }

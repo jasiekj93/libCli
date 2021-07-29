@@ -19,7 +19,6 @@ namespace Cli
         inline auto Help() { return _help; }
         inline auto Arguments() { return _arguments; }
 
-
     private:
         char _name[Configuration::MAX_COMMAND_NAME + 1];
         char _help[Configuration::MAX_COMMAND_HELP_LENGTH + 1];

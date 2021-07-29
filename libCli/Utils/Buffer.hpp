@@ -10,7 +10,7 @@ namespace Cli::Utils
     public:
         Buffer();
 
-        bool Put(const T&);
+        virtual bool Put(const T&);
         void Clear();
 
         auto Count() const { return _count; }
@@ -18,7 +18,7 @@ namespace Cli::Utils
 
         const T& operator[](size_t i) const { return _data[i]; }
 
-    private:
+    protected:
         T _data[SIZE];
         size_t _count;
     };

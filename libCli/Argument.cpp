@@ -96,6 +96,22 @@ bool Argument::_ContainsHexPrefix() const
     return false;
 }
 
+bool Argument::operator==(const Argument &arg) const
+{
+    if(this->_name != arg._name)
+        return false;
+
+    if(this->_type != arg._type)
+        return false;
+
+    if(this->_value != nullptr &&
+        arg._value != nullptr)
+        return (std::strcmp(this->_value, arg._value) == 0);
+    else
+        return (this->_value == arg._value);
+}
+
+
 bool Argument::_IsDecimal() const
 {
     if(_value == nullptr)
