@@ -25,7 +25,7 @@ TEST(ArgumentTest, DefaultConstuctor)
 
     Argument arg;
 
-    CHECK(Argument::Type::Invalid == arg.GetType());
+    CHECK(Argument::Type::Empty == arg.GetType());
     CHECK_EQUAL(Argument::INVALID_NAME, arg.Name());
     CHECK(nullptr == arg.AsString());
     CHECK_FALSE(arg.AsDecimal(ul));
@@ -41,7 +41,7 @@ TEST(ArgumentTest, NullPointer)
 
     Argument arg(name, nullptr);
 
-    CHECK(Argument::Type::Invalid == arg.GetType());
+    CHECK(Argument::Type::Empty == arg.GetType());
     CHECK_EQUAL(name, arg.Name());
     CHECK(nullptr == arg.AsString());
     CHECK_FALSE(arg.AsDecimal(ul));

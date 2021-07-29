@@ -19,28 +19,11 @@ Command::Command(const char *string)
 
     std::strcpy(_data, string);
     
-    _name = std::strtok(_data, " ");
-
-    if(_name == nullptr)
+    if(_FindName() == false)
         return;
 
-    char * token = std::strtok(nullptr, " "); 
-
-    while(token != nullptr)
-    {
-        if(token[0] != '-')
-        {
-            _Clear();
-            return;
-        }
-
-        if(std::strlen(token) == 2)
-        {
-
-        }
-
-        token = std::strtok(nullptr, " ");
-    }
+    if(_FindArguments() == false)
+        _arguments.Clear();
 }
 
 
@@ -54,13 +37,78 @@ const char * Command::GetName() const
     return _name;
 }
 
-size_t Command::ArgumentCount() const
+bool Command::_FindName()
 {
-    return 0;
+    _name = std::strtok(_data, " ");
+
+    return (_name != nullptr);
 }
 
-void Command::_Clear()
+bool Command::_FindArguments()
 {
-    _name = nullptr;
+    char * token = std::strtok(nullptr, " ");
+    const char *name = nullptr; 
+
+    while(token != nullptr)
+    {
+        if(_HyphenCount(token) > 1)
+            return false;
+
+        if(token[0] == '-')
+        {
+            if(std::strlen(token) == 1)
+                return false;
+
+            if(name != nullptr)
+                 if(_arguments.Put(Argument(*name, nullptr)) == false)
+                    return false;
+
+            name = &token[1];
+
+            
+            if(std::strlen(token) > 2)
+            {
+                if(_arguments.Put(Argument(*name, &token[2])) == false)
+                    return false;
+                else
+                    name = nullptr;
+            }
+        }
+        else
+        {
+            if(name == nullptr)
+                return false;
+            else
+            {
+                if(_arguments.Put(Argument(*name, token)) == false)
+                    return false;
+                else
+                    name = nullptr;
+            }
+        }
+
+        token = std::strtok(nullptr, " ");
+    }
+
+
+    if(name != nullptr)
+        if(_arguments.Put(Argument(*name, nullptr)) == false)
+            return false;
+
+    return true;
 }
 
+unsigned int Command::_HyphenCount(const char *token) const
+{
+    unsigned int result = 0;
+
+    while (*token != '\0')
+    {
+        if(*token == '-')
+            result++;
+
+        token ++;
+    }
+    
+    return result;
+}

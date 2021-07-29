@@ -8,7 +8,7 @@ using namespace Cli;
 Argument::Argument()
     : _name(INVALID_NAME)
     , _value(nullptr)
-    , _type(Type::Invalid)
+    , _type(Type::Empty)
 {
 
 }
@@ -20,7 +20,7 @@ Argument::Argument(char c, const char *value)
     unsigned long long output;
 
     if(_value == nullptr)
-        _type = Type::Invalid;
+        _type = Type::Empty;
     else if(AsDecimal(output) == true)
         _type = Type::Decimal;
     else if(AsHex(output) == true)

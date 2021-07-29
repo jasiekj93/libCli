@@ -14,7 +14,7 @@ namespace Cli::Utils
         if(_count == SIZE)
             return false;
 
-        _buffer[_count++] = object;
+        _data[_count++] = object;
         return true;
     }
 

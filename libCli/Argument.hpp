@@ -13,8 +13,7 @@ namespace Cli
             Hex,
             String,
             Double,
-
-            Invalid
+            Empty
         };
 
         Argument();
