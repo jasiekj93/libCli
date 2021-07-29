@@ -41,6 +41,17 @@ TEST(CommandTest, OnlyName)
     CHECK_EQUAL(0, command.Arguments().Count());
 }
 
+TEST(CommandTest, TooLongNameName)
+{   
+    const char text[] = "helloThisIsVeryLongCommandTooBigToBeHandledByThisLibrary";
+
+    Command command(text);
+
+    CHECK(command.IsNull());
+    CHECK(nullptr == command.GetName());
+    CHECK_EQUAL(0, command.Arguments().Count());
+}
+
 TEST(CommandTest, OnlyName_SpacesAtBeginning)
 {   
     const char text[] = "   hello";

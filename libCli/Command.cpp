@@ -41,7 +41,16 @@ bool Command::_FindName()
 {
     _name = std::strtok(_data, " ");
 
-    return (_name != nullptr);
+    if(_name == nullptr)
+        return false;
+
+    if(std::strlen(_name) > Configuration::MAX_COMMAND_NAME)
+    {
+        _name = nullptr;
+        return false;
+    }
+    else
+        return true;
 }
 
 bool Command::_FindArguments()
