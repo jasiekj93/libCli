@@ -27,6 +27,9 @@ namespace Cli
         inline auto IsMandatory() const { return _isMandatory; }
         inline auto Help() const { return _help; }        
 
+        bool operator==(const ArgumentTemplate &) const;
+        bool operator!=(const ArgumentTemplate &) const;
+
     private:
         char _name;
         Argument::Type _type;

@@ -50,3 +50,22 @@ CommandTemplate::CommandTemplate(const char * string,
     for(auto argument : list)
         _arguments.Put(argument);    
 }
+
+
+bool CommandTemplate::operator==(const CommandTemplate &command) const
+{
+    if(std::strcmp(this->_name, command._name) != 0)
+        return false;
+
+    if(std::strcmp(this->_help, command._help) != 0)
+        return false;
+
+    if(this->_arguments.Count() != command._arguments.Count())
+        return false;
+
+    for(size_t i = 0; i < this->_arguments.Count(); i++)
+        if(this->_arguments[i] != command._arguments[i])
+            return false;
+            
+    return true;
+}

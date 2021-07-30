@@ -15,9 +15,12 @@ namespace Cli
         CommandTemplate(const char *name, std::initializer_list<ArgumentTemplate>);
         CommandTemplate(const char *name, const char *help, std::initializer_list<ArgumentTemplate>);
 
-        inline auto Name() { return _name; }
-        inline auto Help() { return _help; }
-        inline auto Arguments() { return _arguments; }
+        inline auto Name() const { return _name; }
+        inline auto Help() const { return _help; }
+        inline auto Arguments() const { return _arguments; }
+
+        bool operator==(const CommandTemplate &) const;
+        bool operator!=(const CommandTemplate &) const;
 
     private:
         char _name[Configuration::MAX_COMMAND_NAME + 1];

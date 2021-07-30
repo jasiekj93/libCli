@@ -29,3 +29,24 @@ ArgumentTemplate::ArgumentTemplate(char name,
         _type = type;
         _isMandatory = isMandatory;
     }
+
+
+bool ArgumentTemplate::operator==(const ArgumentTemplate &arg) const
+{
+    if(this->_name != arg._name)
+        return false;
+
+    if(this->_type != arg._type)
+        return false;
+
+    if(this->_isMandatory != arg._isMandatory)
+        return false;
+
+    return (std::strcmp(this->_help, arg._help) == 0);
+}
+
+bool ArgumentTemplate::operator!=(const ArgumentTemplate &arg) const
+{
+    return ((*this == arg) == false);
+}
+
