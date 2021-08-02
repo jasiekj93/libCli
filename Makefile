@@ -53,6 +53,11 @@ endif
 CXX_SOURCES =  \
 $(wildcard libCli/*.cpp) \
 $(wildcard libCli/Utils/*.cpp) \
+$(wildcard libCli/Template/*.cpp) \
+$(wildcard libCli/Model/*.cpp) \
+$(wildcard libCli/Internal/*.cpp) \
+$(wildcard libCli/Internal/IO/*.cpp) \
+$(wildcard libCli/Internal/IO/Container/*.cpp) \
 
 # includes
 CXX_INCLUDES =  \

@@ -8,12 +8,12 @@
  * @details
  */
 
-#include <libCli/IInputLineObserver.hpp>
+#include <libCli/Internal/IO/IInputLineObserver.hpp>
 #include <cstddef>
 
 namespace Mock
 {
-    class InputLineObserver : public Cli::IInputLineObserver
+    class InputLineObserver : public Cli::Internal::IO::IInputLineObserver
     {
     public:
         InputLineObserver(size_t);

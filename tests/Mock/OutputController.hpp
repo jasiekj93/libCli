@@ -8,12 +8,12 @@
  * @details
  */
 
-#include <libCli/IOutputController.hpp>
-#include <libCli/Utils/LineBuffer.hpp>
+#include <libCli/Internal/IO/IOutputController.hpp>
+#include <libCli/Internal/IO/Container/LineBuffer.hpp>
 
 namespace Mock
 {
-    class OutputController : public Cli::IOutputController
+    class OutputController : public Cli::Internal::IO::IOutputController
     {
     public:
         OutputController(size_t);
@@ -30,7 +30,7 @@ namespace Mock
 
 
         char *previousLine;
-        Cli::Utils::LineBuffer line;
+        Cli::Internal::IO::Container::LineBuffer line;
 
     private:
         OutputController(const OutputController &) = delete;

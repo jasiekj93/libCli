@@ -46,6 +46,11 @@ CXX_SOURCES =  \
 $(wildcard *.cpp) \
 $(wildcard Utils/*.cpp) \
 $(wildcard Mock/*.cpp) \
+$(wildcard Template/*.cpp) \
+$(wildcard Model/*.cpp) \
+$(wildcard Internal/*.cpp) \
+$(wildcard Internal/IO/*.cpp) \
+$(wildcard Internal/IO/Container/*.cpp) \
 
 # includes
 CXX_INCLUDES =  \
