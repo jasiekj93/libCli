@@ -17,10 +17,12 @@ namespace Cli::Internal
     public:
         Terminal(IOutput &,
             ICommandObserver &,
-            size_t depth);
+            size_t depth,
+            const char *userName);
 
         void ReceivedCharCallback(char) override;
         void ReceivedStringCallback(const char *) override;
+
         inline TemplatesBuffer & Templates() override { return _verifier.Templates(); }
 
     protected:

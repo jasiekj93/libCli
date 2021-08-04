@@ -3,7 +3,10 @@
 
 using namespace Cli;
 
-ITerminal * Factory::CreateNewTerminal(IOutput &output, ICommandObserver &observer, size_t depth)
+ITerminal * Factory::CreateNewTerminal(IOutput &output, 
+    ICommandObserver &observer, 
+    size_t depth,
+    const char *userName)
 {
-    return new Internal::Terminal(output, observer, depth);
+    return new Internal::Terminal(output, observer, depth, userName);
 }

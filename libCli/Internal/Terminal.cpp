@@ -5,14 +5,15 @@ using namespace Cli::Internal;
 
 Terminal::Terminal(IOutput &output,
     ICommandObserver &observer,
-    size_t depth)
+    size_t depth,
+    const char *userName)
     : _observer(observer)
     , _inputBuffer(Configuration::MAX_COMMAND_LENGTH, depth)
     , _outputController(output)
     , _inputController(_outputController,
         *this,
         _inputBuffer)
-    , _presenter(output)
+    , _presenter(output, userName)
     , _verifier(_presenter)
 {
 }
@@ -34,7 +35,7 @@ void Terminal::ReceivedInputLineCallback(const char *line)
 
     if(command.IsNull())
     {
-        _presenter.InvalidCommandFormat();
+        _presenter.Prompt(false);
         return;
     }
 

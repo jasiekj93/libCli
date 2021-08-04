@@ -9,6 +9,7 @@ LineBuffer::LineBuffer(size_t size)
     , _cursor(0)
 {
     _data = new char[size + 1];
+    _data[0] = '\0';
 }
 
 LineBuffer::~LineBuffer()

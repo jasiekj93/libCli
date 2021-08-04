@@ -2,11 +2,6 @@
 
 using namespace Mock;
 
-void Presenter::InvalidCommandFormat()
-{
-    operation = Operation::InvalidCommandFormat;
-}
-
 void Presenter::UnknownCommand(const char *)
 {
     operation = Operation::UnknownCommand;
@@ -32,7 +27,7 @@ void Presenter::Help(const Cli::Template::Command &)
     operation = Operation::Help;
 }
 
-void Presenter::Prompt()
+void Presenter::Prompt(bool)
 {
     operation = Operation::Prompt;
 }

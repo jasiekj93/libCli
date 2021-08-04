@@ -10,7 +10,6 @@ namespace Mock
         enum class Operation
         {
             Idle,
-            InvalidCommandFormat,
             UnknownCommand,
             NoMandatoryArguments,
             InvalidArgument,
@@ -19,13 +18,12 @@ namespace Mock
             Prompt
         };
 
-        void InvalidCommandFormat() override;
         void UnknownCommand(const char *) override;
         void NoMandatoryArguments(char argument, const Cli::Template::Command &) override;
         void InvalidArgument(char argument, const Cli::Template::Command &) override;
         void InvalidArgumentType(char argument, const Cli::Template::Command &) override;
         void Help(const Cli::Template::Command &) override;
-        void Prompt() override;
+        void Prompt(bool) override;
 
         Operation operation = Operation::Idle;
     };

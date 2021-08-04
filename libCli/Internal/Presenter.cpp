@@ -1,20 +1,18 @@
 #include "Presenter.hpp"
-#include <cstdio>
+#include <cstring>
 
 using namespace Cli;
 using namespace Cli::Internal;
 
-Presenter::Presenter(IOutput &output)
+Presenter::Presenter(IOutput &output, const char *userName)
     : _output(output)
     , _helper(output)
+    , _userName{'\0'}
 {
-    Prompt();
-}
+    if(userName != nullptr &&
+        std::strlen(userName) <= Configuration::MAX_USER_NAME)
+            std::strcpy(_userName, userName);
 
-
-void Presenter::InvalidCommandFormat()
-{
-    _output.PutString("Nieprawidlowy format polecenia.");
     Prompt();
 }
 
@@ -58,12 +56,16 @@ void Presenter::Help(const Template::Command &command)
     Prompt();
 }
 
-void Presenter::Prompt()
+void Presenter::Prompt(bool addNewLine)
 {
-    _NewLine();
+    if(addNewLine == true)
+        _NewLine();
+        
+    _output.PutString(_userName);
     _output.PutChar(PROMPT_CHAR);
     _output.PutChar(' ');
 }
+
 
 inline void Presenter::_NewLine()
 {

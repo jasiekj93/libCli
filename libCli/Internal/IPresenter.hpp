@@ -18,12 +18,11 @@ namespace Cli::Internal
     public:
         virtual ~IPresenter() {}
 
-        virtual void InvalidCommandFormat() = 0;
         virtual void UnknownCommand(const char *) = 0;
         virtual void NoMandatoryArguments(char argument, const Template::Command &) = 0;
         virtual void InvalidArgument(char argument, const Template::Command &) = 0;
         virtual void InvalidArgumentType(char argument, const Template::Command &) = 0;
         virtual void Help(const Template::Command &) = 0;
-        virtual void Prompt() = 0;
+        virtual void Prompt(bool addNewLine = true) = 0;
     };
 }

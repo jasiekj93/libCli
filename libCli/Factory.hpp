@@ -14,5 +14,8 @@
 
 namespace Cli::Factory
 {
-    ITerminal * CreateNewTerminal(IOutput &, ICommandObserver &, size_t depth = 5);
+    ITerminal * CreateNewTerminal(IOutput &, 
+        ICommandObserver &, 
+        size_t depth = 5, 
+        const char *userName = nullptr);
 }
