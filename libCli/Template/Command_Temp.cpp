@@ -39,7 +39,7 @@ Command::Command(const char * string,
 Command::Command(const char * string, 
     const char *help,
     std::initializer_list<Argument> list)
-    : Command(string, nullptr)
+    : Command(string, help)
 {
      if(std::strlen(_name) == 0)
         return;

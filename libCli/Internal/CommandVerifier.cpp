@@ -5,12 +5,28 @@ using namespace Cli::Internal;
 
 Model::Argument CommandVerifier::_help('h', nullptr);
 
+CommandVerifier::CommandVerifier(IPresenter &presenter)
+    : _presenter(presenter)
+{
+}
 
-CommandVerifier::Status CommandVerifier::Verify(const Model::Command &command) const
+bool CommandVerifier::Verify(const Model::Command &command)
 {
     if(_buffer.Contains(command.GetName()) == false)
-        return Status::Unknown;
+    {
+        _presenter.UnknownCommand(command.GetName());
+        return false;
+    }
 
+    if(_CheckMandatoryArguments(command) == false)
+        return false;
+        
+    return _CheckOptionalArguments(command);
+}
+
+
+bool CommandVerifier::_CheckMandatoryArguments(const Model::Command &command)
+{
     auto templateCommand = _buffer.Get(command.GetName());
 
     for(size_t i = 0; i < templateCommand.Arguments().Count(); i++)
@@ -20,22 +36,38 @@ CommandVerifier::Status CommandVerifier::Verify(const Model::Command &command) c
         if(command.Arguments().Contains(argument.Name()) == true)
         {
             if(command.Arguments().Get(argument.Name()).GetType() != argument.GetType())
-                return Status::InvalidArgumentType;
+            {
+                _presenter.InvalidArgumentType(argument.Name(), templateCommand);
+                return false;
+            }
         }
         else if(argument.IsMandatory() == true)
-            return Status::NoMandatoryArguments;
+        {
+            _presenter.NoMandatoryArguments(argument.Name(), templateCommand);
+            return false;
+        }
     }
 
+    return true;
+}
+
+bool CommandVerifier::_CheckOptionalArguments(const Model::Command &command)
+{
+    auto templateCommand = _buffer.Get(command.GetName());
+    
     for(size_t i = 0; i < command.Arguments().Count(); i++)
     {
        if(templateCommand.Arguments().Contains(command.Arguments()[i].Name()) == false)
        {
             if(command.Arguments()[i] == _help)
-                return Status::Help;
+                _presenter.Help(templateCommand);
             else
-                return Status::InvalidArgument;
+                _presenter.InvalidArgument(command.Arguments()[i].Name(), templateCommand);
+
+            return false;
        }
     }
 
-    return Status::Ok;
+    return true;
 }
+

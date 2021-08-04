@@ -2,6 +2,7 @@
 
 #include <libCli/ITerminal.hpp>
 #include <libCli/IOutput.hpp>
+#include <libCli/ICommandObserver.hpp>
 #include <libCli/Internal/IO/InputController.hpp>
 #include <libCli/Internal/IO/OutputController.hpp>
 #include <libCli/Internal/CommandVerifier.hpp>
@@ -15,6 +16,7 @@ namespace Cli::Internal
     {
     public:
         Terminal(IOutput &,
+            ICommandObserver &,
             size_t depth);
 
         void ReceivedCharCallback(char) override;
@@ -25,11 +27,13 @@ namespace Cli::Internal
         void ReceivedInputLineCallback(const char *) override;
 
     private:
+        ICommandObserver &_observer;
+
         IO::Container::LineBufferWithMemory _inputBuffer;
         IO::OutputController _outputController;
         IO::InputController _inputController;
         
-        CommandVerifier _verifier;
         Presenter _presenter;
+        CommandVerifier _verifier;
     };
 }

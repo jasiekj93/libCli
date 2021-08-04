@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file Configuration.hpp
+ * @author Adrian Szczepanski
+ * @date 04-08-2021
+ * @brief 
+ * @details
+ */
+
 #include <cstddef>
 
 namespace Cli::Configuration

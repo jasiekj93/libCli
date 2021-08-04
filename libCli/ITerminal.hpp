@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file ITerminal.hpp
+ * @author Adrian Szczepanski
+ * @date 04-08-2021
+ * @brief 
+ * @details
+ */
+
 #include <libCli/Utils/Dictionary.hpp>
 #include <libCli/Template/Command.hpp>
 #include <libCli/Configuration.hpp>

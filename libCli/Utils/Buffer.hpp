@@ -15,6 +15,7 @@ namespace Cli::Utils
 
         auto Count() const { return _count; }
         auto Size() const { return SIZE; }
+        auto Data() const { return _data; }
 
         const T& operator[](size_t i) const { return _data[i]; }
 

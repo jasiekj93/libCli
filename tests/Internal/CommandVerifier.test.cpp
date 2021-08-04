@@ -7,6 +7,7 @@
  */
 
 #include <libCli/Internal/CommandVerifier.hpp>
+#include <tests/Mock/Presenter.hpp>
 #include <cstring>
 
 #include <CppUTest/CommandLineTestRunner.h>
@@ -27,7 +28,8 @@ TEST_GROUP(CommandVerifierTest)
 TEST(CommandVerifierTest, OnlyMandatoryArguments)
 {
     Command command(text);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::Decimal, true },
@@ -38,13 +40,14 @@ TEST(CommandVerifierTest, OnlyMandatoryArguments)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::Ok == verifier.Verify(command));
+    CHECK(verifier.Verify(command));
 }
 
 TEST(CommandVerifierTest, MissingMandatoryArgument)
 {
     Command command(text);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::Decimal, true },
@@ -56,13 +59,15 @@ TEST(CommandVerifierTest, MissingMandatoryArgument)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::NoMandatoryArguments == verifier.Verify(command));
+    CHECK_FALSE(verifier.Verify(command));
+    CHECK(Mock::Presenter::Operation::NoMandatoryArguments == presenter.operation);
 }
 
 TEST(CommandVerifierTest, OptionalArgument)
 {
     Command command(text);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::Decimal, true },
@@ -73,13 +78,14 @@ TEST(CommandVerifierTest, OptionalArgument)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::Ok == verifier.Verify(command));
+    CHECK(verifier.Verify(command));
 }
 
 TEST(CommandVerifierTest, OptionalArgument_IsMissing)
 {
     Command command(text);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::Decimal, true },
@@ -91,13 +97,14 @@ TEST(CommandVerifierTest, OptionalArgument_IsMissing)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::Ok == verifier.Verify(command));
+    CHECK(verifier.Verify(command));
 }
 
 TEST(CommandVerifierTest, NotDefinedArgument)
 {
     Command command(text);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::Decimal, true },
@@ -107,13 +114,15 @@ TEST(CommandVerifierTest, NotDefinedArgument)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::InvalidArgument == verifier.Verify(command));
+    CHECK_FALSE(verifier.Verify(command));
+    CHECK(Mock::Presenter::Operation::InvalidArgument == presenter.operation);
 }
 
 TEST(CommandVerifierTest, DifferentType)
 {
     Command command(text);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::String, true },
@@ -124,13 +133,15 @@ TEST(CommandVerifierTest, DifferentType)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::InvalidArgumentType == verifier.Verify(command));
+    CHECK_FALSE(verifier.Verify(command));
+    CHECK(Mock::Presenter::Operation::InvalidArgumentType == presenter.operation);
 }
 
 TEST(CommandVerifierTest, DifferentType_Optional)
 {
     Command command(text);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::String, false },
@@ -141,13 +152,16 @@ TEST(CommandVerifierTest, DifferentType_Optional)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::InvalidArgumentType == verifier.Verify(command));
+    CHECK_FALSE(verifier.Verify(command));
+    CHECK(Mock::Presenter::Operation::InvalidArgumentType == presenter.operation);
+
 }
 
 TEST(CommandVerifierTest, WithHelp)
 {
     Command command(textWihHelp);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::Decimal, true },
@@ -158,13 +172,15 @@ TEST(CommandVerifierTest, WithHelp)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::Help == verifier.Verify(command));
+    CHECK_FALSE(verifier.Verify(command));
+    CHECK(Mock::Presenter::Operation::Help == presenter.operation);
 }
 
 TEST(CommandVerifierTest, CustomHelp)
 {
     Command command(textWihHelp);
-    CommandVerifier verifier;
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
     Template::Command commandTemp(name,
         {
             { 'a', Argument::Type::Decimal, true },
@@ -176,5 +192,5 @@ TEST(CommandVerifierTest, CustomHelp)
         });
 
     CHECK(verifier.Templates().Put(commandTemp));
-    CHECK(CommandVerifier::Status::Ok == verifier.Verify(command));
+    CHECK(verifier.Verify(command));
 }

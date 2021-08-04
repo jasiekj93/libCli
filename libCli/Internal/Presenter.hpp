@@ -1,23 +1,30 @@
 #pragma once
 
-#include <libCli/Model/Command.hpp>
-#include <libCli/IOutput.hpp>
+#include <libCli/Internal/IPresenter.hpp>
+#include <libCli/Internal/CommandHelper.hpp>
 
 namespace Cli::Internal
 {
-    class Presenter
+    class Presenter : public IPresenter
     {
     public:
+        static constexpr char PROMPT_CHAR = '$';
+
         Presenter(IOutput &);
 
-        void InvalidCommandFormat();
-        void UnknownCommand(const char *);
-        void NoMandatoryArguments(const char *);
-        void InvalidArgument(const char *);
-        void InvalidArgumentType(const char *);
-        void Help(const Model::Command &);
+        void InvalidCommandFormat() override;
+        void UnknownCommand(const char *) override;
+        void NoMandatoryArguments(char argument, const Template::Command &) override;
+        void InvalidArgument(char argument, const Template::Command &) override;
+        void InvalidArgumentType(char argument, const Template::Command &) override;
+        void Help(const Template::Command &) override;
+        void Prompt() override;
+
+    protected:
+        void _NewLine();
 
     private:
         IOutput &_output;
+        CommandHelper _helper;
     };
 }
