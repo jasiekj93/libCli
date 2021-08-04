@@ -37,9 +37,9 @@ bool InputController::_ProcessControlChar(char c)
 {
     if(c == '\e')
         return _ProcessEscapeChar();
-    else if(c == '\n')
+    else if(c == '\r')
         return _ProcessNewLine();
-    else if(c == '\b')
+    else if(c == 0x7F)
         return _ProcessBackspace();
     else if(_controlChar.IsNotEmpty())
         return _ProcessConrolSequence(c);

@@ -67,7 +67,7 @@ CXX_INCLUDES =  \
 CXXFLAGS = $(MCU) $(CXX_DEFS) $(CXX_INCLUDES) $(OPT) -std=c++17 -Wall  
 
 ifneq ($(PLATFORM), Win32)
-CXXFLAGS += -fdata-sections -ffunction-sections -ffreestanding -fno-exceptions
+CXXFLAGS += -fdata-sections -ffunction-sections -ffreestanding -fno-exceptions -fno-rtti
 endif
 
 ifeq ($(DEBUG), 1)

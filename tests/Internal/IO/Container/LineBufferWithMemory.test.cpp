@@ -29,6 +29,19 @@ TEST(LineBufferWithMemoryTest, Constructor)
     CHECK_EQUAL(0, buffer.Cursor());
 }
 
+TEST(LineBufferWithMemoryTest, AddSecond_IsTheSame)
+{
+    LineBufferWithMemory buffer(SIZE, DEPTH);
+
+    const char string[] = "aa";
+
+    buffer.PutString(string);
+    buffer.ClearAndMemorize();
+    buffer.PutString(string);
+
+    CHECK_EQUAL(1, buffer.MemoryCount());
+}
+
 TEST(LineBufferWithMemoryTest, SetPrevious)
 {
     LineBufferWithMemory buffer(SIZE, DEPTH);

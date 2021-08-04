@@ -32,13 +32,16 @@ void OutputController::MoveCursorRight()
 void OutputController::Backspace(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
-        _output.PutChar('\b');
+        _output.PutChar(DELETE_CHAR);
 }
 
 void OutputController::Delete(unsigned int times)
 {
+
     for(unsigned int i = 0; i < times; i++)
-        _output.PutChar(DELETE_CHAR);
+    {
+        _output.PutString(ControlChar(ControlChar::Type::Delete).Data());
+    }
 }
 
 void OutputController::NewLine()

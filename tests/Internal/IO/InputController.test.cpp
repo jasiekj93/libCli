@@ -161,7 +161,7 @@ TEST(InputControllerTest, Backspace)
     const char expected[] = "Tex";
     const char text[] = "Text";
 
-    char backspace = '\b';
+    char backspace = 0x7F;
 
     InputController controller(*output, *inputObserver, *buffer);
 
@@ -175,7 +175,7 @@ TEST(InputControllerTest, Backspace)
 TEST(InputControllerTest, Enter)
 {
     const char text[] = "Text";
-    char enter = '\n';
+    char enter = '\r';
 
     InputController controller(*output, *inputObserver, *buffer);
 
@@ -191,7 +191,7 @@ TEST(InputControllerTest, ArrowUp)
 {
     const char text1[] = "Text1";
     const char text2[] = "Text2";
-    char enter = '\n';
+    char enter = '\r';
     ControlChar arrowUp(ControlChar::Type::ArrowUp);
 
     InputController controller(*output, *inputObserver, *buffer);
@@ -210,7 +210,7 @@ TEST(InputControllerTest, ArrowDown)
 {
     const char text1[] = "Text1";
     const char text2[] = "Text2";
-    char enter = '\n';
+    char enter = '\r';
     ControlChar arrowUp(ControlChar::Type::ArrowUp);
     ControlChar arrowDown(ControlChar::Type::ArrowDown);
 

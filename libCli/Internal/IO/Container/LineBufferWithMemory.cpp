@@ -1,4 +1,5 @@
 #include "LineBufferWithMemory.hpp"
+#include <cstring>
 
 using namespace Cli::Internal::IO::Container;
 
@@ -66,7 +67,10 @@ bool LineBufferWithMemory::HasPrevious()
 
 void LineBufferWithMemory::ClearAndMemorize()
 {
-    _lifo.Push(this->Data());
+    if((_lifo.Count() == 0) ||
+        (std::strcmp(this->Data(), _lifo.Get(0)) != 0))
+        _lifo.Push(this->Data());
+
     _index = 0;
     this->Clear();
 }
