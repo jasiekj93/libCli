@@ -82,10 +82,11 @@ bool InputController::_ProcessTab()
 
     if(result != nullptr)
     {
+        _ClearLine();
+        
         _buffer.Clear();
         _buffer.PutString(result);
         
-        _ClearLine();
         _output.PutString(result);
     }
 
