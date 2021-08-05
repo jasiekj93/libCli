@@ -170,6 +170,21 @@ TEST(InputControllerTest, Backspace)
     STRCMP_EQUAL(expected, output->line.Data());
 }
 
+TEST(InputControllerTest, Backspace_FromMiddle)
+{
+    const char expected[] = "Tet";
+    const char text[] = "Text";
+
+    InputController controller(*output, *inputObserver, *buffer);
+
+    controller.ReceivedStringCallback(text);
+    controller.ReceivedStringCallback(ControlSequence(ControlSequence::Type::ArrowLeft).Data());
+    controller.ReceivedCharCallback(ControlChar::BACKSPACE);
+
+    STRCMP_EQUAL(expected, buffer->Data());
+    STRCMP_EQUAL(expected, output->line.Data());
+}
+
 TEST(InputControllerTest, Enter)
 {
     const char text[] = "Text";

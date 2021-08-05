@@ -17,7 +17,7 @@ namespace Cli::Internal::IO
     {
     public:
         static constexpr size_t MAX_SIZE = 4;
-        static constexpr size_t KNOWN_TYPES = 7;
+        static constexpr size_t KNOWN_TYPES = 9;
         static constexpr size_t MAX_ARROW_REPEAT = 9;
 
         enum class Type
@@ -29,6 +29,8 @@ namespace Cli::Internal::IO
             Delete,
             Home,
             End,
+            ClearLine,
+            ClearToEndOfLine,
 
             Unknown,
         };

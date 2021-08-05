@@ -14,6 +14,8 @@ const ControlSequence ControlSequence::_knownCharacters[ControlSequence::KNOWN_T
     { '\e', '[', '3', '~' },
     { '\e', '[', '1', '~' },
     { '\e', '[', '4', '~' },
+    { '\e', '[', 'K' },
+    { '\e', '[', '0', 'K' },
 };
 
 ControlSequence::ControlSequence()

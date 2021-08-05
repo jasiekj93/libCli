@@ -23,9 +23,10 @@ namespace Cli::Internal::IO
         void MoveCursorLeft(unsigned int) override;
         void MoveCursorRight(unsigned int) override;
         void Backspace(unsigned int) override;
-        void Delete(unsigned int) override;
         void NewLine() override;
         void ClearScreen() override;
+        void ClearLine() override;
+        void ClearToEndOfLine() override;
 
     private:
         IOutput &_output;

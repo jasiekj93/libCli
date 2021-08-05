@@ -19,8 +19,9 @@ namespace Cli::Internal::IO
         virtual void MoveCursorLeft(unsigned int times = 1) = 0;
         virtual void MoveCursorRight(unsigned int times = 1) = 0;
         virtual void Backspace(unsigned int times = 1) = 0;
-        virtual void Delete(unsigned int times = 1) = 0;
         virtual void NewLine() = 0;
         virtual void ClearScreen() = 0;
+        virtual void ClearLine() = 0;
+        virtual void ClearToEndOfLine() = 0;
     };
 }

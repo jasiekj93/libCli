@@ -56,6 +56,12 @@ void LineBuffer::Clear()
     _data[0] = '\0';
 }
 
+void LineBuffer::ClearFromCursor()
+{
+    _count = _cursor;
+    _data[_cursor] = '\0';
+}
+
 bool LineBuffer::MoveCursorLeft()
 {
     if (_cursor == 0)

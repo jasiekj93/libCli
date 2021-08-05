@@ -36,11 +36,6 @@ void OutputController::Backspace(unsigned int times)
         _output.PutChar(ControlChar::BACKSPACE);
 }
 
-void OutputController::Delete(unsigned int times)
-{
-    //not used
-}
-
 void OutputController::NewLine()
 {
     _output.PutChar('\r');
@@ -50,4 +45,14 @@ void OutputController::NewLine()
 void OutputController::ClearScreen()
 {
     _output.PutChar('\f');
+}
+
+void OutputController::ClearLine()
+{
+    _output.PutString(ControlSequence(ControlSequence::Type::ClearLine).Data());
+}
+
+void OutputController::ClearToEndOfLine()
+{
+    _output.PutString(ControlSequence(ControlSequence::Type::ClearToEndOfLine).Data());
 }
