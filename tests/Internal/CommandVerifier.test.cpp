@@ -194,3 +194,89 @@ TEST(CommandVerifierTest, CustomHelp)
     CHECK(verifier.Templates().Put(commandTemp));
     CHECK(verifier.Verify(command));
 }
+
+TEST(CommandVerifierTest, Find)
+{
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
+
+    verifier.Templates().Put("foo");
+    verifier.Templates().Put("bar");
+    verifier.Templates().Put("baz");
+
+    auto found = verifier.Find("f");
+
+    CHECK(found != nullptr);
+    STRCMP_EQUAL("foo", found);
+}
+
+TEST(CommandVerifierTest, Find_TwoAreMatch)
+{
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
+
+    verifier.Templates().Put("foo");
+    verifier.Templates().Put("bar");
+    verifier.Templates().Put("baz");
+
+    auto found = verifier.Find("b");
+
+    CHECK(found != nullptr);
+    STRCMP_EQUAL("bar", found);
+}
+
+TEST(CommandVerifierTest, Find_SubstringMatchComaand)
+{
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
+
+    verifier.Templates().Put("foo");
+    verifier.Templates().Put("bar");
+    verifier.Templates().Put("baz");
+
+    auto found = verifier.Find("baz");
+
+    CHECK(found == nullptr);
+}
+
+TEST(CommandVerifierTest, Find_SubstringAreLongerThanCommand)
+{
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
+
+    verifier.Templates().Put("foo");
+    verifier.Templates().Put("bar");
+    verifier.Templates().Put("baz");
+
+    auto found = verifier.Find("baz -t");
+
+    CHECK(found == nullptr);
+}
+
+TEST(CommandVerifierTest, SpacesOnTheBeggining)
+{
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
+
+    verifier.Templates().Put("foo");
+    verifier.Templates().Put("bar");
+    verifier.Templates().Put("baz");
+
+    auto found = verifier.Find(" baz");
+
+    CHECK(found == nullptr);
+}
+
+TEST(CommandVerifierTest, EmptyString)
+{
+    Mock::Presenter presenter;
+    CommandVerifier verifier(presenter);
+
+    verifier.Templates().Put("foo");
+    verifier.Templates().Put("bar");
+    verifier.Templates().Put("baz");
+
+    auto found = verifier.Find("");
+
+    CHECK(found == nullptr);
+}
