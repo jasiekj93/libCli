@@ -13,6 +13,7 @@ namespace Cli::Internal
         CommandVerifier(IPresenter &);
 
         bool Verify(const Model::Command &);
+        
 
         auto & Templates() { return _buffer; }
 

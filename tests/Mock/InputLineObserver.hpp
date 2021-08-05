@@ -20,6 +20,7 @@ namespace Mock
         ~InputLineObserver();
 
         void ReceivedInputLineCallback(const char *) override;
+        const char * ReceivedAutoComapleteCallback(const char *) override { return nullptr; }
 
         char *line;
 

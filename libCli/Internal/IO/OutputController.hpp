@@ -16,8 +16,6 @@ namespace Cli::Internal::IO
     class OutputController : public IOutputController
     {
     public:
-        static constexpr char DELETE_CHAR = 0x7f;
-
         OutputController(IOutput &);
 
         void PutChar(char) override;

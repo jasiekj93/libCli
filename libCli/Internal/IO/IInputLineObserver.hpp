@@ -16,5 +16,6 @@ namespace Cli::Internal::IO
         virtual ~IInputLineObserver() {}
 
         virtual void ReceivedInputLineCallback(const char *) = 0;
+        virtual const char * ReceivedAutoComapleteCallback(const char *) = 0;
     };
 }

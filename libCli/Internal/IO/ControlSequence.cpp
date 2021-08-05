@@ -1,11 +1,11 @@
-#include "ControlChar.hpp"
+#include "ControlSequence.hpp"
 #include <algorithm>
 #include <iterator>
 #include <cstring>
 
 using namespace Cli::Internal::IO;
 
-const ControlChar ControlChar::_knownCharacters[ControlChar::KNOWN_TYPES] = 
+const ControlSequence ControlSequence::_knownCharacters[ControlSequence::KNOWN_TYPES] = 
 {
     { '\e', '[', 'A' },
     { '\e', '[', 'B' },
@@ -16,19 +16,19 @@ const ControlChar ControlChar::_knownCharacters[ControlChar::KNOWN_TYPES] =
     { '\e', '[', '4', '~' },
 };
 
-ControlChar::ControlChar()
+ControlSequence::ControlSequence()
 {
     Clear();
 }
 
-ControlChar::ControlChar(Type type)
-    : ControlChar()
+ControlSequence::ControlSequence(Type type)
+    : ControlSequence()
 {
     if(type != Type::Unknown)
         *this = _knownCharacters[(int)type];
 }
 
-ControlChar::ControlChar(std::initializer_list<char> list)
+ControlSequence::ControlSequence(std::initializer_list<char> list)
 {
     if(list.size() <= MAX_SIZE)
     {
@@ -37,13 +37,13 @@ ControlChar::ControlChar(std::initializer_list<char> list)
     }
 }
 
-ControlChar::ControlChar(const char *string)
+ControlSequence::ControlSequence(const char *string)
 {
    std::strcpy(_data, string);
 }
 
 
-bool ControlChar::Put(char c)
+bool ControlSequence::Put(char c)
 {
     auto length = std::strlen(_data);
 
@@ -55,12 +55,12 @@ bool ControlChar::Put(char c)
     return true;
 }
 
-void ControlChar::Clear()
+void ControlSequence::Clear()
 {
     _data[0] = '\0';
 }
 
-ControlChar::Type ControlChar::GetType()
+ControlSequence::Type ControlSequence::GetType()
 {
     for(size_t i = 0; i < KNOWN_TYPES; i++)
         if(*this == _knownCharacters[i])
@@ -69,23 +69,23 @@ ControlChar::Type ControlChar::GetType()
     return Type::Unknown;
 }
 
-bool ControlChar::IsFull()
+bool ControlSequence::IsFull()
 {
     return (std::strlen(_data) == MAX_SIZE);
 }
 
-bool ControlChar::IsNotEmpty()
+bool ControlSequence::IsNotEmpty()
 {
     return (IsEmpty() == false);
 }
 
-bool ControlChar::IsEmpty()
+bool ControlSequence::IsEmpty()
 {
     return (std::strlen(_data) == 0);
 }
 
 
-bool ControlChar::operator==(const ControlChar &second)
+bool ControlSequence::operator==(const ControlSequence &second)
 {
     return (std::strcmp(this->_data, second._data) == 0);
 }

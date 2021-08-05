@@ -22,6 +22,7 @@ namespace Cli::Internal
 
         void ReceivedCharCallback(char) override;
         void ReceivedStringCallback(const char *) override;
+        const char * ReceivedAutoComapleteCallback(const char *) override { return nullptr; }
 
         inline TemplatesBuffer & Templates() override { return _verifier.Templates(); }
 

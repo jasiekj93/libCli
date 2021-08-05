@@ -69,7 +69,7 @@ TEST(InputControllerTest, ArrowLeft)
     char a = 'A';
     char b = 'B';
 
-    ControlChar arrowLeft(ControlChar::Type::ArrowLeft);
+    ControlSequence arrowLeft(ControlSequence::Type::ArrowLeft);
 
     InputController controller(*output, *inputObserver, *buffer);
 
@@ -86,8 +86,8 @@ TEST(InputControllerTest, ArrowRight)
     char a = 'A';
     char b = 'B';
 
-    ControlChar arrowLeft(ControlChar::Type::ArrowLeft);
-    ControlChar arrowRight(ControlChar::Type::ArrowRight);
+    ControlSequence arrowLeft(ControlSequence::Type::ArrowLeft);
+    ControlSequence arrowRight(ControlSequence::Type::ArrowRight);
 
     InputController controller(*output, *inputObserver, *buffer);
 
@@ -106,7 +106,7 @@ TEST(InputControllerTest, Home)
     const char text[] = "Text";
     char c = 'A';
 
-    ControlChar home(ControlChar::Type::Home);
+    ControlSequence home(ControlSequence::Type::Home);
 
     InputController controller(*output, *inputObserver, *buffer);
 
@@ -124,8 +124,8 @@ TEST(InputControllerTest, End)
     const char text[] = "Text";
     char c = 'A';
 
-    ControlChar home(ControlChar::Type::Home);
-    ControlChar end(ControlChar::Type::End);
+    ControlSequence home(ControlSequence::Type::Home);
+    ControlSequence end(ControlSequence::Type::End);
 
     InputController controller(*output, *inputObserver, *buffer);
 
@@ -143,8 +143,8 @@ TEST(InputControllerTest, Delete)
     const char expected[] = "ext";
     const char text[] = "Text";
 
-    ControlChar deleteChar(ControlChar::Type::Delete);
-    ControlChar home(ControlChar::Type::Home);
+    ControlSequence deleteChar(ControlSequence::Type::Delete);
+    ControlSequence home(ControlSequence::Type::Home);
 
     InputController controller(*output, *inputObserver, *buffer);
 
@@ -161,12 +161,10 @@ TEST(InputControllerTest, Backspace)
     const char expected[] = "Tex";
     const char text[] = "Text";
 
-    char backspace = 0x7F;
-
     InputController controller(*output, *inputObserver, *buffer);
 
     controller.ReceivedStringCallback(text);
-    controller.ReceivedCharCallback(backspace);
+    controller.ReceivedCharCallback(ControlChar::BACKSPACE);
 
     STRCMP_EQUAL(expected, buffer->Data());
     STRCMP_EQUAL(expected, output->line.Data());
@@ -175,12 +173,11 @@ TEST(InputControllerTest, Backspace)
 TEST(InputControllerTest, Enter)
 {
     const char text[] = "Text";
-    char enter = '\r';
 
     InputController controller(*output, *inputObserver, *buffer);
 
     controller.ReceivedStringCallback(text);
-    controller.ReceivedCharCallback(enter);
+    controller.ReceivedCharCallback(ControlChar::NEW_LINE);
 
     CHECK_EQUAL(0, buffer->Count());
     CHECK_EQUAL(0, output->line.Count());
@@ -191,13 +188,13 @@ TEST(InputControllerTest, ArrowUp)
 {
     const char text1[] = "Text1";
     const char text2[] = "Text2";
-    char enter = '\r';
-    ControlChar arrowUp(ControlChar::Type::ArrowUp);
+
+    ControlSequence arrowUp(ControlSequence::Type::ArrowUp);
 
     InputController controller(*output, *inputObserver, *buffer);
 
     controller.ReceivedStringCallback(text1);
-    controller.ReceivedCharCallback(enter);
+    controller.ReceivedCharCallback(ControlChar::NEW_LINE);
     controller.ReceivedStringCallback(text2);
     controller.ReceivedStringCallback(arrowUp.Data());
 
@@ -210,14 +207,14 @@ TEST(InputControllerTest, ArrowDown)
 {
     const char text1[] = "Text1";
     const char text2[] = "Text2";
-    char enter = '\r';
-    ControlChar arrowUp(ControlChar::Type::ArrowUp);
-    ControlChar arrowDown(ControlChar::Type::ArrowDown);
+
+    ControlSequence arrowUp(ControlSequence::Type::ArrowUp);
+    ControlSequence arrowDown(ControlSequence::Type::ArrowDown);
 
     InputController controller(*output, *inputObserver, *buffer);
 
     controller.ReceivedStringCallback(text1);
-    controller.ReceivedCharCallback(enter);
+    controller.ReceivedCharCallback(ControlChar::NEW_LINE);
     controller.ReceivedStringCallback(text2);
     controller.ReceivedStringCallback(arrowUp.Data());
     controller.ReceivedStringCallback(arrowDown.Data());

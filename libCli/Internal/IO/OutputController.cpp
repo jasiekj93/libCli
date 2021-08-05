@@ -1,4 +1,5 @@
 #include "OutputController.hpp"
+#include <libCli/Internal/IO/ControlSequence.hpp>
 #include <libCli/Internal/IO/ControlChar.hpp>
 
 using namespace Cli::Internal::IO;
@@ -21,33 +22,29 @@ void OutputController::PutString(const char *string)
 
 void OutputController::MoveCursorLeft()
 {
-    _output.PutString(ControlChar(ControlChar::Type::ArrowLeft).Data());
+    _output.PutString(ControlSequence(ControlSequence::Type::ArrowLeft).Data());
 }
 
 void OutputController::MoveCursorRight()
 {
-    _output.PutString(ControlChar(ControlChar::Type::ArrowRight).Data());
+    _output.PutString(ControlSequence(ControlSequence::Type::ArrowRight).Data());
 }
 
 void OutputController::Backspace(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
-        _output.PutChar(DELETE_CHAR);
+        _output.PutChar(ControlChar::BACKSPACE);
 }
 
 void OutputController::Delete(unsigned int times)
 {
-
-    for(unsigned int i = 0; i < times; i++)
-    {
-        _output.PutString(ControlChar(ControlChar::Type::Delete).Data());
-    }
+    //not used
 }
 
 void OutputController::NewLine()
 {
-    _output.PutChar('\n');
     _output.PutChar('\r');
+    _output.PutChar('\n');
 }
 
 void OutputController::ClearScreen()

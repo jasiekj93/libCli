@@ -35,13 +35,15 @@ void InputController::ReceivedStringCallback(const char *string)
 
 bool InputController::_ProcessControlChar(char c)
 {
-    if(c == '\e')
+    if(c == ControlChar::ESCAPE_CHAR)
         return _ProcessEscapeChar();
-    else if(c == '\r')
+    else if(c == ControlChar::NEW_LINE)
         return _ProcessNewLine();
-    else if(c == 0x7F)
+    else if(c == ControlChar::BACKSPACE)
         return _ProcessBackspace();
-    else if(_controlChar.IsNotEmpty())
+    else if(c == ControlChar::TAB)
+        return _ProcessTab();
+    else if(_controlSequence.IsNotEmpty())
         return _ProcessConrolSequence(c);
     else
         return false;
@@ -49,8 +51,8 @@ bool InputController::_ProcessControlChar(char c)
 
 bool InputController::_ProcessEscapeChar()
 {
-    _controlChar.Clear();
-    _controlChar.Put('\e');
+    _controlSequence.Clear();
+    _controlSequence.Put(ControlChar::ESCAPE_CHAR);
     return true;
 }
 
@@ -74,44 +76,60 @@ bool InputController::_ProcessBackspace()
     return true;
 }
 
+bool InputController::_ProcessTab()
+{
+    auto result = _observer.ReceivedAutoComapleteCallback(_buffer.Data());
+
+    if(result != nullptr)
+    {
+        _buffer.Clear();
+        _buffer.PutString(result);
+        
+        _ClearLine();
+        _output.PutString(result);
+    }
+
+    return true;
+}
+
 bool InputController::_ProcessConrolSequence(char c)
 {
-    _controlChar.Put(c);
+    _controlSequence.Put(c);
 
     if(_ProcessControlSequenceByType() == true)
-        _controlChar.Clear();
+        _controlSequence.Clear();
 
-    if(_controlChar.IsFull())
-        _controlChar.Clear();
+    if(_controlSequence.IsFull())
+        _controlSequence.Clear();
     
     return true;
 }
 
 bool InputController::_ProcessControlSequenceByType()
 {
-    auto type = _controlChar.GetType();
+    auto type = _controlSequence.GetType();
     
     switch(type)
     {
-        case ControlChar::Type::Delete:
+        case ControlSequence::Type::Delete:
             if(_buffer.Delete() == true)
                 _output.Delete();
             break;
-        case ControlChar::Type::ArrowLeft:
+        case ControlSequence::Type::ArrowLeft:
             if(_buffer.MoveCursorLeft() == true)
                 _output.MoveCursorLeft();
             break;
-        case ControlChar::Type::ArrowRight:
+        case ControlSequence::Type::ArrowRight:
             if (_buffer.MoveCursorRight() == true)
                 _output.MoveCursorRight();
             break;
-        case ControlChar::Type::End:
+        case ControlSequence::Type::End:
             _MoveEnd();
             break;
-        case ControlChar::Type::Home:
+        case ControlSequence::Type::Home:
             _MoveHome();
             break;
-        case ControlChar::Type::ArrowUp:
+        case ControlSequence::Type::ArrowUp:
             if(_buffer.HasPrevious() == true)
             {
                 _ClearLine();
@@ -119,7 +137,7 @@ bool InputController::_ProcessControlSequenceByType()
                 _output.PutString(_buffer.Data());
             }
             break;
-        case ControlChar::Type::ArrowDown:
+        case ControlSequence::Type::ArrowDown:
             if(_buffer.HasNext() == true)
             {
                 _ClearLine();
