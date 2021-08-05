@@ -155,14 +155,30 @@ bool InputController::_ProcessControlSequenceByType()
 
 void InputController::_MoveHome()
 {
-    while(_buffer.MoveCursorLeft())
-        _output.MoveCursorLeft();
+    // while(_buffer.MoveCursorLeft())
+    //     _output.MoveCursorLeft();
+
+    auto times = _buffer.MoveCursorMaxLeft();
+
+    while(times != 0)
+    {
+        _output.MoveCursorLeft(times);
+        times = _buffer.MoveCursorMaxLeft();
+    }
 }
 
 void InputController::_MoveEnd()
 {
-    while(_buffer.MoveCursorRight())
-        _output.MoveCursorRight();
+    // while(_buffer.MoveCursorRight())
+    //     _output.MoveCursorRight();
+
+    auto times = _buffer.MoveCursorMaxRight();
+
+    while(times != 0)
+    {
+        _output.MoveCursorRight(times);
+        times = _buffer.MoveCursorMaxRight();
+    }
 }
 
 void InputController::_ClearLine()

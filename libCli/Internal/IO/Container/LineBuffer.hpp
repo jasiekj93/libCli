@@ -15,6 +15,8 @@ namespace Cli::Internal::IO::Container
     class LineBuffer
     {
     public:
+        static constexpr unsigned int MAX_CURSOR_MOVE_SIZE = 9;
+
         LineBuffer(size_t);
         ~LineBuffer();
 
@@ -24,6 +26,8 @@ namespace Cli::Internal::IO::Container
 
         bool MoveCursorLeft();
         bool MoveCursorRight();
+        unsigned int MoveCursorMaxLeft();
+        unsigned int MoveCursorMaxRight();
         bool Delete();
         
         inline const auto Data() const { return _data; }

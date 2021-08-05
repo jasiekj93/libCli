@@ -74,6 +74,28 @@ bool LineBuffer::MoveCursorRight()
     return true;
 }
 
+unsigned int LineBuffer::MoveCursorMaxLeft()
+{
+    unsigned int times = _cursor;
+
+    if(times > MAX_CURSOR_MOVE_SIZE)
+        times = MAX_CURSOR_MOVE_SIZE;
+
+    _cursor -= times;
+    return times;
+}
+
+unsigned int LineBuffer::MoveCursorMaxRight()
+{
+    unsigned int times = _count - _cursor;
+    
+    if(times > MAX_CURSOR_MOVE_SIZE)
+        times = MAX_CURSOR_MOVE_SIZE;
+
+    _cursor += times;
+    return times;
+}
+
 bool LineBuffer::Delete()
 {
     if (_cursor == _count)

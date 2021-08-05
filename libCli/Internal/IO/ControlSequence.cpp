@@ -28,6 +28,21 @@ ControlSequence::ControlSequence(Type type)
         *this = _knownCharacters[(int)type];
 }
 
+ControlSequence::ControlSequence(Type type, unsigned int times)
+    : ControlSequence(type)
+{
+    if(times > MAX_ARROW_REPEAT)
+        return;
+
+    if(type == Type::ArrowRight ||
+        type == Type::ArrowLeft)
+    {
+        _data[3] = _data[2];
+        _data[2] = '0' + times;
+        _data[4] = '\0';
+    }
+}
+
 ControlSequence::ControlSequence(std::initializer_list<char> list)
 {
     if(list.size() <= MAX_SIZE)

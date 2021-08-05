@@ -20,8 +20,8 @@ namespace Cli::Internal::IO
 
         void PutChar(char) override;
         void PutString(const char *) override;
-        void MoveCursorLeft() override;
-        void MoveCursorRight() override;
+        void MoveCursorLeft(unsigned int) override;
+        void MoveCursorRight(unsigned int) override;
         void Backspace(unsigned int) override;
         void Delete(unsigned int) override;
         void NewLine() override;

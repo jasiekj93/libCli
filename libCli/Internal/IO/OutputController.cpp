@@ -20,14 +20,14 @@ void OutputController::PutString(const char *string)
     _output.PutString(string);
 }
 
-void OutputController::MoveCursorLeft()
+void OutputController::MoveCursorLeft(unsigned int times)
 {
-    _output.PutString(ControlSequence(ControlSequence::Type::ArrowLeft).Data());
+    _output.PutString(ControlSequence(ControlSequence::Type::ArrowLeft, times).Data());
 }
 
-void OutputController::MoveCursorRight()
+void OutputController::MoveCursorRight(unsigned int times)
 {
-    _output.PutString(ControlSequence(ControlSequence::Type::ArrowRight).Data());
+    _output.PutString(ControlSequence(ControlSequence::Type::ArrowRight, times).Data());
 }
 
 void OutputController::Backspace(unsigned int times)

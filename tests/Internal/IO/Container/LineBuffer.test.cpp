@@ -13,7 +13,7 @@
 
 using namespace Cli::Internal::IO::Container;
 
-static constexpr size_t SIZE = 5;
+static constexpr size_t SIZE = 12;
 
 TEST_GROUP(LineBufferTest)
 {
@@ -210,4 +210,33 @@ TEST(LineBufferTest, Delete_OnTheEnd)
     
     buffer.Put(a);
     CHECK_FALSE(buffer.Delete());
+}
+
+TEST(LineBufferTest, MoveCursorMaxLeft)
+{
+    const char text[] = "0123456789";
+    LineBuffer buffer(SIZE);
+    
+    buffer.PutString(text);
+    CHECK_EQUAL(9, buffer.MoveCursorMaxLeft());
+    CHECK_EQUAL(1, buffer.Cursor());
+    CHECK_EQUAL(1, buffer.MoveCursorMaxLeft());
+    CHECK_EQUAL(0, buffer.Cursor());
+    CHECK_EQUAL(0, buffer.MoveCursorMaxLeft());
+}
+
+TEST(LineBufferTest, MoveCursorMaxRight)
+{
+    const char text[] = "0123456789";
+    LineBuffer buffer(SIZE);
+    
+    buffer.PutString(text);
+    buffer.MoveCursorMaxLeft();
+    buffer.MoveCursorMaxLeft();
+
+    CHECK_EQUAL(9, buffer.MoveCursorMaxRight());
+    CHECK_EQUAL(9, buffer.Cursor());
+    CHECK_EQUAL(1, buffer.MoveCursorMaxRight());
+    CHECK_EQUAL(10, buffer.Cursor());
+    CHECK_EQUAL(0, buffer.MoveCursorMaxRight());
 }

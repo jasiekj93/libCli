@@ -21,8 +21,8 @@ namespace Mock
 
         void PutChar(char) override;
         void PutString(const char *) override;
-        void MoveCursorLeft() override;
-        void MoveCursorRight() override;
+        void MoveCursorLeft(unsigned int times) override;
+        void MoveCursorRight(unsigned int times) override;
         void Backspace(unsigned int times) override;
         void Delete(unsigned int times) override;
         void NewLine() override;

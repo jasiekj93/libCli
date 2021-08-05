@@ -24,14 +24,16 @@ void OutputController::PutString(const char *string)
     line.PutString(string);
 }
 
-void OutputController::MoveCursorLeft()
+void OutputController::MoveCursorLeft(unsigned int times)
 {
-    line.MoveCursorLeft();
+    for(unsigned int i = 0; i < times; i++)
+        line.MoveCursorLeft();
 }
 
-void OutputController::MoveCursorRight()
+void OutputController::MoveCursorRight(unsigned int times)
 {
-    line.MoveCursorRight();
+    for(unsigned int i = 0; i < times; i++)
+        line.MoveCursorRight();
 }
 
 void OutputController::Backspace(unsigned int times)

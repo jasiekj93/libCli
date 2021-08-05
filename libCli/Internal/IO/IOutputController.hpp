@@ -16,8 +16,8 @@ namespace Cli::Internal::IO
 
         virtual void PutChar(char) = 0;
         virtual void PutString(const char *) = 0;
-        virtual void MoveCursorLeft() = 0;
-        virtual void MoveCursorRight() = 0;
+        virtual void MoveCursorLeft(unsigned int times = 1) = 0;
+        virtual void MoveCursorRight(unsigned int times = 1) = 0;
         virtual void Backspace(unsigned int times = 1) = 0;
         virtual void Delete(unsigned int times = 1) = 0;
         virtual void NewLine() = 0;

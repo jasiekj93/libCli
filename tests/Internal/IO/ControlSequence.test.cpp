@@ -72,3 +72,12 @@ TEST(ControlSequenceTest, GetType)
     CHECK(ControlSequence::Type::Delete == deleteChar.GetType());
     CHECK(ControlSequence::Type::Unknown == unknown.GetType());
 }
+
+TEST(ControlSequenceTest, Arrow_ManyTimes)
+{
+    ControlSequence many(ControlSequence::Type::ArrowLeft, 5);
+    ControlSequence tooMany(ControlSequence::Type::ArrowRight, ControlSequence::MAX_ARROW_REPEAT + 1);
+
+    CHECK_EQUAL('5', many.Data()[2]);
+    CHECK_EQUAL('C', tooMany.Data()[2]);
+}
