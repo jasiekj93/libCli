@@ -45,3 +45,8 @@ void Terminal::ReceivedInputLineCallback(const char *line)
     _observer.ReceivedCommandCallback(command);
     _presenter.Prompt();
 }
+
+const char * Terminal::ReceivedAutoComapleteCallback(const char *substring)
+{
+    return _verifier.Find(substring);
+}
