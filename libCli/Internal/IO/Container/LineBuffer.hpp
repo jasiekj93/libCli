@@ -23,7 +23,6 @@ namespace Cli::Internal::IO::Container
         bool Put(char);
         bool PutString(const char *);
         void Clear();
-        void ClearFromCursor();
 
         bool MoveCursorLeft();
         bool MoveCursorRight();
@@ -32,7 +31,6 @@ namespace Cli::Internal::IO::Container
         bool Delete();
         
         inline const auto Data() const { return _data; }
-        inline const auto DataFromCursor() const { return &_data[_cursor]; }
         inline const auto Count() const { return _count; }
         inline const auto Cursor() const { return _cursor; }
 

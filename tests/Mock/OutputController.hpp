@@ -24,10 +24,9 @@ namespace Mock
         void MoveCursorLeft(unsigned int times) override;
         void MoveCursorRight(unsigned int times) override;
         void Backspace(unsigned int times) override;
+        void Delete(unsigned int times) override;
         void NewLine() override;
         void ClearScreen() override;
-        void ClearLine() override;
-        void ClearToEndOfLine() override;
 
 
         char *previousLine;

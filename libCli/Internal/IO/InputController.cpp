@@ -71,8 +71,6 @@ bool InputController::_ProcessBackspace()
     {
         _buffer.Delete();
         _output.Backspace();
-        _output.ClearToEndOfLine();
-        _output.PutString(_buffer.DataFromCursor());
     }
 
     return true;
@@ -84,7 +82,7 @@ bool InputController::_ProcessTab()
 
     if(result != nullptr)
     {
-        _output.ClearLine();
+        _ClearLine();
         
         _buffer.Clear();
         _buffer.PutString(result);
@@ -116,10 +114,7 @@ bool InputController::_ProcessControlSequenceByType()
     {
         case ControlSequence::Type::Delete:
             if(_buffer.Delete() == true)
-            {
-                _output.ClearToEndOfLine();
-                _output.PutString(_buffer.DataFromCursor());
-            }
+                _output.Delete();
             break;
         case ControlSequence::Type::ArrowLeft:
             if(_buffer.MoveCursorLeft() == true)
@@ -138,7 +133,7 @@ bool InputController::_ProcessControlSequenceByType()
         case ControlSequence::Type::ArrowUp:
             if(_buffer.HasPrevious() == true)
             {
-                _output.ClearLine();
+                _ClearLine();
                 _buffer.SetPrevious();
                 _output.PutString(_buffer.Data());
             }
@@ -146,7 +141,7 @@ bool InputController::_ProcessControlSequenceByType()
         case ControlSequence::Type::ArrowDown:
             if(_buffer.HasNext() == true)
             {
-                _output.ClearLine();
+                _ClearLine();
                 _buffer.SetNext();
                 _output.PutString(_buffer.Data());
             }
@@ -160,6 +155,9 @@ bool InputController::_ProcessControlSequenceByType()
 
 void InputController::_MoveHome()
 {
+    // while(_buffer.MoveCursorLeft())
+    //     _output.MoveCursorLeft();
+
     auto times = _buffer.MoveCursorMaxLeft();
 
     while(times != 0)
@@ -171,6 +169,9 @@ void InputController::_MoveHome()
 
 void InputController::_MoveEnd()
 {
+    // while(_buffer.MoveCursorRight())
+    //     _output.MoveCursorRight();
+
     auto times = _buffer.MoveCursorMaxRight();
 
     while(times != 0)
@@ -178,4 +179,10 @@ void InputController::_MoveEnd()
         _output.MoveCursorRight(times);
         times = _buffer.MoveCursorMaxRight();
     }
+}
+
+void InputController::_ClearLine()
+{
+    _MoveEnd();
+    _output.Backspace(_buffer.Count());
 }

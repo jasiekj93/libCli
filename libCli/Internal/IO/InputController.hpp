@@ -29,6 +29,7 @@ namespace Cli::Internal::IO
 
         void _MoveHome();
         void _MoveEnd();
+        void _ClearLine();
 
     private:
         IOutputController &_output;

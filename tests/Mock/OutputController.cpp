@@ -45,6 +45,12 @@ void OutputController::Backspace(unsigned int times)
     }
 }
 
+void OutputController::Delete(unsigned int times)
+{
+    for(unsigned int i = 0; i < times; i++)
+        line.Delete();
+}
+
 void OutputController::NewLine()
 {
     std::strcpy(previousLine, line.Data());
@@ -55,14 +61,4 @@ void OutputController::ClearScreen()
 {
     previousLine[0] = '\0';
     line.Clear();
-}
-
-void OutputController::ClearLine()
-{
-    line.Clear();
-}
-
-void OutputController::ClearToEndOfLine()
-{
-    line.ClearFromCursor();
 }
