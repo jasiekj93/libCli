@@ -67,7 +67,8 @@ bool InputController::_ProcessNewLine()
 
 bool InputController::_ProcessBackspace()
 {
-    if(_buffer.MoveCursorLeft() == true)
+    if(_buffer.Count() == _buffer.Cursor() &&
+        (_buffer.MoveCursorLeft() == true))
     {
         _buffer.Delete();
         _output.Backspace();
