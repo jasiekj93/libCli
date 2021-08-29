@@ -33,6 +33,12 @@ void InputController::ReceivedStringCallback(const char *string)
         ReceivedCharCallback(string[i]);
 }
 
+void InputController::RestoreLine()
+{
+    _output.PutString(_buffer.Data());
+    _buffer.MoveCursorMaxRight();
+}
+
 bool InputController::_ProcessControlChar(char c)
 {
     if(c == ControlChar::ESCAPE_CHAR)

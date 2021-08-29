@@ -25,5 +25,9 @@ namespace Cli
         virtual void ReceivedStringCallback(const char *) = 0;
         
         virtual TemplatesBuffer & Templates() = 0;
+
+        virtual void PutString(const char *) = 0;
+        virtual void DisableInput() = 0;
+        virtual void EnableInput() = 0;
     };
 }

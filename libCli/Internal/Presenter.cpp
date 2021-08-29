@@ -28,7 +28,7 @@ void Presenter::NoMandatoryArguments(char arg, const Template::Command &command)
     _output.PutString(command.Name());
     _output.PutString(": brak wymaganych argumentow");
     _output.PutChar(arg);
-    _NewLine();
+    NewLine();
     Help(command);
 }
 
@@ -37,7 +37,7 @@ void Presenter::InvalidArgument(char arg, const Template::Command &command)
     _output.PutString(command.Name());
     _output.PutString(": nieprawidlowy argument -");
     _output.PutChar(arg);
-    _NewLine();
+    NewLine();
     Help(command);
 }
 
@@ -46,7 +46,7 @@ void Presenter::InvalidArgumentType(char arg, const Template::Command &command)
     _output.PutString(command.Name());
     _output.PutString(": nieprawidlowy typ argumentu -");
     _output.PutChar(arg);
-    _NewLine();
+    NewLine();
     Help(command);
 }
 
@@ -59,7 +59,7 @@ void Presenter::Help(const Template::Command &command)
 void Presenter::Prompt(bool addNewLine)
 {
     if(addNewLine == true)
-        _NewLine();
+        NewLine();
         
     _output.PutString(_userName);
     _output.PutChar(PROMPT_CHAR);
@@ -67,7 +67,7 @@ void Presenter::Prompt(bool addNewLine)
 }
 
 
-inline void Presenter::_NewLine()
+inline void Presenter::NewLine()
 {
     _output.PutString("\r\n");
 }

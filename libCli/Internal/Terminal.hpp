@@ -26,11 +26,16 @@ namespace Cli::Internal
 
         inline TemplatesBuffer & Templates() override { return _verifier.Templates(); }
 
+        void PutString(const char *) override;
+        virtual void DisableInput() override;
+        virtual void EnableInput() override;
+
     protected:
         void ReceivedInputLineCallback(const char *) override;
 
     private:
         ICommandObserver &_observer;
+        IOutput &_output;
 
         IO::Container::LineBufferWithMemory _inputBuffer;
         IO::OutputController _outputController;
@@ -38,5 +43,6 @@ namespace Cli::Internal
         
         Presenter _presenter;
         CommandVerifier _verifier;
+        bool _isInputEnabled;
     };
 }

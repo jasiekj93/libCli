@@ -45,7 +45,7 @@ MCU = -m32
 else
 CPU = -mcpu=cortex-m7
 FPU = -mfpu=fpv5-sp-d16
-FLOAT-ABI = -mfloat-abi=hard
+FLOAT-ABI = -mfloat-abi=softfp
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 endif 
 

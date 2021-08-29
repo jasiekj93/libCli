@@ -18,6 +18,8 @@ namespace Cli::Internal::IO
         void ReceivedCharCallback(char);
         void ReceivedStringCallback(const char *);
 
+        void RestoreLine();
+
     protected:
         bool _ProcessControlChar(char c);
         bool _ProcessEscapeChar();

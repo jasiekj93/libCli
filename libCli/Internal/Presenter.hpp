@@ -19,9 +19,10 @@ namespace Cli::Internal
         void InvalidArgumentType(char argument, const Template::Command &) override;
         void Help(const Template::Command &) override;
         void Prompt(bool addNewLine = true) override;
+        
+        void NewLine();
 
     protected:
-        void _NewLine();
 
     private:
         IOutput &_output;
