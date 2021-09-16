@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file CommandVerifier.hpp
+ * @author Adrian Szczepanski
+ * @date 16-09-2021
+ * @brief 
+ * @details
+ */
+
 #include <libCli/Template/Command.hpp>
 #include <libCli/Model/Command.hpp>
 #include <libCli/Utils/Dictionary.hpp>

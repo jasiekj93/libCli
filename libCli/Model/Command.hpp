@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file Command.hpp
+ * @author Adrian Szczepanski
+ * @date 16-09-2021
+ * @brief 
+ * @details
+ */
+
 #include <libCli/Configuration.hpp>
 #include <libCli/Utils/DictionaryChar.hpp>
 #include <libCli/Model/Argument.hpp>

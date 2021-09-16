@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file Dictionary.hpp
+ * @author Adrian Szczepanski
+ * @date 16-09-2021
+ * @brief 
+ * @details
+ */
+
 #include <libCli/Utils/Buffer.hpp>
 
 namespace Cli::Utils

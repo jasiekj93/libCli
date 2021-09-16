@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file Buffer.hpp
+ * @author Adrian Szczepanski
+ * @date 16-09-2021
+ * @brief 
+ * @details
+ */
+
 #include <cstddef>
 
 namespace Cli::Utils

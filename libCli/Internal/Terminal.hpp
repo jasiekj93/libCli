@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file Terminal.hpp
+ * @author Adrian Szczepanski
+ * @date 16-09-2021
+ * @brief 
+ * @details
+ */
+
 #include <libCli/ITerminal.hpp>
 #include <libCli/IOutput.hpp>
 #include <libCli/ICommandObserver.hpp>

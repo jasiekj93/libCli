@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file Presenter.hpp
+ * @author Adrian Szczepanski
+ * @date 16-09-2021
+ * @brief 
+ * @details
+ */
+
 #include <libCli/Internal/IPresenter.hpp>
 #include <libCli/Internal/CommandHelper.hpp>
 #include <libCli/Configuration.hpp>
