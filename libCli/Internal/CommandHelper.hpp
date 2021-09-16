@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file CommandHelper.hpp
+ * @author Adrian Szczepanski
+ * @date 16-09-2021
+ * @brief 
+ * @details
+ */
+
 #include <libCli/Template/Command.hpp>
 #include <libCli/IOutput.hpp>
 

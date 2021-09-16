@@ -1,5 +1,13 @@
 #pragma once
 
+/**
+ * @file InputController.hpp
+ * @author Adrian Szczepanski
+ * @date 16-09-2021
+ * @brief 
+ * @details
+ */
+
 #include <libCli/Internal/IO/IInputLineObserver.hpp>
 #include <libCli/Internal/IO/ControlSequence.hpp>
 #include <libCli/Internal/IO/ControlChar.hpp>
