@@ -26,7 +26,10 @@ namespace Cli::Internal
         Terminal(IOutput &,
             ICommandObserver &,
             size_t depth,
-            const char *userName);
+            const char *userName,
+            size_t );
+
+        ~Terminal();
 
         void ReceivedCharCallback(char) override;
         void ReceivedStringCallback(const char *) override;
@@ -35,6 +38,7 @@ namespace Cli::Internal
         inline TemplatesBuffer & Templates() override { return _verifier.Templates(); }
 
         void PutString(const char *) override;
+        size_t Printf(const char *, ...) override;
         virtual void DisableInput() override;
         virtual void EnableInput() override;
 
@@ -52,5 +56,7 @@ namespace Cli::Internal
         Presenter _presenter;
         CommandVerifier _verifier;
         bool _isInputEnabled;
+        char *_printfBuffer;
+        const size_t _printfBufferSize;
     };
 }

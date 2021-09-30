@@ -6,7 +6,12 @@ using namespace Cli;
 ITerminal * Factory::CreateNewTerminal(IOutput &output, 
     ICommandObserver &observer, 
     size_t depth,
-    const char *userName)
+    const char *userName,
+    size_t printfBufferSize)
 {
-    return new Internal::Terminal(output, observer, depth, userName);
+    return new Internal::Terminal(output, 
+        observer, 
+        depth, 
+        userName, 
+        printfBufferSize);
 }

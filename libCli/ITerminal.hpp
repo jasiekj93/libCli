@@ -27,6 +27,7 @@ namespace Cli
         virtual TemplatesBuffer & Templates() = 0;
 
         virtual void PutString(const char *) = 0;
+        virtual size_t Printf(const char *, ...) = 0;
         virtual void DisableInput() = 0;
         virtual void EnableInput() = 0;
     };
