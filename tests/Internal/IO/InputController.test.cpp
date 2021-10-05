@@ -64,97 +64,97 @@ TEST(InputControllerTest, OneChar_NotPrintable)
     CHECK_EQUAL(0, output->line.Count());
 }
 
-TEST(InputControllerTest, ArrowLeft)
-{
-    char a = 'A';
-    char b = 'B';
+// TEST(InputControllerTest, ArrowLeft)
+// {
+//     char a = 'A';
+//     char b = 'B';
 
-    ControlSequence arrowLeft(ControlSequence::Type::ArrowLeft);
+//     ControlSequence arrowLeft(ControlSequence::Type::ArrowLeft);
 
-    InputController controller(*output, *inputObserver, *buffer);
+//     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedCharCallback(a);
-    controller.ReceivedStringCallback(arrowLeft.Data());
-    controller.ReceivedCharCallback(b);
+//     controller.ReceivedCharCallback(a);
+//     controller.ReceivedStringCallback(arrowLeft.Data());
+//     controller.ReceivedCharCallback(b);
 
-    CHECK_EQUAL(b, (*buffer)[0]);
-    CHECK_EQUAL(b, output->line[0]);
-}
+//     CHECK_EQUAL(b, (*buffer)[0]);
+//     CHECK_EQUAL(b, output->line[0]);
+// }
 
-TEST(InputControllerTest, ArrowRight)
-{
-    char a = 'A';
-    char b = 'B';
+// TEST(InputControllerTest, ArrowRight)
+// {
+//     char a = 'A';
+//     char b = 'B';
 
-    ControlSequence arrowLeft(ControlSequence::Type::ArrowLeft);
-    ControlSequence arrowRight(ControlSequence::Type::ArrowRight);
+//     ControlSequence arrowLeft(ControlSequence::Type::ArrowLeft);
+//     ControlSequence arrowRight(ControlSequence::Type::ArrowRight);
 
-    InputController controller(*output, *inputObserver, *buffer);
+//     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedCharCallback(a);
-    controller.ReceivedStringCallback(arrowLeft.Data());
-    controller.ReceivedStringCallback(arrowRight.Data());
-    controller.ReceivedCharCallback(b);
+//     controller.ReceivedCharCallback(a);
+//     controller.ReceivedStringCallback(arrowLeft.Data());
+//     controller.ReceivedStringCallback(arrowRight.Data());
+//     controller.ReceivedCharCallback(b);
 
-    CHECK_EQUAL(b, (*buffer)[1]);
-    CHECK_EQUAL(b, output->line[1]);
-}
+//     CHECK_EQUAL(b, (*buffer)[1]);
+//     CHECK_EQUAL(b, output->line[1]);
+// }
 
-TEST(InputControllerTest, Home)
-{
-    const char expected[] = "Aext";
-    const char text[] = "Text";
-    char c = 'A';
+// TEST(InputControllerTest, Home)
+// {
+//     const char expected[] = "Aext";
+//     const char text[] = "Text";
+//     char c = 'A';
 
-    ControlSequence home(ControlSequence::Type::Home);
+//     ControlSequence home(ControlSequence::Type::Home);
 
-    InputController controller(*output, *inputObserver, *buffer);
+//     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedStringCallback(text);
-    controller.ReceivedStringCallback(home.Data());
-    controller.ReceivedCharCallback(c);
+//     controller.ReceivedStringCallback(text);
+//     controller.ReceivedStringCallback(home.Data());
+//     controller.ReceivedCharCallback(c);
 
-    STRCMP_EQUAL(expected, buffer->Data());
-    STRCMP_EQUAL(expected, output->line.Data());
-}
+//     STRCMP_EQUAL(expected, buffer->Data());
+//     STRCMP_EQUAL(expected, output->line.Data());
+// }
 
-TEST(InputControllerTest, End)
-{
-    const char expected[] = "TextA";
-    const char text[] = "Text";
-    char c = 'A';
+// TEST(InputControllerTest, End)
+// {
+//     const char expected[] = "TextA";
+//     const char text[] = "Text";
+//     char c = 'A';
 
-    ControlSequence home(ControlSequence::Type::Home);
-    ControlSequence end(ControlSequence::Type::End);
+//     ControlSequence home(ControlSequence::Type::Home);
+//     ControlSequence end(ControlSequence::Type::End);
 
-    InputController controller(*output, *inputObserver, *buffer);
+//     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedStringCallback(text);
-    controller.ReceivedStringCallback(home.Data());
-    controller.ReceivedStringCallback(end.Data());
-    controller.ReceivedCharCallback(c);
+//     controller.ReceivedStringCallback(text);
+//     controller.ReceivedStringCallback(home.Data());
+//     controller.ReceivedStringCallback(end.Data());
+//     controller.ReceivedCharCallback(c);
 
-    STRCMP_EQUAL(expected, buffer->Data());
-    STRCMP_EQUAL(expected, output->line.Data());
-}
+//     STRCMP_EQUAL(expected, buffer->Data());
+//     STRCMP_EQUAL(expected, output->line.Data());
+// }
 
-TEST(InputControllerTest, Delete)
-{
-    const char expected[] = "ext";
-    const char text[] = "Text";
+// TEST(InputControllerTest, Delete)
+// {
+//     const char expected[] = "ext";
+//     const char text[] = "Text";
 
-    ControlSequence deleteChar(ControlSequence::Type::Delete);
-    ControlSequence home(ControlSequence::Type::Home);
+//     ControlSequence deleteChar(ControlSequence::Type::Delete);
+//     ControlSequence home(ControlSequence::Type::Home);
 
-    InputController controller(*output, *inputObserver, *buffer);
+//     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedStringCallback(text);
-    controller.ReceivedStringCallback(home.Data());
-    controller.ReceivedStringCallback(deleteChar.Data());
+//     controller.ReceivedStringCallback(text);
+//     controller.ReceivedStringCallback(home.Data());
+//     controller.ReceivedStringCallback(deleteChar.Data());
 
-    STRCMP_EQUAL(expected, buffer->Data());
-    STRCMP_EQUAL(expected, output->line.Data());
-}
+//     STRCMP_EQUAL(expected, buffer->Data());
+//     STRCMP_EQUAL(expected, output->line.Data());
+// }
 
 TEST(InputControllerTest, Backspace)
 {

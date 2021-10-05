@@ -24,6 +24,8 @@ namespace Mock
         void InvalidArgumentType(char argument, const Cli::Template::Command &) override;
         void Help(const Cli::Template::Command &) override;
         void Prompt(bool) override;
+        
+        inline size_t PromptLength() override { return 5; }
 
         Operation operation = Operation::Idle;
     };

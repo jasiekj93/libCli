@@ -11,6 +11,7 @@
 #include <libCli/Internal/IPresenter.hpp>
 #include <libCli/Internal/CommandHelper.hpp>
 #include <libCli/Configuration.hpp>
+#include <cstring>
 
 namespace Cli::Internal
 {
@@ -27,6 +28,8 @@ namespace Cli::Internal
         void InvalidArgumentType(char argument, const Template::Command &) override;
         void Help(const Template::Command &) override;
         void Prompt(bool addNewLine = true) override;
+        
+        inline size_t PromptLength() override { return (std::strlen(_userName) + 2); }
         
         void NewLine();
 

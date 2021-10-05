@@ -24,5 +24,6 @@ namespace Cli::Internal
         virtual void InvalidArgumentType(char argument, const Template::Command &) = 0;
         virtual void Help(const Template::Command &) = 0;
         virtual void Prompt(bool addNewLine = true) = 0;
+        virtual size_t PromptLength() = 0;
     };
 }

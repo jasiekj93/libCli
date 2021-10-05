@@ -27,6 +27,7 @@ namespace Cli::Internal::IO
         void ReceivedStringCallback(const char *);
 
         void RestoreLine();
+        void ClearLine(unsigned int extraChars = 0);
 
     protected:
         bool _ProcessControlChar(char c);
@@ -39,7 +40,6 @@ namespace Cli::Internal::IO
 
         void _MoveHome();
         void _MoveEnd();
-        void _ClearLine();
 
     private:
         IOutputController &_output;

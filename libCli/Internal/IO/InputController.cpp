@@ -39,6 +39,13 @@ void InputController::RestoreLine()
     _buffer.MoveCursorMaxRight();
 }
 
+void InputController::ClearLine(unsigned int extraChars)
+{
+    _MoveEnd();
+    _output.Backspace(_buffer.Count());
+    _output.Backspace(extraChars);
+}
+
 bool InputController::_ProcessControlChar(char c)
 {
     if(c == ControlChar::ESCAPE_CHAR)
@@ -89,7 +96,7 @@ bool InputController::_ProcessTab()
 
     if(result != nullptr)
     {
-        _ClearLine();
+        ClearLine();
         
         _buffer.Clear();
         _buffer.PutString(result);
@@ -123,24 +130,24 @@ bool InputController::_ProcessControlSequenceByType()
             if(_buffer.Delete() == true)
                 _output.Delete();
             break;
-        case ControlSequence::Type::ArrowLeft:
-            if(_buffer.MoveCursorLeft() == true)
-                _output.MoveCursorLeft();
-            break;
-        case ControlSequence::Type::ArrowRight:
-            if (_buffer.MoveCursorRight() == true)
-                _output.MoveCursorRight();
-            break;
-        case ControlSequence::Type::End:
-            _MoveEnd();
-            break;
-        case ControlSequence::Type::Home:
-            _MoveHome();
-            break;
+        // case ControlSequence::Type::ArrowLeft:
+        //     if(_buffer.MoveCursorLeft() == true)
+        //         _output.MoveCursorLeft();
+        //     break;
+        // case ControlSequence::Type::ArrowRight:
+        //     if (_buffer.MoveCursorRight() == true)
+        //         _output.MoveCursorRight();
+        //     break;
+        // case ControlSequence::Type::End:
+        //     _MoveEnd();
+        //     break;
+        // case ControlSequence::Type::Home:
+        //     _MoveHome();
+        //     break;
         case ControlSequence::Type::ArrowUp:
             if(_buffer.HasPrevious() == true)
             {
-                _ClearLine();
+                ClearLine();
                 _buffer.SetPrevious();
                 _output.PutString(_buffer.Data());
             }
@@ -148,7 +155,7 @@ bool InputController::_ProcessControlSequenceByType()
         case ControlSequence::Type::ArrowDown:
             if(_buffer.HasNext() == true)
             {
-                _ClearLine();
+                ClearLine();
                 _buffer.SetNext();
                 _output.PutString(_buffer.Data());
             }
@@ -186,10 +193,4 @@ void InputController::_MoveEnd()
         _output.MoveCursorRight(times);
         times = _buffer.MoveCursorMaxRight();
     }
-}
-
-void InputController::_ClearLine()
-{
-    _MoveEnd();
-    _output.Backspace(_buffer.Count());
 }

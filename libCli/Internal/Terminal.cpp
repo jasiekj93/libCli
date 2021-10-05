@@ -76,10 +76,7 @@ void Terminal::PutString(const char *string)
     _output.PutString(string);
 
     if(_isInputEnabled ==true)
-    {
-        _presenter.Prompt();
-        _inputController.RestoreLine();
-    }
+        EnableInput();
 }
 
 size_t Terminal::Printf(const char *format, ...)
@@ -105,12 +102,14 @@ size_t Terminal::Printf(const char *format, ...)
 
 void Terminal::DisableInput()
 {
+    auto promptLength = _presenter.PromptLength();
     _isInputEnabled = false;
-    _presenter.NewLine();
+    _inputController.ClearLine(promptLength);
 }
 
 void Terminal::EnableInput()
 {
     _isInputEnabled = true;
     _presenter.Prompt();
+    _inputController.RestoreLine();
 }
