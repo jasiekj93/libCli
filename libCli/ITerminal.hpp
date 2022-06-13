@@ -30,5 +30,6 @@ namespace Cli
         virtual size_t Printf(const char *, ...) = 0;
         virtual void DisableInput() = 0;
         virtual void EnableInput() = 0;
+        virtual bool IsInputEnabled() = 0;
     };
 }

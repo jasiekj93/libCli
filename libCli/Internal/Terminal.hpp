@@ -41,6 +41,7 @@ namespace Cli::Internal
         size_t Printf(const char *, ...) override;
         virtual void DisableInput() override;
         virtual void EnableInput() override;
+        inline bool IsInputEnabled() override { return _isInputEnabled; }
 
     protected:
         void ReceivedInputLineCallback(const char *) override;
