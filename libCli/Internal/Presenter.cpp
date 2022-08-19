@@ -26,7 +26,7 @@ void Presenter::UnknownCommand(const char *name)
 void Presenter::NoMandatoryArguments(char arg, const Template::Command &command)
 {
     _output.PutString(command.Name());
-    _output.PutString(": brak wymaganych argumentow");
+    _output.PutString(": brak wymaganych argumentow: -");
     _output.PutChar(arg);
     NewLine();
     Help(command);
