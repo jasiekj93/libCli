@@ -1,5 +1,5 @@
 #include "Factory.hpp"
-#include <libcli/Internal/Terminal.hpp>
+#include <libcli/internal/Terminal.hpp>
 
 using namespace cli;
 
@@ -9,7 +9,7 @@ ITerminal * Factory::CreateNewTerminal(IOutput &output,
     const char *userName,
     size_t printfBufferSize)
 {
-    return new Internal::Terminal(output, 
+    return new internal::Terminal(output, 
         observer, 
         depth, 
         userName, 

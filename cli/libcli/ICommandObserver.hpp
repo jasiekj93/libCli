@@ -8,7 +8,7 @@
  * @details
  */
 
-#include <libcli/Model/Command.hpp>
+#include <libcli/model/Command.hpp>
 
 namespace cli
 {
@@ -17,6 +17,6 @@ namespace cli
     public:
         virtual ~ICommandObserver() {}
 
-        virtual void ReceivedCommandCallback(const Model::Command &) = 0;
+        virtual void ReceivedCommandCallback(const model::Command &) = 0;
     };
 }

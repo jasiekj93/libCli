@@ -14,13 +14,13 @@ external_dir := $(project_dir)/external
 # Sources 
 cxx_sources :=  \
 $(wildcard *.cpp) \
-$(wildcard Utils/*.cpp) \
-$(wildcard Mock/*.cpp) \
-$(wildcard Template/*.cpp) \
-$(wildcard Model/*.cpp) \
-$(wildcard Internal/*.cpp) \
-$(wildcard Internal/IO/*.cpp) \
-$(wildcard Internal/IO/Container/*.cpp) \
+$(wildcard utils/*.cpp) \
+$(wildcard mock/*.cpp) \
+$(wildcard templates/*.cpp) \
+$(wildcard model/*.cpp) \
+$(wildcard internal/*.cpp) \
+$(wildcard internal/io/*.cpp) \
+$(wildcard internal/io/container/*.cpp) \
 
 # Includes
 cxx_includes := \

@@ -1,0 +1,33 @@
+#pragma once
+
+/**
+ * @file OutputController.hpp
+ * @author Adrian Szczepanski
+ * @date 27-07-2021
+ * @brief 
+ * @details
+ */
+
+#include <libcli/IOutput.hpp>
+#include <libcli/internal/io/IOutputController.hpp>
+
+namespace cli::internal::io
+{
+    class OutputController : public IOutputController
+    {
+    public:
+        OutputController(IOutput &);
+
+        void PutChar(char) override;
+        void PutString(const char *) override;
+        void MoveCursorLeft(unsigned int) override;
+        void MoveCursorRight(unsigned int) override;
+        void Backspace(unsigned int) override;
+        void Delete(unsigned int) override;
+        void NewLine() override;
+        void ClearScreen() override;
+
+    private:
+        IOutput &_output;
+    };
+}

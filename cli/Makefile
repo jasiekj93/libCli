@@ -18,12 +18,12 @@ external_dir := $(project_dir)/external
 # Sources 
 cxx_sources :=  \
 $(wildcard libcli/*.cpp) \
-$(wildcard libcli/Internal/*.cpp) \
-$(wildcard libcli/Internal/IO/*.cpp) \
-$(wildcard libcli/Internal/IO/Container/*.cpp) \
-$(wildcard libcli/Model/*.cpp) \
-$(wildcard libcli/Template/*.cpp) \
-$(wildcard libcli/Utils/*.cpp) \
+$(wildcard libcli/internal/*.cpp) \
+$(wildcard libcli/internal/io/*.cpp) \
+$(wildcard libcli/internal/io/container/*.cpp) \
+$(wildcard libcli/model/*.cpp) \
+$(wildcard libcli/templates/*.cpp) \
+$(wildcard libcli/utils/*.cpp) \
 
 # c_sources := \
 
