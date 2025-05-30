@@ -4,115 +4,130 @@
 # ------------------------------------------------
 
 # Target
-TARGET = libCppUTest
-#PLATFORM = CortexM7
-PLATFORM = Win32
+target = libCppUTest
+platform := Pc32
+supported_platforms := Pc32 ArmM4 ArmM7
 
-ifeq (PLATFORM, Win32)
-TARGET += Win32
+ifeq (platform, Pc32)
+target += Pc32
 endif
 
 # debug
-DEBUG = 1
-OPT = -Og
+DEBUG := 1
+opt := -Og
 
 # directories
-BUILD_DIR = build/$(TARGET)
-LIB_DIR = lib/$(PLATFORM)
+build_root_dir := build
+lib_root_dir := lib
+build_dir := $(build_root_dir)/$(platform)
+lib_dir := $(lib_root_dir)/$(platform)
 
 # toolchain
-ifeq ($(PLATFORM), Win32)
-PREFIX = 
+ifeq ($(platform), Pc32)
+prefix := 
 else
-PREFIX = arm-none-eabi-
+prefix := arm-none-eabi-
 endif
 
-CC = $(PREFIX)gcc
-CXX = $(PREFIX)g++
-AS = $(PREFIX)gcc -x assembler-with-cpp
-CP = $(PREFIX)objcopy
-SZ = $(PREFIX)size
-AR = $(PREFIX)ar
-HEX = $(CP) -O ihex
-BIN = $(CP) -O binary -S
+CC := $(prefix)gcc
+CXX := $(prefix)g++
+AS := $(prefix)gcc -x assembler-with-cpp
+CP := $(prefix)objcopy
+SZ := $(prefix)size
+AR := $(prefix)ar
+HEX := $(CP) -O ihex
+BIN := $(CP) -O binary -S
 
 # mcu definition
-ifeq ($(PLATFORM), Win32)
-MCU = -m32
+ifeq ($(platform), Pc32)
+mcu := -m32
+else ifeq ($(platform), ArmM4)
+cpu := -mcpu=cortex-m4
+fpu := -mfpu=fpv4-sp-d16
+float-abi := -mfloat-abi=hard
+mcu := $(cpu) -mthumb $(fpu) $(float-abi)
+else ifeq ($(platform), ArmM7)
+cpu := -mcpu=cortex-m7
+fpu := -mfpu=fpv5-sp-d16
+float-abi := -mfloat-abi=hard
+mcu := $(cpu) -mthumb $(fpu) $(float-abi)
 else
-CPU = -mcpu=cortex-m7
-FPU = -mfpu=fpv5-sp-d16
-FLOAT-ABI = -mfloat-abi=softfp
-MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
+$(error "Platform $(platform) not supported!")
 endif 
 
 # sources 
-CXX_SOURCES =  \
-$(wildcard CppUTest/*.cpp) \
+cxx_sources :=  \
+$(wildcard src/CppUTest/*.cpp) \
 
 # includes
-CXX_INCLUDES =  \
+cxx_includes :=  \
 -Iinclude \
 
 #defines
-ifeq ($(PLATFORM), Win32)
-USE_STD_LIB = 1
+ifeq ($(platform), Pc32)
+use_std_lib := 1
 else
-USE_STD_LIB = 0
+use_std_lib := 0
 endif
 
-CXX_DEFS = \
--DCPPUTEST_USE_STD_CPP_LIB=$(USE_STD_LIB)
+cxx_defs := \
+-DCPPUTEST_USE_STD_CPP_LIB=$(use_std_lib)
 
 # gcc flags
-CXXFLAGS = $(MCU) $(CXX_DEFS) $(CXX_INCLUDES) $(OPT) -std=c++17 -Wall 
+cxxflags = $(mcu) $(cxx_defs) $(cxx_includes) $(opt) -std=c++17
 
-ifneq ($(PLATFORM), Win32)
-CXXFLAGS += -fdata-sections -ffunction-sections -ffreestanding -fno-exceptions -nostdlib
+ifneq ($(platform), Pc32)
+cxxflags += -fdata-sections -ffunction-sections -ffreestanding -fno-exceptions -nostdlib
 endif
 
 ifeq ($(DEBUG), 1)
-CXXFLAGS += -g -gdwarf-2
+cxxflags += -g -gdwarf-2
 endif
 
 # Generate dependency information
-CXXFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
+cxxflags += -MMD -MP -MF"$(@:%.o=%.d)"
 
-.PHONY: all print clean
 
-# build all
-all: $(LIB_DIR)/$(TARGET).a
+.PHONY: all $(supported_platforms) clean mrproper distclean
+
+all: $(supported_platforms)
+
+$(supported_platforms):
+	+@$(MAKE) --directory=. library platform=$@
+
+library: $(lib_dir)/$(target).a
 
 print-%: ; @echo $* = $($*)
 
-# list of objects
-OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(CXX_SOURCES:.cpp=.o)))
-vpath %.cpp $(sort $(dir $(CXX_SOURCES)))
-
 # list of C++ objects
-OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(CXX_SOURCES:.cpp=.o)))
-vpath %.cpp $(sort $(dir $(CXX_SOURCES)))
+objects := $(addprefix $(build_dir)/,$(notdir $(cxx_sources:.cpp=.o)))
+vpath %.cpp $(sort $(dir $(cxx_sources)))
 
 # build C++ objects
-$(BUILD_DIR)/%.o: %.cpp Makefile | $(BUILD_DIR)
+$(build_dir)/%.o: %.cpp Makefile | $(build_dir)
 	@echo Compiling $<
-	@$(CXX) -c $(CXXFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.cpp=.lst)) $< -o $@
+	@$(CXX) -c $(cxxflags) -Wa,-a,-ad,-alms=$(build_dir)/$(notdir $(<:.cpp=.lst)) $< -o $@
 
 # build library
-$(LIB_DIR)/$(TARGET).a: $(OBJECTS) Makefile | $(LIB_DIR)
+$(lib_dir)/$(target).a: $(objects) Makefile | $(lib_dir)
 	@echo Creating library $@
-	@$(AR) rcs $@ $(OBJECTS) 
+	@$(AR) rcs $@ $(objects) 
 
 # create directories
-$(BUILD_DIR):
+$(build_dir):
 	mkdir -p $@		
 
-$(LIB_DIR):
+$(lib_dir):
 	mkdir -p $@
 
 # clean up
 clean:
-	rm -rf $(BUILD_DIR)
+	@echo Cleaning build directory
+	@rm -rf $(build_root_dir)
+
+mrproper distclean: clean
+	@echo Cleaning lib directory
+	@rm -rf $(lib_root_dir)
   
 # dependencies
--include $(wildcard $(BUILD_DIR)/*.d)
+-include $(wildcard $(build_dir)/*.d)

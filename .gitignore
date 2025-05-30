@@ -1,6 +1,4 @@
 build
+bin
 lib
 test
-
-external/CppUTest/build
-external/CppUTest/lib
