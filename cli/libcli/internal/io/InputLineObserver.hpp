@@ -15,7 +15,7 @@ namespace cli::internal::io
     public:
         virtual ~InputLineObserver() {}
 
-        virtual void ReceivedInputLineCallback(const char*) = 0;
-        virtual const char * ReceivedAutoCompleteCallback(const char*) = 0;
+        virtual void receivedInputLineCallback(const char*) = 0;
+        virtual const char * receivedAutoCompleteCallback(const char*) = 0;
     };
 }

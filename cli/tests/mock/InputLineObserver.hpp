@@ -19,8 +19,8 @@ namespace mock
         InputLineObserver(size_t);
         ~InputLineObserver();
 
-        void ReceivedInputLineCallback(const char*) override;
-        const char* ReceivedAutoCompleteCallback(const char*) override { return nullptr; }
+        void receivedInputLineCallback(const char*) override;
+        const char* receivedAutoCompleteCallback(const char*) override { return nullptr; }
 
         char* line;
 

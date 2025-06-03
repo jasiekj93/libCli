@@ -20,25 +20,25 @@ namespace cli::internal::io::container
         LineBuffer(size_t);
         ~LineBuffer();
 
-        bool Put(char);
-        bool PutString(const char *);
-        void Clear();
+        bool put(char);
+        bool putString(const char *);
+        void clear();
 
-        bool MoveCursorLeft();
-        bool MoveCursorRight();
-        unsigned int MoveCursorMaxLeft();
-        unsigned int MoveCursorMaxRight();
-        bool Delete();
-        
-        inline const auto Data() const { return _data; }
-        inline const auto Count() const { return _count; }
-        inline const auto Cursor() const { return _cursor; }
+        bool moveCursorLeft();
+        bool moveCursorRight();
+        unsigned int moveCursorMaxLeft();
+        unsigned int moveCursorMaxRight();
+        bool remove();
+
+        inline const auto data() const { return _data; }
+        inline const auto count() const { return _count; }
+        inline const auto cursor() const { return _cursor; }
 
         inline auto operator[](size_t i) const { return _data[i]; }
         
     protected:
-        void _CopyTo(char *);
-        void _CopyFrom(const char *);
+        void copyTo(char *) const;
+        void copyFrom(const char *);
 
     private:
         char *_data;

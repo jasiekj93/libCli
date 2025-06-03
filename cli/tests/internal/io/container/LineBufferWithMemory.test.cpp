@@ -25,8 +25,8 @@ TEST(LineBufferWithMemoryTest, Constructor)
 {
     LineBufferWithMemory buffer(SIZE, DEPTH);
 
-    CHECK_EQUAL(0, buffer.Count());
-    CHECK_EQUAL(0, buffer.Cursor());
+    CHECK_EQUAL(0, buffer.count());
+    CHECK_EQUAL(0, buffer.cursor());
 }
 
 TEST(LineBufferWithMemoryTest, AddSecond_IsTheSame)
@@ -35,11 +35,11 @@ TEST(LineBufferWithMemoryTest, AddSecond_IsTheSame)
 
     const char string[] = "aa";
 
-    buffer.PutString(string);
-    buffer.ClearAndMemorize();
-    buffer.PutString(string);
+    buffer.putString(string);
+    buffer.clearAndMemorize();
+    buffer.putString(string);
 
-    CHECK_EQUAL(1, buffer.MemoryCount());
+    CHECK_EQUAL(1, buffer.memoryCount());
 }
 
 TEST(LineBufferWithMemoryTest, SetPrevious)
@@ -52,19 +52,19 @@ TEST(LineBufferWithMemoryTest, SetPrevious)
         "bbb"
     };
 
-    buffer.PutString(strings[0]);
-    buffer.ClearAndMemorize();
-    buffer.PutString(strings[1]);
+    buffer.putString(strings[0]);
+    buffer.clearAndMemorize();
+    buffer.putString(strings[1]);
 
-    CHECK_EQUAL(1, buffer.MemoryCount());
-    STRCMP_EQUAL(strings[1], buffer.Data());
-    CHECK_EQUAL(std::strlen(strings[1]), buffer.Cursor());
-    CHECK_EQUAL(std::strlen(strings[1]), buffer.Count());
+    CHECK_EQUAL(1, buffer.memoryCount());
+    STRCMP_EQUAL(strings[1], buffer.data());
+    CHECK_EQUAL(std::strlen(strings[1]), buffer.cursor());
+    CHECK_EQUAL(std::strlen(strings[1]), buffer.count());
 
-    CHECK(buffer.SetPrevious());
-    STRCMP_EQUAL(strings[0], buffer.Data());
-    CHECK_EQUAL(std::strlen(strings[0]), buffer.Cursor());
-    CHECK_EQUAL(std::strlen(strings[0]), buffer.Count());
+    CHECK(buffer.setPrevious());
+    STRCMP_EQUAL(strings[0], buffer.data());
+    CHECK_EQUAL(std::strlen(strings[0]), buffer.cursor());
+    CHECK_EQUAL(std::strlen(strings[0]), buffer.count());
 }
 
 TEST(LineBufferWithMemoryTest, SetPrevious_NoPrevious)
@@ -77,9 +77,9 @@ TEST(LineBufferWithMemoryTest, SetPrevious_NoPrevious)
         "bar"
     };
 
-    buffer.PutString(strings[0]);
+    buffer.putString(strings[0]);
 
-    CHECK_FALSE(buffer.SetPrevious());
+    CHECK_FALSE(buffer.setPrevious());
 }
 
 TEST(LineBufferWithMemoryTest, SetNext)
@@ -92,13 +92,13 @@ TEST(LineBufferWithMemoryTest, SetNext)
         "bar"
     };
 
-    buffer.PutString(strings[0]);
-    buffer.ClearAndMemorize();
-    buffer.PutString(strings[1]);
+    buffer.putString(strings[0]);
+    buffer.clearAndMemorize();
+    buffer.putString(strings[1]);
 
-    CHECK(buffer.SetPrevious());
-    CHECK(buffer.SetNext());
-    STRCMP_EQUAL(strings[1], buffer.Data());
+    CHECK(buffer.setPrevious());
+    CHECK(buffer.setNext());
+    STRCMP_EQUAL(strings[1], buffer.data());
 }
 
 TEST(LineBufferWithMemoryTest, SetCurrent)
@@ -112,18 +112,18 @@ TEST(LineBufferWithMemoryTest, SetCurrent)
         "baz"
     };
 
-    buffer.PutString(strings[0]);
-    buffer.ClearAndMemorize();
-    buffer.PutString(strings[1]);
-    buffer.ClearAndMemorize();
-    buffer.PutString(strings[2]);
+    buffer.putString(strings[0]);
+    buffer.clearAndMemorize();
+    buffer.putString(strings[1]);
+    buffer.clearAndMemorize();
+    buffer.putString(strings[2]);
 
-    CHECK_EQUAL(2, buffer.MemoryCount());
-    buffer.SetPrevious();
-    buffer.SetPrevious();
-    STRCMP_EQUAL(strings[0], buffer.Data());
+    CHECK_EQUAL(2, buffer.memoryCount());
+    buffer.setPrevious();
+    buffer.setPrevious();
+    STRCMP_EQUAL(strings[0], buffer.data());
 
-    buffer.SetCurrent();
+    buffer.setCurrent();
 
-    STRCMP_EQUAL(strings[2], buffer.Data());
+    STRCMP_EQUAL(strings[2], buffer.data());
 }

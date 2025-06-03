@@ -19,7 +19,7 @@ LineBuffer::~LineBuffer()
 }
 
 
-bool LineBuffer::Put(char c)
+bool LineBuffer::put(char c)
 {
     if (_cursor == _size)
         return false;
@@ -36,7 +36,7 @@ bool LineBuffer::Put(char c)
     return true;
 }
 
-bool LineBuffer::PutString(const char *string)
+bool LineBuffer::putString(const char *string)
 {
     auto length = std::strlen(string);
 
@@ -44,19 +44,19 @@ bool LineBuffer::PutString(const char *string)
         return false;
 
     for (size_t i = 0; i < length; i++)
-        Put(string[i]);
+        put(string[i]);
 
     return true;
 }
 
-void LineBuffer::Clear()
+void LineBuffer::clear()
 {
     _count = 0;
     _cursor = 0;
     _data[0] = '\0';
 }
 
-bool LineBuffer::MoveCursorLeft()
+bool LineBuffer::moveCursorLeft()
 {
     if (_cursor == 0)
         return false;
@@ -65,7 +65,7 @@ bool LineBuffer::MoveCursorLeft()
     return true;
 }
 
-bool LineBuffer::MoveCursorRight()
+bool LineBuffer::moveCursorRight()
 {
     if (_cursor == _count)
         return false;
@@ -74,7 +74,7 @@ bool LineBuffer::MoveCursorRight()
     return true;
 }
 
-unsigned int LineBuffer::MoveCursorMaxLeft()
+unsigned int LineBuffer::moveCursorMaxLeft()
 {
     unsigned int times = _cursor;
 
@@ -85,7 +85,7 @@ unsigned int LineBuffer::MoveCursorMaxLeft()
     return times;
 }
 
-unsigned int LineBuffer::MoveCursorMaxRight()
+unsigned int LineBuffer::moveCursorMaxRight()
 {
     unsigned int times = _count - _cursor;
     
@@ -96,7 +96,7 @@ unsigned int LineBuffer::MoveCursorMaxRight()
     return times;
 }
 
-bool LineBuffer::Delete()
+bool LineBuffer::remove()
 {
     if (_cursor == _count)
         return false;
@@ -108,12 +108,12 @@ bool LineBuffer::Delete()
     return true;
 }
 
-void LineBuffer::_CopyTo(char *output)
+void LineBuffer::copyTo(char *output) const
 {
     std::strcpy(output, _data);
 }
 
-void LineBuffer::_CopyFrom(const char *input)
+void LineBuffer::copyFrom(const char *input)
 {
     std::strcpy(_data, input);
     _count = strlen(input);

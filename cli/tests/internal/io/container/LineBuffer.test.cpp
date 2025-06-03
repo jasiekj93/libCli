@@ -24,8 +24,8 @@ TEST(LineBufferTest, Constructor)
 {
     LineBuffer buffer(SIZE);
 
-    CHECK_EQUAL(0, buffer.Count());
-    CHECK_EQUAL(0, buffer.Cursor());
+    CHECK_EQUAL(0, buffer.count());
+    CHECK_EQUAL(0, buffer.cursor());
 }
 
 TEST(LineBufferTest, AddOneChar)
@@ -33,10 +33,10 @@ TEST(LineBufferTest, AddOneChar)
     LineBuffer buffer(SIZE);
     char a = 'A';
 
-    CHECK(buffer.Put(a));
+    CHECK(buffer.put(a));
     
-    CHECK_EQUAL(1, buffer.Count());
-    CHECK_EQUAL(1, buffer.Cursor()); 
+    CHECK_EQUAL(1, buffer.count());
+    CHECK_EQUAL(1, buffer.cursor()); 
     CHECK_EQUAL(a, buffer[0]);
     CHECK_EQUAL('\0', buffer[1]);
 }
@@ -46,10 +46,10 @@ TEST(LineBufferTest, AddString)
     LineBuffer buffer(SIZE);
     char string[] = "Hello";
 
-    CHECK(buffer.PutString(string));
+    CHECK(buffer.putString(string));
     
-    CHECK_EQUAL(std::strlen(string), buffer.Count());
-    CHECK_EQUAL(std::strlen(string), buffer.Cursor());
+    CHECK_EQUAL(std::strlen(string), buffer.count());
+    CHECK_EQUAL(std::strlen(string), buffer.cursor());
     CHECK_EQUAL('\0', buffer[std::strlen(string)]);
 }
 
@@ -59,13 +59,13 @@ TEST(LineBufferTest, AddMoreThanSize)
     char c = 'A';
 
     for(size_t i = 0; i < SIZE; i++)
-        CHECK(buffer.Put(c++));
+        CHECK(buffer.put(c++));
     
-    CHECK_FALSE(buffer.Put(c));
+    CHECK_FALSE(buffer.put(c));
     c--;
     
-    CHECK_EQUAL(SIZE, buffer.Count());
-    CHECK_EQUAL(SIZE, buffer.Cursor());
+    CHECK_EQUAL(SIZE, buffer.count());
+    CHECK_EQUAL(SIZE, buffer.cursor());
     CHECK_EQUAL(c, buffer[SIZE - 1]);
     CHECK_EQUAL('\0', buffer[SIZE])
 }
@@ -76,15 +76,15 @@ TEST(LineBufferTest, Clear)
     char c = 'A';
 
     for(size_t i = 0; i < SIZE; i++)
-        buffer.Put(c++);
+        buffer.put(c++);
     
-    CHECK_EQUAL(SIZE, buffer.Count());
-    CHECK_EQUAL(SIZE, buffer.Cursor());
+    CHECK_EQUAL(SIZE, buffer.count());
+    CHECK_EQUAL(SIZE, buffer.cursor());
 
-    buffer.Clear();
+    buffer.clear();
 
-    CHECK_EQUAL(0, buffer.Count());
-    CHECK_EQUAL(0, buffer.Cursor());
+    CHECK_EQUAL(0, buffer.count());
+    CHECK_EQUAL(0, buffer.cursor());
 }
 
 TEST(LineBufferTest, MoveCursorLeft)
@@ -93,12 +93,12 @@ TEST(LineBufferTest, MoveCursorLeft)
     char a = 'A';
     char b = 'B';
 
-    buffer.Put(a);
-    CHECK(buffer.MoveCursorLeft());
-    buffer.Put(b);
+    buffer.put(a);
+    CHECK(buffer.moveCursorLeft());
+    buffer.put(b);
 
-    CHECK_EQUAL(1, buffer.Count());
-    CHECK_EQUAL(1, buffer.Cursor());
+    CHECK_EQUAL(1, buffer.count());
+    CHECK_EQUAL(1, buffer.cursor());
     CHECK_EQUAL(b, buffer[0]);
     CHECK_EQUAL('\0', buffer[1]);
 }
@@ -107,7 +107,7 @@ TEST(LineBufferTest, MoveCursorLeft_IsEmpty)
 {
     LineBuffer buffer(SIZE);
 
-    CHECK_FALSE(buffer.MoveCursorLeft());
+    CHECK_FALSE(buffer.moveCursorLeft());
 }
 
 TEST(LineBufferTest, MoveCursorRight)
@@ -117,17 +117,17 @@ TEST(LineBufferTest, MoveCursorRight)
     char b = 'B';
     char c = 'C';
 
-    buffer.Put(a);
-    buffer.Put(b);
+    buffer.put(a);
+    buffer.put(b);
 
-    buffer.MoveCursorLeft();
+    buffer.moveCursorLeft();
 
-    CHECK(buffer.MoveCursorRight());
+    CHECK(buffer.moveCursorRight());
 
-    buffer.Put(c);
+    buffer.put(c);
 
-    CHECK_EQUAL(3, buffer.Count());
-    CHECK_EQUAL(3, buffer.Cursor());
+    CHECK_EQUAL(3, buffer.count());
+    CHECK_EQUAL(3, buffer.cursor());
     CHECK_EQUAL(c, buffer[2]);
     CHECK_EQUAL('\0', buffer[3]);
 }
@@ -138,61 +138,61 @@ TEST(LineBufferTest, MoveCursorRight_IsOnTheEnd)
     char a = 'A';
     char b = 'B';
     
-    buffer.Put(a);
-    buffer.Put(b);
+    buffer.put(a);
+    buffer.put(b);
 
-    CHECK_FALSE(buffer.MoveCursorRight());
+    CHECK_FALSE(buffer.moveCursorRight());
 }
 
-TEST(LineBufferTest, Delete)
+TEST(LineBufferTest, remove)
 {
     LineBuffer buffer(SIZE);
     char a = 'A';
     char b = 'B';
     
-    buffer.Put(a);
-    buffer.Put(b);
-    buffer.MoveCursorLeft();
+    buffer.put(a);
+    buffer.put(b);
+    buffer.moveCursorLeft();
 
-    CHECK(buffer.Delete());
-    CHECK_EQUAL(1, buffer.Count());
-    CHECK_EQUAL(1, buffer.Cursor());
+    CHECK(buffer.remove());
+    CHECK_EQUAL(1, buffer.count());
+    CHECK_EQUAL(1, buffer.cursor());
     CHECK_EQUAL(a, buffer[0]);
     CHECK_EQUAL('\0', buffer[1]);
 }
 
-TEST(LineBufferTest, Delete_InTheMiddle)
+TEST(LineBufferTest, remove_InTheMiddle)
 {
     LineBuffer buffer(SIZE);
     char a = 'A';
     char b = 'B';
     char c = 'C';
     
-    buffer.Put(a);
-    buffer.Put(b);
-    buffer.Put(c);
-    buffer.MoveCursorLeft();
-    buffer.MoveCursorLeft();
+    buffer.put(a);
+    buffer.put(b);
+    buffer.put(c);
+    buffer.moveCursorLeft();
+    buffer.moveCursorLeft();
 
-    CHECK(buffer.Delete());
-    CHECK_EQUAL(2, buffer.Count());
-    CHECK_EQUAL(1, buffer.Cursor());
+    CHECK(buffer.remove());
+    CHECK_EQUAL(2, buffer.count());
+    CHECK_EQUAL(1, buffer.cursor());
     CHECK_EQUAL(a, buffer[0]);
     CHECK_EQUAL(c, buffer[1]);
     CHECK_EQUAL('\0', buffer[2]);
 }
 
-TEST(LineBufferTest, Delete_OneChar)
+TEST(LineBufferTest, remove_OneChar)
 {
     LineBuffer buffer(SIZE);
     char a = 'A';
     
-    buffer.Put(a);
-    buffer.MoveCursorLeft();
+    buffer.put(a);
+    buffer.moveCursorLeft();
 
-    CHECK(buffer.Delete());
-    CHECK_EQUAL(0, buffer.Count());
-    CHECK_EQUAL(0, buffer.Cursor());
+    CHECK(buffer.remove());
+    CHECK_EQUAL(0, buffer.count());
+    CHECK_EQUAL(0, buffer.cursor());
     CHECK_EQUAL('\0', buffer[0]);
 }
 
@@ -200,16 +200,16 @@ TEST(LineBufferTest, IsEmpty)
 {
     LineBuffer buffer(SIZE);
     
-    CHECK_FALSE(buffer.Delete());
+    CHECK_FALSE(buffer.remove());
 }
 
-TEST(LineBufferTest, Delete_OnTheEnd)
+TEST(LineBufferTest, remove_OnTheEnd)
 {
     LineBuffer buffer(SIZE);
     char a = 'A';
     
-    buffer.Put(a);
-    CHECK_FALSE(buffer.Delete());
+    buffer.put(a);
+    CHECK_FALSE(buffer.remove());
 }
 
 TEST(LineBufferTest, MoveCursorMaxLeft)
@@ -217,12 +217,12 @@ TEST(LineBufferTest, MoveCursorMaxLeft)
     const char text[] = "0123456789";
     LineBuffer buffer(SIZE);
     
-    buffer.PutString(text);
-    CHECK_EQUAL(9, buffer.MoveCursorMaxLeft());
-    CHECK_EQUAL(1, buffer.Cursor());
-    CHECK_EQUAL(1, buffer.MoveCursorMaxLeft());
-    CHECK_EQUAL(0, buffer.Cursor());
-    CHECK_EQUAL(0, buffer.MoveCursorMaxLeft());
+    buffer.putString(text);
+    CHECK_EQUAL(9, buffer.moveCursorMaxLeft());
+    CHECK_EQUAL(1, buffer.cursor());
+    CHECK_EQUAL(1, buffer.moveCursorMaxLeft());
+    CHECK_EQUAL(0, buffer.cursor());
+    CHECK_EQUAL(0, buffer.moveCursorMaxLeft());
 }
 
 TEST(LineBufferTest, MoveCursorMaxRight)
@@ -230,13 +230,13 @@ TEST(LineBufferTest, MoveCursorMaxRight)
     const char text[] = "0123456789";
     LineBuffer buffer(SIZE);
     
-    buffer.PutString(text);
-    buffer.MoveCursorMaxLeft();
-    buffer.MoveCursorMaxLeft();
+    buffer.putString(text);
+    buffer.moveCursorMaxLeft();
+    buffer.moveCursorMaxLeft();
 
-    CHECK_EQUAL(9, buffer.MoveCursorMaxRight());
-    CHECK_EQUAL(9, buffer.Cursor());
-    CHECK_EQUAL(1, buffer.MoveCursorMaxRight());
-    CHECK_EQUAL(10, buffer.Cursor());
-    CHECK_EQUAL(0, buffer.MoveCursorMaxRight());
+    CHECK_EQUAL(9, buffer.moveCursorMaxRight());
+    CHECK_EQUAL(9, buffer.cursor());
+    CHECK_EQUAL(1, buffer.moveCursorMaxRight());
+    CHECK_EQUAL(10, buffer.cursor());
+    CHECK_EQUAL(0, buffer.moveCursorMaxRight());
 }

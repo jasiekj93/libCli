@@ -18,11 +18,11 @@ namespace cli::internal::io::container
         StringCircularLifo(size_t size, size_t depth);
         ~StringCircularLifo();
 
-        bool Push(const char *);
-        const char * Get(size_t) const;
-        void Clear();
+        bool push(const char *);
+        const char * get(size_t) const;
+        void clear();
 
-        inline auto Count() const { return _count; }
+        inline auto count() const { return _count; }
     
     private:
         const size_t _size;

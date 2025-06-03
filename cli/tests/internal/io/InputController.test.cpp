@@ -60,8 +60,8 @@ TEST(InputControllerTest, OneChar_NotPrintable)
 
     controller.ReceivedCharCallback(c);
 
-    CHECK_EQUAL(0, buffer->Count());
-    CHECK_EQUAL(0, output->line.Count());
+    CHECK_EQUAL(0, buffer->count());
+    CHECK_EQUAL(0, output->line.count());
 }
 
 // TEST(InputControllerTest, ArrowLeft)
@@ -166,8 +166,8 @@ TEST(InputControllerTest, Backspace)
     controller.ReceivedStringCallback(text);
     controller.ReceivedCharCallback(ControlChar::BACKSPACE);
 
-    STRCMP_EQUAL(expected, buffer->Data());
-    STRCMP_EQUAL(expected, output->line.Data());
+    STRCMP_EQUAL(expected, buffer->data());
+    STRCMP_EQUAL(expected, output->line.data());
 }
 
 TEST(InputControllerTest, Enter)
@@ -179,8 +179,8 @@ TEST(InputControllerTest, Enter)
     controller.ReceivedStringCallback(text);
     controller.ReceivedCharCallback(ControlChar::NEW_LINE);
 
-    CHECK_EQUAL(0, buffer->Count());
-    CHECK_EQUAL(0, output->line.Count());
+    CHECK_EQUAL(0, buffer->count());
+    CHECK_EQUAL(0, output->line.count());
     STRCMP_EQUAL(text, output->previousLine);
 }
 
@@ -199,8 +199,8 @@ TEST(InputControllerTest, ArrowUp)
     controller.ReceivedStringCallback(arrowUp.Data());
 
     STRCMP_EQUAL(text1, output->previousLine);
-    STRCMP_EQUAL(text1, output->line.Data());
-    STRCMP_EQUAL(text1, buffer->Data());
+    STRCMP_EQUAL(text1, output->line.data());
+    STRCMP_EQUAL(text1, buffer->data());
 }
 
 TEST(InputControllerTest, ArrowDown)
@@ -220,6 +220,6 @@ TEST(InputControllerTest, ArrowDown)
     controller.ReceivedStringCallback(arrowDown.Data());
 
     STRCMP_EQUAL(text1, output->previousLine);
-    STRCMP_EQUAL(text2, output->line.Data());
-    STRCMP_EQUAL(text2, buffer->Data());
+    STRCMP_EQUAL(text2, output->line.data());
+    STRCMP_EQUAL(text2, buffer->data());
 }

@@ -16,49 +16,49 @@ OutputController::~OutputController()
 
 void OutputController::PutChar(char c)
 {
-    line.Put(c);
+    line.put(c);
 }
 
 void OutputController::PutString(const char *string)
 {
-    line.PutString(string);
+    line.putString(string);
 }
 
 void OutputController::MoveCursorLeft(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
-        line.MoveCursorLeft();
+        line.moveCursorLeft();
 }
 
 void OutputController::MoveCursorRight(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
-        line.MoveCursorRight();
+        line.moveCursorRight();
 }
 
 void OutputController::Backspace(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
     {
-        line.MoveCursorLeft();
-        line.Delete();
+        line.moveCursorLeft();
+        line.remove();
     }
 }
 
 void OutputController::Delete(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
-        line.Delete();
+        line.remove();
 }
 
 void OutputController::NewLine()
 {
-    std::strcpy(previousLine, line.Data());
-    line.Clear();
+    std::strcpy(previousLine, line.data());
+    line.clear();
 }
 
 void OutputController::ClearScreen()
 {
     previousLine[0] = '\0';
-    line.Clear();
+    line.clear();
 }

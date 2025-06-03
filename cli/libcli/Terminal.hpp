@@ -21,15 +21,15 @@ namespace cli
 
         virtual ~Terminal() {}
 
-        virtual void ReceivedCharCallback(char) = 0;
-        virtual void ReceivedStringCallback(const char*) = 0;
+        virtual void receivedCharCallback(char) = 0;
+        virtual void receivedStringCallback(const char*) = 0;
         
         virtual TemplatessBuffer & templates() = 0;
 
-        virtual void PutString(const char*) = 0;
-        virtual size_t Printf(const char*, ...) = 0;
-        virtual void DisableInput() = 0;
-        virtual void EnableInput() = 0;
-        virtual bool IsInputEnabled() = 0;
+        virtual void putString(const char*) = 0;
+        virtual size_t printf(const char*, ...) = 0;
+        virtual void disableInput() = 0;
+        virtual void enableInput() = 0;
+        virtual bool isInputEnabled() = 0;
     };
 }

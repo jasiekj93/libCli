@@ -9,7 +9,7 @@
  */
 
 #include <libcli/internal/io/container/LineBuffer.hpp>
-#include <libcli/internal/io/container//StringCircularLifo.hpp>
+#include <libcli/internal/io/container/StringCircularLifo.hpp>
 
 namespace cli::internal::io::container
 {
@@ -19,17 +19,17 @@ namespace cli::internal::io::container
         LineBufferWithMemory(size_t size, size_t depth);
         ~LineBufferWithMemory();
 
-        bool SetPrevious();
-        bool SetNext();
-        void SetCurrent();
+        bool setPrevious();
+        bool setNext();
+        void setCurrent();
 
-        bool HasNext();
-        bool HasPrevious();
+        bool hasNext();
+        bool hasPrevious();
 
-        void ClearAndMemorize();
+        void clearAndMemorize();
 
-        inline auto MemoryCount() const { return _lifo.Count(); }
-        inline auto ClearMemory() { _lifo.Clear(); }
+        inline auto memoryCount() const { return _lifo.count(); }
+        inline auto clearMemory() { _lifo.clear(); }
 
     private:
         const size_t _size;

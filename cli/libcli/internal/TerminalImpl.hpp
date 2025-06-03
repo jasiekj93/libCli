@@ -31,20 +31,20 @@ namespace cli::internal
 
         ~TerminalImpl();
 
-        void ReceivedCharCallback(char) override;
-        void ReceivedStringCallback(const char *) override;
-        const char * ReceivedAutoCompleteCallback(const char *) override;
+        void receivedCharCallback(char) override;
+        void receivedStringCallback(const char *) override;
+        const char * receivedAutoCompleteCallback(const char *) override;
 
         inline TemplatessBuffer & templates() override { return _verifier.templates(); }
 
-        void PutString(const char *) override;
-        size_t Printf(const char *, ...) override;
-        virtual void DisableInput() override;
-        virtual void EnableInput() override;
-        inline bool IsInputEnabled() override { return _isInputEnabled; }
+        void putString(const char *) override;
+        size_t printf(const char *, ...) override;
+        virtual void disableInput() override;
+        virtual void enableInput() override;
+        inline bool isInputEnabled() override { return _isInputEnabled; }
 
     protected:
-        void ReceivedInputLineCallback(const char *) override;
+        void receivedInputLineCallback(const char *) override;
 
     private:
         CommandObserver &_observer;

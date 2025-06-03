@@ -24,34 +24,34 @@ TEST(StringCircularLifoTest, Constructor)
 {
     StringCircularLifo queue(SIZE, DEPTH);
 
-    CHECK_EQUAL(0, queue.Count());
-    CHECK(nullptr == queue.Get(0));
+    CHECK_EQUAL(0, queue.count());
+    CHECK(nullptr == queue.get(0));
 }
 
-TEST(StringCircularLifoTest, Push_One)
+TEST(StringCircularLifoTest, push_One)
 {
     StringCircularLifo queue(SIZE, DEPTH);
     const char * text = "Hello";
 
-    CHECK(queue.Push(text));
+    CHECK(queue.push(text));
 
-    CHECK_EQUAL(1, queue.Count());
-    STRCMP_EQUAL(text, queue.Get(0));
-    CHECK(nullptr == queue.Get(1));
+    CHECK_EQUAL(1, queue.count());
+    STRCMP_EQUAL(text, queue.get(0));
+    CHECK(nullptr == queue.get(1));
 }
 
-TEST(StringCircularLifoTest, Push_TooBig)
+TEST(StringCircularLifoTest, push_TooBig)
 {
     StringCircularLifo queue(SIZE, DEPTH);
     const char * text = "Very Big Hello";
 
-    CHECK_FALSE(queue.Push(text));
+    CHECK_FALSE(queue.push(text));
 
-    CHECK_EQUAL(0, queue.Count());
-    CHECK(nullptr == queue.Get(0));
+    CHECK_EQUAL(0, queue.count());
+    CHECK(nullptr == queue.get(0));
 }
 
-TEST(StringCircularLifoTest, Push_MoreThanDepth)
+TEST(StringCircularLifoTest, push_MoreThanDepth)
 {
     StringCircularLifo queue(SIZE, DEPTH);
     const char * texts[] = { 
@@ -62,15 +62,15 @@ TEST(StringCircularLifoTest, Push_MoreThanDepth)
     };
 
     for(size_t i = 0; i < (DEPTH + 1); i++)
-        CHECK(queue.Push(texts[i]));
+        CHECK(queue.push(texts[i]));
 
-    CHECK_EQUAL(DEPTH, queue.Count());
-    STRCMP_EQUAL(texts[3], queue.Get(0));
-    STRCMP_EQUAL(texts[2], queue.Get(1));
-    STRCMP_EQUAL(texts[1], queue.Get(2));
+    CHECK_EQUAL(DEPTH, queue.count());
+    STRCMP_EQUAL(texts[3], queue.get(0));
+    STRCMP_EQUAL(texts[2], queue.get(1));
+    STRCMP_EQUAL(texts[1], queue.get(2));
 }
 
-TEST(StringCircularLifoTest, Push_OverwriteTwoTimes)
+TEST(StringCircularLifoTest, push_OverwriteTwoTimes)
 {
     StringCircularLifo queue(SIZE, DEPTH);
     const char * texts[] = { 
@@ -83,10 +83,10 @@ TEST(StringCircularLifoTest, Push_OverwriteTwoTimes)
     };
 
     for(size_t i = 0; i < (2 * DEPTH); i++)
-        CHECK(queue.Push(texts[i]));
+        CHECK(queue.push(texts[i]));
 
-    CHECK_EQUAL(DEPTH, queue.Count());
-    STRCMP_EQUAL(texts[5], queue.Get(0));
-    STRCMP_EQUAL(texts[4], queue.Get(1));
-    STRCMP_EQUAL(texts[3], queue.Get(2));
+    CHECK_EQUAL(DEPTH, queue.count());
+    STRCMP_EQUAL(texts[5], queue.get(0));
+    STRCMP_EQUAL(texts[4], queue.get(1));
+    STRCMP_EQUAL(texts[3], queue.get(2));
 }

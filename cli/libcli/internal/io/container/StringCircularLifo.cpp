@@ -12,7 +12,7 @@ StringCircularLifo::StringCircularLifo(size_t size, size_t depth)
     for(size_t i = 0; i < _depth; i++)
         _data[i] = new char[_size + 1];
 
-    Clear();
+    clear();
 }
 
 StringCircularLifo::~StringCircularLifo()
@@ -23,7 +23,7 @@ StringCircularLifo::~StringCircularLifo()
     delete[] _data;
 }
 
-bool StringCircularLifo::Push(const char *string)
+bool StringCircularLifo::push(const char *string)
 {
     if (std::strlen(string) > _size)
         return false;
@@ -38,7 +38,7 @@ bool StringCircularLifo::Push(const char *string)
     return true;
 }
 
-const char * StringCircularLifo::Get(size_t id) const
+const char * StringCircularLifo::get(size_t id) const
 {
     if (id >= _count)
         return nullptr;
@@ -50,7 +50,7 @@ const char * StringCircularLifo::Get(size_t id) const
     return _data[index];
 }
 
-void StringCircularLifo::Clear()
+void StringCircularLifo::clear()
 {
     for (size_t i = 0; i < _depth; i++)
     {

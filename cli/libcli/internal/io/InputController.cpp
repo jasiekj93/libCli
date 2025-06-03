@@ -20,7 +20,7 @@ void InputController::ReceivedCharCallback(char c)
     
     if(std::isprint(c))
     {
-        if(_buffer.Put(c) == true)
+        if(_buffer.put(c) == true)
             _output.PutChar(c);
     }
 }
@@ -35,14 +35,14 @@ void InputController::ReceivedStringCallback(const char *string)
 
 void InputController::RestoreLine()
 {
-    _output.PutString(_buffer.Data());
-    _buffer.MoveCursorMaxRight();
+    _output.PutString(_buffer.data());
+    _buffer.moveCursorMaxRight();
 }
 
 void InputController::ClearLine(unsigned int extraChars)
 {
     _MoveEnd();
-    _output.Backspace(_buffer.Count());
+    _output.Backspace(_buffer.count());
     _output.Backspace(extraChars);
 }
 
@@ -72,18 +72,18 @@ bool InputController::_ProcessEscapeChar()
 bool InputController::_ProcessNewLine()
 {
     _output.NewLine();
-    _observer.ReceivedInputLineCallback(_buffer.Data());
-    _buffer.ClearAndMemorize();
+    _observer.receivedInputLineCallback(_buffer.data());
+    _buffer.clearAndMemorize();
 
     return true;
 }
 
 bool InputController::_ProcessBackspace()
 {
-    if(_buffer.Count() == _buffer.Cursor() &&
-        (_buffer.MoveCursorLeft() == true))
+    if(_buffer.count() == _buffer.cursor() &&
+        (_buffer.moveCursorLeft() == true))
     {
-        _buffer.Delete();
+        _buffer.remove();
         _output.Backspace();
     }
 
@@ -92,14 +92,14 @@ bool InputController::_ProcessBackspace()
 
 bool InputController::_ProcessTab()
 {
-    auto result = _observer.ReceivedAutoCompleteCallback(_buffer.Data());
+    auto result = _observer.receivedAutoCompleteCallback(_buffer.data());
 
     if(result != nullptr)
     {
         ClearLine();
         
-        _buffer.Clear();
-        _buffer.PutString(result);
+        _buffer.clear();
+        _buffer.putString(result);
         
         _output.PutString(result);
     }
@@ -127,7 +127,7 @@ bool InputController::_ProcessControlSequenceByType()
     switch(type)
     {
         case ControlSequence::Type::Delete:
-            if(_buffer.Delete() == true)
+            if(_buffer.remove() == true)
                 _output.Delete();
             break;
         // case ControlSequence::Type::ArrowLeft:
@@ -145,19 +145,19 @@ bool InputController::_ProcessControlSequenceByType()
         //     _MoveHome();
         //     break;
         case ControlSequence::Type::ArrowUp:
-            if(_buffer.HasPrevious() == true)
+            if(_buffer.hasPrevious() == true)
             {
                 ClearLine();
-                _buffer.SetPrevious();
-                _output.PutString(_buffer.Data());
+                _buffer.setPrevious();
+                _output.PutString(_buffer.data());
             }
             break;
         case ControlSequence::Type::ArrowDown:
-            if(_buffer.HasNext() == true)
+            if(_buffer.hasNext() == true)
             {
                 ClearLine();
-                _buffer.SetNext();
-                _output.PutString(_buffer.Data());
+                _buffer.setNext();
+                _output.PutString(_buffer.data());
             }
             break;
         default:
@@ -172,12 +172,12 @@ void InputController::_MoveHome()
     // while(_buffer.MoveCursorLeft())
     //     _output.MoveCursorLeft();
 
-    auto times = _buffer.MoveCursorMaxLeft();
+    auto times = _buffer.moveCursorMaxLeft();
 
     while(times != 0)
     {
         _output.MoveCursorLeft(times);
-        times = _buffer.MoveCursorMaxLeft();
+        times = _buffer.moveCursorMaxLeft();
     }
 }
 
@@ -186,11 +186,11 @@ void InputController::_MoveEnd()
     // while(_buffer.MoveCursorRight())
     //     _output.MoveCursorRight();
 
-    auto times = _buffer.MoveCursorMaxRight();
+    auto times = _buffer.moveCursorMaxRight();
 
     while(times != 0)
     {
         _output.MoveCursorRight(times);
-        times = _buffer.MoveCursorMaxRight();
+        times = _buffer.moveCursorMaxRight();
     }
 }
