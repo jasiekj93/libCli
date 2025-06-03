@@ -8,10 +8,11 @@
  * @details
  */
 
+#include <utility>
+
 #include <libcli/Configuration.hpp>
 #include <libcli/templates/Argument.hpp>
 #include <libcli/utils/DictionaryChar.hpp>
-#include <utility>
 
 namespace cli::templates
 {
@@ -19,9 +20,9 @@ namespace cli::templates
     {
     public:
         Command();
-        Command(const char *name, const char *help = nullptr);
-        Command(const char *name, std::initializer_list<Argument>);
-        Command(const char *name, const char *help, std::initializer_list<Argument>);
+        Command(const char* name, const char* help = nullptr);
+        Command(const char* name, std::initializer_list<Argument>);
+        Command(const char* name, const char* help, std::initializer_list<Argument>);
 
         inline auto Name() const { return _name; }
         inline auto Help() const { return _help; }

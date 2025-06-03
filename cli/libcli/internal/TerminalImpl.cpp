@@ -1,12 +1,12 @@
-#include "Terminal.hpp"
+#include "TerminalImpl.hpp"
 #include <cstdarg>
 #include <cstdio>
 
 using namespace cli;
 using namespace cli::internal;
 
-Terminal::Terminal(IOutput &output,
-    ICommandObserver &observer,
+TerminalImpl::TerminalImpl(Output &output,
+    CommandObserver &observer,
     size_t depth,
     const char *userName,
     size_t printfBufferSize)
@@ -26,25 +26,25 @@ Terminal::Terminal(IOutput &output,
     _printfBuffer = new char[printfBufferSize];
 }
 
-Terminal::~Terminal()
+TerminalImpl::~TerminalImpl()
 {
     delete[] _printfBuffer;
 }
 
 
-void Terminal::ReceivedCharCallback(char c)
+void TerminalImpl::ReceivedCharCallback(char c)
 {
     if(_isInputEnabled)
         _inputController.ReceivedCharCallback(c);
 }
 
-void Terminal::ReceivedStringCallback(const char *string)
+void TerminalImpl::ReceivedStringCallback(const char *string)
 {
     if(_isInputEnabled)
         _inputController.ReceivedStringCallback(string);
 }
 
-void Terminal::ReceivedInputLineCallback(const char *line)
+void TerminalImpl::ReceivedInputLineCallback(const char *line)
 {
     model::Command command(line);
 
@@ -63,12 +63,12 @@ void Terminal::ReceivedInputLineCallback(const char *line)
     _isInputEnabled = true;
 }
 
-const char * Terminal::ReceivedAutoComapleteCallback(const char *substring)
+const char * TerminalImpl::ReceivedAutoCompleteCallback(const char *substring)
 {
     return _verifier.Find(substring);
 }
 
-void Terminal::PutString(const char *string)
+void TerminalImpl::PutString(const char *string)
 {
     if(_isInputEnabled == true)
         _presenter.NewLine();
@@ -79,7 +79,7 @@ void Terminal::PutString(const char *string)
         EnableInput();
 }
 
-size_t Terminal::Printf(const char *format, ...)
+size_t TerminalImpl::Printf(const char *format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -100,14 +100,14 @@ size_t Terminal::Printf(const char *format, ...)
     return result;
 }
 
-void Terminal::DisableInput()
+void TerminalImpl::DisableInput()
 {
     auto promptLength = _presenter.PromptLength();
     _isInputEnabled = false;
     _inputController.ClearLine(promptLength);
 }
 
-void Terminal::EnableInput()
+void TerminalImpl::EnableInput()
 {
     _isInputEnabled = true;
     _presenter.Prompt();

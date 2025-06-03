@@ -8,23 +8,23 @@
  * @details
  */
 
-#include <libcli/internal/io/IInputLineObserver.hpp>
+#include <libcli/internal/io/InputLineObserver.hpp>
 #include <libcli/internal/io/ControlSequence.hpp>
 #include <libcli/internal/io/ControlChar.hpp>
+#include <libcli/internal/io/OutputController.hpp>
 #include <libcli/internal/io/container/LineBufferWithMemory.hpp>
-#include <libcli/internal/io/IOutputController.hpp>
 
 namespace cli::internal::io
 {
     class InputController
     {
     public:
-        InputController(IOutputController &, 
-        IInputLineObserver &,
-        container::LineBufferWithMemory &);
+        InputController(OutputController&, 
+        InputLineObserver&,
+        container::LineBufferWithMemory&);
 
         void ReceivedCharCallback(char);
-        void ReceivedStringCallback(const char *);
+        void ReceivedStringCallback(const char*);
 
         void RestoreLine();
         void ClearLine(unsigned int extraChars = 0);
@@ -42,9 +42,9 @@ namespace cli::internal::io
         void _MoveEnd();
 
     private:
-        IOutputController &_output;
-        IInputLineObserver &_observer;
-        container::LineBufferWithMemory &_buffer;
+        OutputController& _output;
+        InputLineObserver& _observer;
+        container::LineBufferWithMemory& _buffer;
 
         ControlSequence _controlSequence;
     };

@@ -1,18 +1,18 @@
 #pragma once
 
-#include <libcli/IOutput.hpp>
+#include <libcli/Output.hpp>
 #include <libcli/utils/StringBuffer.hpp>
 #include <cstring>
 
 namespace mock
 {
-    class Output : public cli::IOutput
+    class Output : public cli::Output
     {
     public:
         static constexpr size_t SIZE = 1024;
 
         inline void PutChar(char c) override { buffer.Put(c); }
-        inline void PutString(const char *string) override 
+        inline void PutString(const char* string) override 
         { 
             while(*string != '\0')
             {

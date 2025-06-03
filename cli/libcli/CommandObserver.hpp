@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- * @file ICommandObserver.hpp
+ * @file CommandObserver.hpp
  * @author Adrian Szczepanski
  * @date 04-08-2021
  * @brief 
@@ -12,10 +12,10 @@
 
 namespace cli
 {
-    class ICommandObserver
+    class CommandObserver
     {
     public:
-        virtual ~ICommandObserver() {}
+        virtual ~CommandObserver() {}
 
         virtual void ReceivedCommandCallback(const model::Command &) = 0;
     };

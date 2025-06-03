@@ -1,10 +1,10 @@
-#include "Presenter.hpp"
+#include "PresenterImpl.hpp"
 #include <cstring>
 
 using namespace cli;
 using namespace cli::internal;
 
-Presenter::Presenter(IOutput &output, const char *userName)
+PresenterImpl::PresenterImpl(Output& output, const char* userName)
     : _output(output)
     , _helper(output)
     , _userName{'\0'}
@@ -16,14 +16,14 @@ Presenter::Presenter(IOutput &output, const char *userName)
     Prompt();
 }
 
-void Presenter::UnknownCommand(const char *name)
+void PresenterImpl::UnknownCommand(const char *name)
 {
     _output.PutString(name);
     _output.PutString(": nie znaleziono polecenia");
     Prompt();
 }
 
-void Presenter::NoMandatoryArguments(char arg, const templates::Command &command)
+void PresenterImpl::NoMandatoryArguments(char arg, const templates::Command& command)
 {
     _output.PutString(command.Name());
     _output.PutString(": brak wymaganych argumentow: -");
@@ -32,7 +32,7 @@ void Presenter::NoMandatoryArguments(char arg, const templates::Command &command
     Help(command);
 }
 
-void Presenter::InvalidArgument(char arg, const templates::Command &command)
+void PresenterImpl::InvalidArgument(char arg, const templates::Command& command)
 {
     _output.PutString(command.Name());
     _output.PutString(": nieprawidlowy argument -");
@@ -41,7 +41,7 @@ void Presenter::InvalidArgument(char arg, const templates::Command &command)
     Help(command);
 }
 
-void Presenter::InvalidArgumentType(char arg, const templates::Command &command)
+void PresenterImpl::InvalidArgumentType(char arg, const templates::Command& command)
 {
     _output.PutString(command.Name());
     _output.PutString(": nieprawidlowy typ argumentu -");
@@ -50,13 +50,13 @@ void Presenter::InvalidArgumentType(char arg, const templates::Command &command)
     Help(command);
 }
 
-void Presenter::Help(const templates::Command &command)
+void PresenterImpl::Help(const templates::Command& command)
 {
     _helper.DisplayHelp(command);
     Prompt();
 }
 
-void Presenter::Prompt(bool addNewLine)
+void PresenterImpl::Prompt(bool addNewLine)
 {
     if(addNewLine == true)
         NewLine();
@@ -67,7 +67,7 @@ void Presenter::Prompt(bool addNewLine)
 }
 
 
-inline void Presenter::NewLine()
+inline void PresenterImpl::NewLine()    
 {
     _output.PutString("\r\n");
 }

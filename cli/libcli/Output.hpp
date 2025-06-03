@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- * @file IOutput.hpp
+ * @file Output.hpp
  * @author Adrian Szczepanski
  * @date 26-07-2021
  * @brief 
@@ -10,10 +10,10 @@
 
 namespace cli
 {
-    class IOutput
+    class Output
     {
     public:
-        virtual ~IOutput() {}
+        virtual ~Output() {}
 
         virtual void PutChar(char c) = 0;
         virtual void PutString(const char *) = 0;

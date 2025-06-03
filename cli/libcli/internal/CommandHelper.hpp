@@ -9,25 +9,25 @@
  */
 
 #include <libcli/templates/Command.hpp>
-#include <libcli/IOutput.hpp>
+#include <libcli/Output.hpp>
 
 namespace cli::internal
 {
     class CommandHelper
     {
     public:
-        CommandHelper(IOutput &);
+        CommandHelper(Output&);
 
-        void DisplayHelp(const templates::Command &);
+        void DisplayHelp(const templates::Command&);
 
     protected:
-        void _PrintUsage(const templates::Command &);
-        void _PrintArgumentUsage(const templates::Command &);
-        void _PrintCommandHelp(const templates::Command &);
-        void _PrintArguments(const templates::Command &);
-        void _PrintArgumentType(const templates::Argument &);
+        void _PrintUsage(const templates::Command&);
+        void _PrintArgumentUsage(const templates::Command&);
+        void _PrintCommandHelp(const templates::Command&);
+        void _PrintArguments(const templates::Command&);
+        void _PrintArgumentType(const templates::Argument&);
     
     private:
-        IOutput &_output;
+        Output& _output;
     };
 }

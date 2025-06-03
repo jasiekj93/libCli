@@ -8,14 +8,14 @@
  * @details
  */
 
-#include <libcli/ITerminal.hpp>
-#include <libcli/ICommandObserver.hpp>
-#include <libcli/IOutput.hpp>
+#include <libcli/Terminal.hpp>
+#include <libcli/CommandObserver.hpp>
+#include <libcli/Output.hpp>
 
 namespace cli::Factory
 {
-    ITerminal * CreateNewTerminal(IOutput &, 
-        ICommandObserver &,
+    Terminal * CreateNewTerminal(Output &, 
+        CommandObserver &,
         size_t depth = 5, 
         const char *userName = nullptr,
         size_t printfBufferSize = 256); 

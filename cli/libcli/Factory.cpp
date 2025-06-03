@@ -1,15 +1,15 @@
 #include "Factory.hpp"
-#include <libcli/internal/Terminal.hpp>
+#include <libcli/internal/TerminalImpl.hpp>
 
 using namespace cli;
 
-ITerminal * Factory::CreateNewTerminal(IOutput &output, 
-    ICommandObserver &observer, 
+Terminal * Factory::CreateNewTerminal(Output &output, 
+    CommandObserver &observer, 
     size_t depth,
     const char *userName,
     size_t printfBufferSize)
 {
-    return new internal::Terminal(output, 
+    return new internal::TerminalImpl(output, 
         observer, 
         depth, 
         userName, 

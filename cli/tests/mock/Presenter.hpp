@@ -1,10 +1,10 @@
 #pragma once
 
-#include <libcli/internal/IPresenter.hpp>
+#include <libcli/internal/Presenter.hpp>
 
 namespace mock
 {
-    class Presenter : public cli::internal::IPresenter
+    class Presenter : public cli::internal::Presenter
     {
     public:
         enum class Operation
@@ -18,11 +18,11 @@ namespace mock
             Prompt
         };
 
-        void UnknownCommand(const char *) override;
-        void NoMandatoryArguments(char argument, const cli::templates::Command &) override;
-        void InvalidArgument(char argument, const cli::templates::Command &) override;
-        void InvalidArgumentType(char argument, const cli::templates::Command &) override;
-        void Help(const cli::templates::Command &) override;
+        void UnknownCommand(const char*) override;
+        void NoMandatoryArguments(char argument, const cli::templates::Command&) override;
+        void InvalidArgument(char argument, const cli::templates::Command&) override;
+        void InvalidArgumentType(char argument, const cli::templates::Command&) override;
+        void Help(const cli::templates::Command&) override;
         void Prompt(bool) override;
         
         inline size_t PromptLength() override { return 5; }

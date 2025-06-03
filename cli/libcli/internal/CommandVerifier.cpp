@@ -6,7 +6,7 @@ using namespace cli::internal;
 
 model::Argument CommandVerifier::_help('h', nullptr);
 
-CommandVerifier::CommandVerifier(IPresenter &presenter)
+CommandVerifier::CommandVerifier(Presenter &presenter)
     : _presenter(presenter)
 {
 }

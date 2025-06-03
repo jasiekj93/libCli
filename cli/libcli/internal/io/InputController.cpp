@@ -4,9 +4,9 @@
 
 using namespace cli::internal::io;
 
-InputController::InputController(IOutputController &output, 
-    IInputLineObserver &observer,
-    container::LineBufferWithMemory &buffer)
+InputController::InputController(OutputController& output, 
+    InputLineObserver& observer,
+    container::LineBufferWithMemory& buffer)
     : _output(output)
     , _observer(observer)
     , _buffer(buffer)
@@ -92,7 +92,7 @@ bool InputController::_ProcessBackspace()
 
 bool InputController::_ProcessTab()
 {
-    auto result = _observer.ReceivedAutoComapleteCallback(_buffer.Data());
+    auto result = _observer.ReceivedAutoCompleteCallback(_buffer.Data());
 
     if(result != nullptr)
     {

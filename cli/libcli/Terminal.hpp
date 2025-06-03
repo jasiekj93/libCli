@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- * @file ITerminal.hpp
+ * @file Terminal.hpp
  * @author Adrian Szczepanski
  * @date 04-08-2021
  * @brief 
@@ -14,20 +14,20 @@
 
 namespace cli
 {
-    class ITerminal
+    class Terminal
     {
     public:
-        using templatessBuffer = utils::Dictionary<templates::Command, Configuration::MAX_COMMAND_TEMPLATES_COUNT>;
+        using TemplatessBuffer = utils::Dictionary<templates::Command, Configuration::MAX_COMMAND_TEMPLATES_COUNT>;
 
-        virtual ~ITerminal() {}
+        virtual ~Terminal() {}
 
         virtual void ReceivedCharCallback(char) = 0;
-        virtual void ReceivedStringCallback(const char *) = 0;
+        virtual void ReceivedStringCallback(const char*) = 0;
         
-        virtual templatessBuffer & templatess() = 0;
+        virtual TemplatessBuffer & templates() = 0;
 
-        virtual void PutString(const char *) = 0;
-        virtual size_t Printf(const char *, ...) = 0;
+        virtual void PutString(const char*) = 0;
+        virtual size_t Printf(const char*, ...) = 0;
         virtual void DisableInput() = 0;
         virtual void EnableInput() = 0;
         virtual bool IsInputEnabled() = 0;

@@ -8,24 +8,24 @@
  * @details
  */
 
-#include <libcli/internal/io/IInputLineObserver.hpp>
+#include <libcli/internal/io/InputLineObserver.hpp>
 #include <cstddef>
 
 namespace mock
 {
-    class InputLineObserver : public cli::internal::io::IInputLineObserver
+    class InputLineObserver : public cli::internal::io::InputLineObserver
     {
     public:
         InputLineObserver(size_t);
         ~InputLineObserver();
 
-        void ReceivedInputLineCallback(const char *) override;
-        const char * ReceivedAutoComapleteCallback(const char *) override { return nullptr; }
+        void ReceivedInputLineCallback(const char*) override;
+        const char* ReceivedAutoCompleteCallback(const char*) override { return nullptr; }
 
-        char *line;
+        char* line;
 
     private:
-        InputLineObserver(const InputLineObserver &) = delete;
-        auto operator=(const InputLineObserver &) = delete;
+        InputLineObserver(const InputLineObserver&) = delete;
+        auto operator=(const InputLineObserver&) = delete;
     };
 }

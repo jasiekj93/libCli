@@ -4,7 +4,7 @@
 using namespace cli;
 using namespace cli::internal;
 
-CommandHelper::CommandHelper(IOutput &output)
+CommandHelper::CommandHelper(Output& output)
     : _output(output)
 {
 }

@@ -1,41 +1,41 @@
 #pragma once
 
 /**
- * @file Terminal.hpp
+ * @file TerminalImpl.hpp
  * @author Adrian Szczepanski
  * @date 16-09-2021
  * @brief 
  * @details
  */
 
-#include <libcli/ITerminal.hpp>
-#include <libcli/IOutput.hpp>
-#include <libcli/ICommandObserver.hpp>
+#include <libcli/Terminal.hpp>
+#include <libcli/Output.hpp>
+#include <libcli/CommandObserver.hpp>
 #include <libcli/internal/io/InputController.hpp>
-#include <libcli/internal/io/OutputController.hpp>
+#include <libcli/internal/io/OutputControllerImpl.hpp>
 #include <libcli/internal/CommandVerifier.hpp>
-#include <libcli/internal/Presenter.hpp>
+#include <libcli/internal/PresenterImpl.hpp>
 
 namespace cli::internal
 {
-    class Terminal 
-        : public ITerminal
-        , public io::IInputLineObserver
+    class TerminalImpl 
+        : public Terminal
+        , public io::InputLineObserver
     {
     public:
-        Terminal(IOutput &,
-            ICommandObserver &,
+        TerminalImpl(Output &,
+            CommandObserver &,
             size_t depth,
             const char *userName,
             size_t );
 
-        ~Terminal();
+        ~TerminalImpl();
 
         void ReceivedCharCallback(char) override;
         void ReceivedStringCallback(const char *) override;
-        const char * ReceivedAutoComapleteCallback(const char *) override;
+        const char * ReceivedAutoCompleteCallback(const char *) override;
 
-        inline templatessBuffer & templatess() override { return _verifier.templatess(); }
+        inline TemplatessBuffer & templates() override { return _verifier.templates(); }
 
         void PutString(const char *) override;
         size_t Printf(const char *, ...) override;
@@ -47,14 +47,14 @@ namespace cli::internal
         void ReceivedInputLineCallback(const char *) override;
 
     private:
-        ICommandObserver &_observer;
-        IOutput &_output;
+        CommandObserver &_observer;
+        Output &_output;
 
         io::container::LineBufferWithMemory _inputBuffer;
-        io::OutputController _outputController;
+        io::OutputControllerImpl _outputController;
         io::InputController _inputController;
         
-        Presenter _presenter;
+        PresenterImpl _presenter;
         CommandVerifier _verifier;
         bool _isInputEnabled;
         char *_printfBuffer;

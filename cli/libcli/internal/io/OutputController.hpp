@@ -7,27 +7,20 @@
  * @brief 
  * @details
  */
-
-#include <libcli/IOutput.hpp>
-#include <libcli/internal/io/IOutputController.hpp>
-
 namespace cli::internal::io
 {
-    class OutputController : public IOutputController
+    class OutputController
     {
     public:
-        OutputController(IOutput &);
+        virtual ~OutputController() {}
 
-        void PutChar(char) override;
-        void PutString(const char *) override;
-        void MoveCursorLeft(unsigned int) override;
-        void MoveCursorRight(unsigned int) override;
-        void Backspace(unsigned int) override;
-        void Delete(unsigned int) override;
-        void NewLine() override;
-        void ClearScreen() override;
-
-    private:
-        IOutput &_output;
+        virtual void PutChar(char) = 0;
+        virtual void PutString(const char *) = 0;
+        virtual void MoveCursorLeft(unsigned int times = 1) = 0;
+        virtual void MoveCursorRight(unsigned int times = 1) = 0;
+        virtual void Backspace(unsigned int times = 1) = 0;
+        virtual void Delete(unsigned int times = 1) = 0;
+        virtual void NewLine() = 0;
+        virtual void ClearScreen() = 0;
     };
 }
