@@ -15,7 +15,7 @@ namespace cli
     public:
         virtual ~Output() {}
 
-        virtual void PutChar(char c) = 0;
-        virtual void PutString(const char *) = 0;
+        virtual void putChar(char c) = 0;
+        virtual void putString(const char*) = 0;
     };
 }

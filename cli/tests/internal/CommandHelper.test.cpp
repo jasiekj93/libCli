@@ -58,7 +58,7 @@ TEST(CommandHelperTest, OneArgument_Mandatory)
                             "-a\tcalkowity\tThis is number\r\n";
 
     templates::Command command("hello", "This is help", {
-        { 'a', model::Argument::Type::Decimal, true, "This is number" }
+        { 'a', model::Argument::Type::DECIMAL, true, "This is number" }
     });
 
     mock::Output output;
@@ -77,7 +77,7 @@ TEST(CommandHelperTest, OneArgument_Optional)
                             "-a\tcalkowity\tThis is number\r\n";
 
     templates::Command command("hello", "This is help", {
-        { 'a', model::Argument::Type::Decimal, false, "This is number" }
+        { 'a', model::Argument::Type::DECIMAL, false, "This is number" }
     });
 
     mock::Output output;
@@ -95,7 +95,7 @@ TEST(CommandHelperTest, OneArgument_NoCommandHelp)
                             "-a\tcalkowity\tThis is number\r\n";
 
     templates::Command command("hello", {
-        { 'a', model::Argument::Type::Decimal, true, "This is number" }
+        { 'a', model::Argument::Type::DECIMAL, true, "This is number" }
     });
 
     mock::Output output;
@@ -118,11 +118,11 @@ TEST(CommandHelperTest, ManyArguments)
                             "-e\tciag znakow\tThis is string\r\n";
 
     templates::Command command("hello", "This is help", {
-        { 'a', model::Argument::Type::Decimal, false, "This is number" },
-        { 'b', model::Argument::Type::Double, true, "This is double" },
-        { 'c', model::Argument::Type::Empty, false, "This is empty" },
-        { 'd', model::Argument::Type::Hex, true, "This is hex" },
-        { 'e', model::Argument::Type::String, true, "This is string" },
+        { 'a', model::Argument::Type::DECIMAL, false, "This is number" },
+        { 'b', model::Argument::Type::DOUBLE, true, "This is double" },
+        { 'c', model::Argument::Type::EMPTY, false, "This is empty" },
+        { 'd', model::Argument::Type::HEX, true, "This is hex" },
+        { 'e', model::Argument::Type::STRING, true, "This is string" },
     });
 
     mock::Output output;

@@ -6,91 +6,94 @@
 using namespace cli::model;
 
 Argument::Argument()
-    : _name(INVALID_NAME)
-    , _value(nullptr)
-    , _type(Type::Empty)
+    : name(INVALID_NAME)
+    , value("")
+    , type(Type::EMPTY)
 {
 
 }
 
-Argument::Argument(char c, const char *value)
-    : _name(c)
-    , _value(value)
+Argument::Argument(char c, etl::string_view val)
+    : name(c)
+    , value("")
 {
+    if(val != nullptr)
+        value = val;
+
     unsigned long long output;
 
-    if(_value == nullptr)
-        _type = Type::Empty;
-    else if(AsDecimal(output) == true)
-        _type = Type::Decimal;
-    else if(AsHex(output) == true)
-        _type = Type::Hex;
-    else if(AsDouble((double &)output) == true)
-        _type = Type::Double;
+    if(value.empty())
+        type = Type::EMPTY;
+    else if(asDecimal(output) == true)
+        type = Type::DECIMAL;
+    else if(asHex(output) == true)
+        type = Type::HEX;
+    else if(asDouble((double &)output) == true)
+        type = Type::DOUBLE;
     else
-        _type = Type::String;
+        type = Type::STRING;
 }
 
-bool Argument::AsDecimal(unsigned long &output) const
+bool Argument::asDecimal(unsigned long &output) const
 {
-    if(_IsDecimal() == false)
+    if(isDecimal() == false)
         return false;
 
     char *end;
-    output = std::strtoul(_value, &end, 10);
+    output = std::strtoul(value.data(), &end, 10);
 
-    return (_value != end);
+    return (value.data() != end);
 }
 
-bool Argument::AsDecimal(unsigned long long &output) const
+bool Argument::asDecimal(unsigned long long &output) const
 {
-    if(_IsDecimal() == false)
+    if(isDecimal() == false)
         return false;
 
     char *end;
-    output = std::strtoull(_value, &end, 10);
+    output = std::strtoull(value.data(), &end, 10);
 
-    return (_value != end);
+    return (value.data() != end);
 }
 
-bool Argument::AsHex(unsigned long &output) const
+bool Argument::asHex(unsigned long &output) const
 {
-    if(_IsHex() == false)
+    if(isHex() == false)
         return false;
 
     char *end;
-    output = std::strtoul(_value, &end, 16);
+    output = std::strtoul(value.data(), &end, 16);
 
-    return (_value != end);
+    return (value.data() != end);
 }
 
-bool Argument::AsHex(unsigned long long &output) const
+bool Argument::asHex(unsigned long long &output) const
 {
-    if(_IsHex() == false)
+    if(isHex() == false)
         return false;
 
     char *end;
-    output = std::strtoull(_value, &end, 16);
+    output = std::strtoull(value.data(), &end, 16);
 
-    return (_value != end);
+    return (value.data() != end);
 }
 
-bool Argument::AsDouble(double &output) const
+bool Argument::asDouble(double &output) const
 {
-    if(_IsDouble() == false)
+    if(isDouble() == false)
         return false;
 
     char *end;
-    output = std::strtod(_value, &end);
+    output = std::strtod(value.data(), &end);
 
-    return (_value != end);
+    return (value.data() != end);
 }
 
-bool Argument::_ContainsHexPrefix() const
+bool Argument::containsHexPrefix() const
 {
-     if(std::strlen(_value) >= 2)
-        if(_value[0] == '0' &&
-            _value[1] == 'x')
+     if(value.size() > 2)
+        if(value[0] == '0' &&
+            value[1] == 'x')
             return true;
 
     return false;
@@ -98,85 +101,59 @@ bool Argument::_ContainsHexPrefix() const
 
 bool Argument::operator==(const Argument &arg) const
 {
-    if(this->_name != arg._name)
-        return false;
-
-    if(this->_type != arg._type)
-        return false;
-
-    if(this->_value != nullptr &&
-        arg._value != nullptr)
-        return (std::strcmp(this->_value, arg._value) == 0);
-    else
-        return (this->_value == arg._value);
+    return (this->name == arg.name and
+            this->type == arg.type and
+            this->value == arg.value);
 }
 
 
-bool Argument::_IsDecimal() const
+bool Argument::isDecimal() const
 {
-    if(_value == nullptr)
+    if(containsHexPrefix() == true)
         return false;
 
-    if(_ContainsHexPrefix() == true)
-        return false;
-
-    auto pointer = _value;
-
-    while(*pointer != '\0')
-    {   
-        if(std::isdigit(*pointer) == false)
+    for(auto& c : value)
+    {
+        if(not std::isdigit(c))
             return false;
-
-        pointer++;
     }
 
     return true;
 }
 
-bool Argument::_IsHex() const
+bool Argument::isHex() const
 {
-    if(_value == nullptr)
-        return false;
-
-    auto pointer = _value;
+    auto pointer = value.begin();
     
-    if(_ContainsHexPrefix() == true)
-        pointer = &_value[2]; 
+    if(containsHexPrefix() == true)
+        pointer += 2;
 
 
-    while(*pointer != '\0')
+    for(auto it = pointer; it != value.end(); ++it)
     {
-        if(std::isxdigit(*pointer) == false)
+        if(not std::isxdigit(*it))
             return false;
-
-        pointer++;
     }
 
     return true;
 }
 
-bool Argument::_IsDouble() const
+bool Argument::isDouble() const
 {
-    if(_value == nullptr)
+    if(containsHexPrefix() == true)
         return false;
 
-    if(_ContainsHexPrefix() == true)
-        return false;
+    auto dotCount = 0U;
 
-    auto pointer = _value;
-    unsigned int dotCount = 0;
-
-    while(*pointer != '\0')
+    for(auto& c : value)
     {
-        if(std::isdigit(*pointer) == false)
+        if(not std::isdigit(c))
         {
-            if(*pointer == '.')
+            if(c == '.')
                 dotCount++;
             else
                 return false;
         }
-
-        pointer++;
     }
 
     return (dotCount <= 1);

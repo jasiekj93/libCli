@@ -14,9 +14,9 @@
 
 namespace cli::Factory
 {
-    Terminal * CreateNewTerminal(Output &, 
-        CommandObserver &,
+    Terminal* createNewTerminal(Output&, 
+        CommandObserver&,
         size_t depth = 5, 
-        const char *userName = nullptr,
+        const char* userName = nullptr,
         size_t printfBufferSize = 256); 
 }

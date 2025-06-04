@@ -26,12 +26,12 @@ TEST(ArgumentTest, DefaultConstuctor)
 
     Argument arg;
 
-    CHECK(Argument::Type::Empty == arg.GetType());
-    CHECK_EQUAL(Argument::INVALID_NAME, arg.Name());
-    CHECK(nullptr == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK_FALSE(arg.AsHex(ul));
-    CHECK_FALSE(arg.AsDouble(d));
+    CHECK(Argument::Type::EMPTY == arg.getType());
+    CHECK_EQUAL(Argument::INVALID_NAME, arg.getName());
+    CHECK(nullptr == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK_FALSE(arg.asHex(ul));
+    CHECK_FALSE(arg.asDouble(d));
 }
 
 TEST(ArgumentTest, NullPointer)
@@ -42,15 +42,15 @@ TEST(ArgumentTest, NullPointer)
 
     Argument arg(name, nullptr);
 
-    CHECK(Argument::Type::Empty == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(nullptr == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK_FALSE(arg.AsHex(ul));
-    CHECK_FALSE(arg.AsDouble(d));
+    CHECK(Argument::Type::EMPTY == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(nullptr == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK_FALSE(arg.asHex(ul));
+    CHECK_FALSE(arg.asDouble(d));
 }
 
-TEST(ArgumentTest, Decimal)
+TEST(ArgumentTest, DECIMAL)
 {
     double d;
     unsigned long ul;
@@ -62,14 +62,14 @@ TEST(ArgumentTest, Decimal)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::Decimal == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK(arg.AsDecimal(ul));
+    CHECK(Argument::Type::DECIMAL == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK(arg.asDecimal(ul));
     CHECK_EQUAL(ul, number);
-    CHECK(arg.AsHex(ul));
+    CHECK(arg.asHex(ul));
     CHECK_EQUAL(ul, hexNumber);
-    CHECK(arg.AsDouble(d));
+    CHECK(arg.asDouble(d));
     CHECK_EQUAL(doubleNumber, d);
 }
 
@@ -83,13 +83,13 @@ TEST(ArgumentTest, Hex_WithPrefix)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::Hex == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK(arg.AsHex(ul));
+    CHECK(Argument::Type::HEX == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK(arg.asHex(ul));
     CHECK_EQUAL(ul, hexNumber);
-    CHECK_FALSE(arg.AsDouble(d));
+    CHECK_FALSE(arg.asDouble(d));
 }
 
 TEST(ArgumentTest, Hex_WithLetters)
@@ -102,13 +102,13 @@ TEST(ArgumentTest, Hex_WithLetters)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::Hex == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK(arg.AsHex(ul));
+    CHECK(Argument::Type::HEX == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK(arg.asHex(ul));
     CHECK_EQUAL(ul, hexNumber);
-    CHECK_FALSE(arg.AsDouble(d));
+    CHECK_FALSE(arg.asDouble(d));
 }
 
 TEST(ArgumentTest, NotAHex)
@@ -120,15 +120,15 @@ TEST(ArgumentTest, NotAHex)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::String == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK_FALSE(arg.AsHex(ul));
-    CHECK_FALSE(arg.AsDouble(d));
+    CHECK(Argument::Type::STRING == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK_FALSE(arg.asHex(ul));
+    CHECK_FALSE(arg.asDouble(d));
 }
 
-TEST(ArgumentTest, String)
+TEST(ArgumentTest, STRING)
 {
     double d;
     unsigned long ul;
@@ -137,15 +137,15 @@ TEST(ArgumentTest, String)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::String == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK_FALSE(arg.AsHex(ul));
-    CHECK_FALSE(arg.AsDouble(d));
+    CHECK(Argument::Type::STRING == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK_FALSE(arg.asHex(ul));
+    CHECK_FALSE(arg.asDouble(d));
 }
 
-TEST(ArgumentTest, Double)
+TEST(ArgumentTest, DOUBLE)
 {
     double d;
     unsigned long ul;
@@ -155,12 +155,12 @@ TEST(ArgumentTest, Double)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::Double == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK_FALSE(arg.AsHex(ul));
-    CHECK(arg.AsDouble(d));
+    CHECK(Argument::Type::DOUBLE == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK_FALSE(arg.asHex(ul));
+    CHECK(arg.asDouble(d));
     CHECK_EQUAL(number, d);
 }
 
@@ -173,12 +173,12 @@ TEST(ArgumentTest, Double_TwoDots)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::String == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK_FALSE(arg.AsHex(ul));
-    CHECK_FALSE(arg.AsDouble(d));
+    CHECK(Argument::Type::STRING == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK_FALSE(arg.asHex(ul));
+    CHECK_FALSE(arg.asDouble(d));
 }
 
 TEST(ArgumentTest, Double_DotAtBeginning)
@@ -191,12 +191,12 @@ TEST(ArgumentTest, Double_DotAtBeginning)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::Double == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK_FALSE(arg.AsHex(ul));
-    CHECK(arg.AsDouble(d));
+    CHECK(Argument::Type::DOUBLE == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK_FALSE(arg.asHex(ul));
+    CHECK(arg.asDouble(d));
     CHECK_EQUAL(number, d);
 }
 
@@ -210,11 +210,11 @@ TEST(ArgumentTest, Double_DotAtEnd)
 
     Argument arg(name, stringNumber);
 
-    CHECK(Argument::Type::Double == arg.GetType());
-    CHECK_EQUAL(name, arg.Name());
-    CHECK(stringNumber == arg.AsString());
-    CHECK_FALSE(arg.AsDecimal(ul));
-    CHECK_FALSE(arg.AsHex(ul));
-    CHECK(arg.AsDouble(d));
+    CHECK(Argument::Type::DOUBLE == arg.getType());
+    CHECK_EQUAL(name, arg.getName());
+    CHECK(stringNumber == arg.asString());
+    CHECK_FALSE(arg.asDecimal(ul));
+    CHECK_FALSE(arg.asHex(ul));
+    CHECK(arg.asDouble(d));
     CHECK_EQUAL(number, d);
 }

@@ -72,7 +72,7 @@ TEST(CommandTempTest, NameConstructor_Help_TooLong)
 
 TEST(CommandTempTest, InitalizerListConstructor)
 {
-    Command command("hello", { { 'a', model::Argument::Type::Double, true }, {'b', model::Argument::Type::Hex, false } });
+    Command command("hello", { { 'a', model::Argument::Type::DOUBLE, true }, {'b', model::Argument::Type::HEX, false } });
 
     STRCMP_EQUAL("hello", command.Name());
     CHECK_EQUAL(2, command.Arguments().Count());
@@ -80,7 +80,7 @@ TEST(CommandTempTest, InitalizerListConstructor)
 
 TEST(CommandTempTest, InitalizerListConstructor_InvalidName)
 {
-    Command command(nullptr, { { 'a', model::Argument::Type::Double, true }, {'b', model::Argument::Type::Hex, false } });
+    Command command(nullptr, { { 'a', model::Argument::Type::DOUBLE, true }, {'b', model::Argument::Type::HEX, false } });
 
     CHECK_EQUAL(0, std::strlen(command.Name()));
     CHECK_EQUAL(0, command.Arguments().Count());

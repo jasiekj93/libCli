@@ -23,16 +23,16 @@ void CommandHelper::DisplayHelp(const templates::Command &command)
 
 void CommandHelper::_PrintUsage(const templates::Command &command)
 {
-    _output.PutString("zastosowanie: ");
-    _output.PutString(command.Name());
+    _output.putString("zastosowanie: ");
+    _output.putString(command.Name());
 
     if (command.Arguments().Count() > 0)
     {
-        _output.PutChar(' ');
+        _output.putChar(' ');
         _PrintArgumentUsage(command);
     }
 
-    _output.PutString("\r\n");
+    _output.putString("\r\n");
 }
 
 void CommandHelper::_PrintArgumentUsage(const templates::Command &command)
@@ -41,63 +41,63 @@ void CommandHelper::_PrintArgumentUsage(const templates::Command &command)
     {
         auto argument = command.Arguments()[i];
 
-        if (argument.IsMandatory() == false)
-            _output.PutChar('[');
+        if (argument.isMandatory() == false)
+            _output.putChar('[');
 
-        _output.PutChar('-');
-        _output.PutChar(argument.Name());
+        _output.putChar('-');
+        _output.putChar(argument.getName());
 
-        if (argument.IsMandatory() == false)
-            _output.PutChar(']');
+        if (argument.isMandatory() == false)
+            _output.putChar(']');
 
-        _output.PutChar(' ');
+        _output.putChar(' ');
     }
 }
 
 void CommandHelper::_PrintCommandHelp(const templates::Command &command)
 {
-    _output.PutChar('\t');
-    _output.PutString(command.Help());
-    _output.PutString("\r\n");
+    _output.putChar('\t');
+    _output.putString(command.Help());
+    _output.putString("\r\n");
 }
 
 void CommandHelper::_PrintArguments(const templates::Command &command)
 {
-    _output.PutString("\r\n");
+    _output.putString("\r\n");
 
     for (size_t i = 0; i < command.Arguments().Count(); i++)
     {
         auto argument = command.Arguments()[i];
 
-        _output.PutChar('-');
-        _output.PutChar(argument.Name());
-        _output.PutChar('\t');
+        _output.putChar('-');
+        _output.putChar(argument.getName());
+        _output.putChar('\t');
         _PrintArgumentType(argument);
 
 
-        if (std::strlen(argument.Help()) > 0)
+        if (std::strlen(argument.help()) > 0)
         {
-            _output.PutChar('\t');
-            _output.PutString(argument.Help());
+            _output.putChar('\t');
+            _output.putString(argument.help());
         }
 
-        _output.PutString("\r\n");
+        _output.putString("\r\n");
     }
 }
 
 void CommandHelper::_PrintArgumentType(const templates::Argument &argument)
 {
-    switch(argument.GetType())
+    switch(argument.getType())
     {
-        case model::Argument::Type::Decimal:
-            return _output.PutString("calkowity");
-        case model::Argument::Type::Double:
-            return _output.PutString("zmiennoprzecinkowy");
-        case model::Argument::Type::Empty:
-            return _output.PutString(" ");
-        case model::Argument::Type::Hex:
-            return _output.PutString("szesnastkowy");
-        case model::Argument::Type::String:
-            return _output.PutString("ciag znakow");
+        case model::Argument::Type::DECIMAL:
+            return _output.putString("calkowity");
+        case model::Argument::Type::DOUBLE:
+            return _output.putString("zmiennoprzecinkowy");
+        case model::Argument::Type::EMPTY:
+            return _output.putString(" ");
+        case model::Argument::Type::HEX:
+            return _output.putString("szesnastkowy");
+        case model::Argument::Type::STRING:
+            return _output.putString("ciag znakow");
     }
 }

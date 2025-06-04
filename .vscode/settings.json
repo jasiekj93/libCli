@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.tpp": "cpp",
+        "*.roff": "troff",
         "random": "cpp",
         "initializer_list": "cpp",
         "cstring": "cpp",
@@ -44,6 +45,7 @@
         "ranges": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "span": "cpp"
     }
 }

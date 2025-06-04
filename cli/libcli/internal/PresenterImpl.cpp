@@ -18,34 +18,34 @@ PresenterImpl::PresenterImpl(Output& output, const char* userName)
 
 void PresenterImpl::UnknownCommand(const char *name)
 {
-    _output.PutString(name);
-    _output.PutString(": nie znaleziono polecenia");
+    _output.putString(name);
+    _output.putString(": nie znaleziono polecenia");
     Prompt();
 }
 
 void PresenterImpl::NoMandatoryArguments(char arg, const templates::Command& command)
 {
-    _output.PutString(command.Name());
-    _output.PutString(": brak wymaganych argumentow: -");
-    _output.PutChar(arg);
+    _output.putString(command.Name());
+    _output.putString(": brak wymaganych argumentow: -");
+    _output.putChar(arg);
     NewLine();
     Help(command);
 }
 
 void PresenterImpl::InvalidArgument(char arg, const templates::Command& command)
 {
-    _output.PutString(command.Name());
-    _output.PutString(": nieprawidlowy argument -");
-    _output.PutChar(arg);
+    _output.putString(command.Name());
+    _output.putString(": nieprawidlowy argument -");
+    _output.putChar(arg);
     NewLine();
     Help(command);
 }
 
 void PresenterImpl::InvalidArgumentType(char arg, const templates::Command& command)
 {
-    _output.PutString(command.Name());
-    _output.PutString(": nieprawidlowy typ argumentu -");
-    _output.PutChar(arg);
+    _output.putString(command.Name());
+    _output.putString(": nieprawidlowy typ argumentu -");
+    _output.putChar(arg);
     NewLine();
     Help(command);
 }
@@ -61,13 +61,13 @@ void PresenterImpl::Prompt(bool addNewLine)
     if(addNewLine == true)
         NewLine();
         
-    _output.PutString(_userName);
-    _output.PutChar(PROMPT_CHAR);
-    _output.PutChar(' ');
+    _output.putString(_userName);
+    _output.putChar(PROMPT_CHAR);
+    _output.putChar(' ');
 }
 
 
 inline void PresenterImpl::NewLine()    
 {
-    _output.PutString("\r\n");
+    _output.putString("\r\n");
 }

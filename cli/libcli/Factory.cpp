@@ -3,10 +3,10 @@
 
 using namespace cli;
 
-Terminal * Factory::CreateNewTerminal(Output &output, 
-    CommandObserver &observer, 
+Terminal* Factory::createNewTerminal(Output& output, 
+    CommandObserver& observer, 
     size_t depth,
-    const char *userName,
+    const char* userName,
     size_t printfBufferSize)
 {
     return new internal::TerminalImpl(output, 

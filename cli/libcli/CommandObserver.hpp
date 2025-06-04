@@ -17,6 +17,6 @@ namespace cli
     public:
         virtual ~CommandObserver() {}
 
-        virtual void ReceivedCommandCallback(const model::Command &) = 0;
+        virtual void receivedCommandCallback(const model::Command&) = 0;
     };
 }

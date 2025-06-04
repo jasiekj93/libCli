@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Test cli",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/test/testCli.elf",
+            "program": "${workspaceFolder}/test/debug/testcli.elf",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${fileDirname}",

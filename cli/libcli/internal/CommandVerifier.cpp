@@ -55,17 +55,17 @@ bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
     {
         auto &argument = templateCommand.Arguments()[i];
         
-        if(command.Arguments().Contains(argument.Name()) == true)
+        if(command.Arguments().Contains(argument.getName()) == true)
         {
-            if(command.Arguments().Get(argument.Name()).GetType() != argument.GetType())
+            if(command.Arguments().Get(argument.getName()).getType() != argument.getType())
             {
-                _presenter.InvalidArgumentType(argument.Name(), templateCommand);
+                _presenter.InvalidArgumentType(argument.getName(), templateCommand);
                 return false;
             }
         }
-        else if(argument.IsMandatory() == true)
+        else if(argument.isMandatory() == true)
         {
-            _presenter.NoMandatoryArguments(argument.Name(), templateCommand);
+            _presenter.NoMandatoryArguments(argument.getName(), templateCommand);
             return false;
         }
     }
@@ -79,12 +79,12 @@ bool CommandVerifier::_CheckOptionalArguments(const model::Command &command)
     
     for(size_t i = 0; i < command.Arguments().Count(); i++)
     {
-       if(templateCommand.Arguments().Contains(command.Arguments()[i].Name()) == false)
+       if(templateCommand.Arguments().Contains(command.Arguments()[i].getName()) == false)
        {
             if(command.Arguments()[i] == _help)
                 _presenter.Help(templateCommand);
             else
-                _presenter.InvalidArgument(command.Arguments()[i].Name(), templateCommand);
+                _presenter.InvalidArgument(command.Arguments()[i].getName(), templateCommand);
 
             return false;
        }

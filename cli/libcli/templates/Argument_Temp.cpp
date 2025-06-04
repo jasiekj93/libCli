@@ -4,10 +4,10 @@
 using namespace cli::templates;
 
 Argument::Argument()
-    : _name(model::Argument::INVALID_NAME)
-    , _type(model::Argument::Type::Empty)
-    , _isMandatory(false)
-    , _help{'\0'}
+    : name(model::Argument::INVALID_NAME)
+    , type(model::Argument::Type::EMPTY)
+    , mandatoryValue(false)
+    , helpMessage{'\0'}
 {
 }
 
@@ -22,27 +22,27 @@ Argument::Argument(char name,
             if(std::strlen(help) > Configuration::MAX_ARGUMENT_HELP_LENGTH)
                 return;
             else
-                std::strcpy(_help, help);
+                std::strcpy(helpMessage, help);
         }
 
-        _name = name;
-        _type = type;
-        _isMandatory = isMandatory;
+        this->name = name;
+        this->type = type;
+        this->mandatoryValue = isMandatory;
     }
 
 
 bool Argument::operator==(const Argument &arg) const
 {
-    if(this->_name != arg._name)
+    if(this->name != arg.name)
         return false;
 
-    if(this->_type != arg._type)
+    if(this->type != arg.type)
         return false;
 
-    if(this->_isMandatory != arg._isMandatory)
+    if(this->mandatoryValue != arg.mandatoryValue)
         return false;
 
-    return (std::strcmp(this->_help, arg._help) == 0);
+    return (std::strcmp(this->helpMessage, arg.helpMessage) == 0);
 }
 
 bool Argument::operator!=(const Argument &arg) const

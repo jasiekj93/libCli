@@ -5,7 +5,7 @@ namespace cli::utils
     template<class T, size_t SIZE>
     bool DictionaryChar<T, SIZE>::Put(const T &object)
     {
-        if (Contains(object.Name()) == true)
+        if (Contains(object.getName()) == true)
             return false;
         else
             return Buffer<T, SIZE>::Put(object);
@@ -21,7 +21,7 @@ namespace cli::utils
     int DictionaryChar<T, SIZE>::At(char c) const
     {
         for (size_t i = 0; i < Buffer<T, SIZE>::_count; i++)
-            if (Buffer<T, SIZE>::_data[i].Name() == c)
+            if (Buffer<T, SIZE>::_data[i].getName() == c)
                 return i;
 
         return -1;

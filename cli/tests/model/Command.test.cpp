@@ -87,9 +87,9 @@ TEST(CommandTest, OneArgument)
     STRCMP_EQUAL(expectedName, command.GetName());
     CHECK_EQUAL(1, command.Arguments().Count());
 
-    CHECK_EQUAL('a', command.Arguments()[0].Name());
-    CHECK(Argument::Type::String == command.Arguments()[0].GetType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].AsString());
+    CHECK_EQUAL('a', command.Arguments()[0].getName());
+    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
+    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
 }
 
 TEST(CommandTest, OneArgument_MoreSpaces)
@@ -103,9 +103,9 @@ TEST(CommandTest, OneArgument_MoreSpaces)
     STRCMP_EQUAL(expectedName, command.GetName());
     CHECK_EQUAL(1, command.Arguments().Count());
 
-    CHECK_EQUAL('a', command.Arguments()[0].Name());
-    CHECK(Argument::Type::String == command.Arguments()[0].GetType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].AsString());
+    CHECK_EQUAL('a', command.Arguments()[0].getName());
+    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
+    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
 }
 
 TEST(CommandTest, OneArgument_NoSpace)
@@ -119,9 +119,9 @@ TEST(CommandTest, OneArgument_NoSpace)
     STRCMP_EQUAL(expectedName, command.GetName());
     CHECK_EQUAL(1, command.Arguments().Count());
 
-    CHECK_EQUAL('a', command.Arguments()[0].Name());
-    CHECK(Argument::Type::String == command.Arguments()[0].GetType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].AsString());
+    CHECK_EQUAL('a', command.Arguments()[0].getName());
+    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
+    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
 }
 
 TEST(CommandTest, TwoArguments)
@@ -136,13 +136,13 @@ TEST(CommandTest, TwoArguments)
     STRCMP_EQUAL(expectedName, command.GetName());
     CHECK_EQUAL(2, command.Arguments().Count());
 
-    CHECK_EQUAL('a', command.Arguments()[0].Name());
-    CHECK(Argument::Type::String == command.Arguments()[0].GetType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].AsString());
+    CHECK_EQUAL('a', command.Arguments()[0].getName());
+    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
+    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
 
-    CHECK_EQUAL('u', command.Arguments()[1].Name());
-    CHECK(Argument::Type::Hex == command.Arguments()[1].GetType());
-    CHECK(command.Arguments()[1].AsHex(hex));
+    CHECK_EQUAL('u', command.Arguments()[1].getName());
+    CHECK(Argument::Type::HEX == command.Arguments()[1].getType());
+    CHECK(command.Arguments()[1].asHex(hex));
     CHECK_EQUAL(0x5F, hex);
 }
 
@@ -157,12 +157,12 @@ TEST(CommandTest, TwoArguments_OneEmpty)
     STRCMP_EQUAL(expectedName, command.GetName());
     CHECK_EQUAL(2, command.Arguments().Count());
 
-    CHECK_EQUAL('a', command.Arguments()[0].Name());
-    CHECK(Argument::Type::String == command.Arguments()[0].GetType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].AsString());
+    CHECK_EQUAL('a', command.Arguments()[0].getName());
+    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
+    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
 
-    CHECK_EQUAL('u', command.Arguments()[1].Name());
-    CHECK(Argument::Type::Empty == command.Arguments()[1].GetType());
+    CHECK_EQUAL('u', command.Arguments()[1].getName());
+    CHECK(Argument::Type::EMPTY == command.Arguments()[1].getType());
 }
 
 TEST(CommandTest, TwoArguments_OneIvalid)
@@ -189,11 +189,11 @@ TEST(CommandTest, TwoArguments_TwoEmpty)
     STRCMP_EQUAL(expectedName, command.GetName());
     CHECK_EQUAL(2, command.Arguments().Count());
 
-    CHECK_EQUAL('a', command.Arguments()[0].Name());
-    CHECK(Argument::Type::Empty == command.Arguments()[0].GetType());
+    CHECK_EQUAL('a', command.Arguments()[0].getName());
+    CHECK(Argument::Type::EMPTY == command.Arguments()[0].getType());
 
-    CHECK_EQUAL('b', command.Arguments()[1].Name());
-    CHECK(Argument::Type::Empty == command.Arguments()[1].GetType());
+    CHECK_EQUAL('b', command.Arguments()[1].getName());
+    CHECK(Argument::Type::EMPTY == command.Arguments()[1].getType());
 }
 
 TEST(CommandTest, TooMuchArguments)

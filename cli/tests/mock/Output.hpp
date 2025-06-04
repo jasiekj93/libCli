@@ -11,12 +11,12 @@ namespace mock
     public:
         static constexpr size_t SIZE = 1024;
 
-        inline void PutChar(char c) override { buffer.Put(c); }
-        inline void PutString(const char* string) override 
+        inline void putChar(char c) override { buffer.Put(c); }
+        inline void putString(const char* string) override 
         { 
             while(*string != '\0')
             {
-                PutChar(*string);
+                putChar(*string);
                 string++;
             }
         }

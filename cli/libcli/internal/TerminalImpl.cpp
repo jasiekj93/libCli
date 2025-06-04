@@ -58,7 +58,7 @@ void TerminalImpl::receivedInputLineCallback(const char *line)
         return;
 
     _isInputEnabled = false;
-    _observer.ReceivedCommandCallback(command);
+    _observer.receivedCommandCallback(command);
     _presenter.Prompt();
     _isInputEnabled = true;
 }
@@ -73,7 +73,7 @@ void TerminalImpl::putString(const char *string)
     if(_isInputEnabled == true)
         _presenter.NewLine();
     
-    _output.PutString(string);
+    _output.putString(string);
 
     if(_isInputEnabled ==true)
         enableInput();

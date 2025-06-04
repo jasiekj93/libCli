@@ -22,18 +22,18 @@ namespace cli::templates
             bool isMandatory, 
             const char * help = nullptr);
 
-        inline auto Name() const { return _name; }        
-        inline auto GetType() const { return _type; }
-        inline auto IsMandatory() const { return _isMandatory; }
-        inline auto Help() const { return _help; }        
+        inline auto getName() const { return name; }        
+        inline auto getType() const { return type; }
+        inline auto isMandatory() const { return mandatoryValue; }
+        inline auto help() const { return helpMessage; }        
 
         bool operator==(const Argument &) const;
         bool operator!=(const Argument &) const;
 
     private:
-        char _name;
-        model::Argument::Type _type;
-        bool _isMandatory;
-        char _help[Configuration::MAX_ARGUMENT_HELP_LENGTH];
+        char name;
+        model::Argument::Type type;
+        bool mandatoryValue;
+        char helpMessage[Configuration::MAX_ARGUMENT_HELP_LENGTH];
     };
 }
