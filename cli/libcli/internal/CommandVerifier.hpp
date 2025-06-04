@@ -9,6 +9,7 @@
  */
 
 #include <etl/map.h>
+#include <etl/string.h>
 
 #include <libcli/templates/Command.hpp>
 #include <libcli/model/Command.hpp>
@@ -23,20 +24,19 @@ namespace cli::internal
 
         CommandVerifier(Presenter&);
 
-        bool Verify(const model::Command&);
-        const char* Find(const char*);
+        bool verify(const model::Command&);
+        etl::string_view find(etl::string_view);
         
-
-        auto& templates() { return _buffer; }
+        auto& templates() { return buffer; }
 
     protected:
-        bool _CheckMandatoryArguments(const model::Command&);
-        bool _CheckOptionalArguments(const model::Command&);
+        bool checkMandatoryArguments(const model::Command&);
+        bool checkOptionalArguments(const model::Command&);
 
     private:
-        static model::Argument _help;
+        static model::Argument help;
 
-        Presenter &_presenter;
-        Templates _buffer;
+        Presenter& presenter;
+        Templates buffer;
     };
 }

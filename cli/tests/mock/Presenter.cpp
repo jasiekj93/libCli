@@ -2,32 +2,32 @@
 
 using namespace mock;
 
-void Presenter::UnknownCommand(const char *)
+void Presenter::unknownCommand(etl::string_view)
 {
     operation = Operation::UnknownCommand;
 }
 
-void Presenter::NoMandatoryArguments(char argument, const cli::templates::Command &)
+void Presenter::noMandatoryArguments(char argument, const cli::templates::Command &)
 {
     operation = Operation::NoMandatoryArguments;
 }
 
-void Presenter::InvalidArgument(char argument, const cli::templates::Command &)
+void Presenter::invalidArgument(char argument, const cli::templates::Command &)
 {
     operation = Operation::InvalidArgument;
 }
 
-void Presenter::InvalidArgumentType(char argument, const cli::templates::Command &)
+void Presenter::invalidArgumentType(char argument, const cli::templates::Command &)
 {
     operation = Operation::InvalidArgumentType;
 }
 
-void Presenter::Help(const cli::templates::Command &)
+void Presenter::help(const cli::templates::Command &)
 {
     operation = Operation::Help;
 }
 
-void Presenter::Prompt(bool)
+void Presenter::prompt(bool)
 {
     operation = Operation::Prompt;
 }

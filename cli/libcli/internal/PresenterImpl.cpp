@@ -4,70 +4,69 @@
 using namespace cli;
 using namespace cli::internal;
 
-PresenterImpl::PresenterImpl(Output& output, const char* userName)
-    : _output(output)
-    , _helper(output)
-    , _userName{'\0'}
+PresenterImpl::PresenterImpl(Output& output, etl::string_view string)
+    : output(output)
+    , helper(output)
+    , userName("")
 {
-    if(userName != nullptr &&
-        std::strlen(userName) <= Configuration::MAX_USER_NAME)
-            std::strcpy(_userName, userName);
+    if(string.size() <= Configuration::MAX_USER_NAME)
+        this->userName = string;
 
-    Prompt();
+    prompt();
 }
 
-void PresenterImpl::UnknownCommand(const char *name)
+void PresenterImpl::unknownCommand(etl::string_view name)
 {
-    _output.putString(name);
-    _output.putString(": nie znaleziono polecenia");
-    Prompt();
+    output.putString(name.data());
+    output.putString(": nie znaleziono polecenia");
+    prompt();
 }
 
-void PresenterImpl::NoMandatoryArguments(char arg, const templates::Command& command)
+void PresenterImpl::noMandatoryArguments(char arg, const templates::Command& command)
 {
-    _output.putString(command.getName().c_str());
-    _output.putString(": brak wymaganych argumentow: -");
-    _output.putChar(arg);
-    NewLine();
-    Help(command);
+    output.putString(command.getName().c_str());
+    output.putString(": brak wymaganych argumentow: -");
+    output.putChar(arg);
+    newLine();
+    help(command);
 }
 
-void PresenterImpl::InvalidArgument(char arg, const templates::Command& command)
+void PresenterImpl::invalidArgument(char arg, const templates::Command& command)
 {
-    _output.putString(command.getName().c_str());
-    _output.putString(": nieprawidlowy argument -");
-    _output.putChar(arg);
-    NewLine();
-    Help(command);
+    output.putString(command.getName().c_str());
+    output.putString(": nieprawidlowy argument -");
+    output.putChar(arg);
+    newLine();
+    help(command);
 }
 
-void PresenterImpl::InvalidArgumentType(char arg, const templates::Command& command)
+void PresenterImpl::invalidArgumentType(char arg, const templates::Command& command)
 {
-    _output.putString(command.getName().c_str());
-    _output.putString(": nieprawidlowy typ argumentu -");
-    _output.putChar(arg);
-    NewLine();
-    Help(command);
+    output.putString(command.getName().c_str());
+    output.putString(": nieprawidlowy typ argumentu -");
+    output.putChar(arg);
+    newLine();
+    help(command);
 }
 
-void PresenterImpl::Help(const templates::Command& command)
+void PresenterImpl::help(const templates::Command& command)
 {
-    _helper.DisplayHelp(command);
-    Prompt();
+    helper.displayHelp(command);
+    prompt();
 }
 
-void PresenterImpl::Prompt(bool addNewLine)
+void PresenterImpl::prompt(bool addNewLine)
 {
     if(addNewLine == true)
-        NewLine();
+        newLine();
         
-    _output.putString(_userName);
-    _output.putChar(PROMPT_CHAR);
-    _output.putChar(' ');
+    output.putString(userName.data());
+    output.putChar(PROMPT_CHAR);
+    output.putChar(' ');
 }
 
 
-inline void PresenterImpl::NewLine()    
+inline void PresenterImpl::newLine()    
 {
-    _output.putString("\r\n");
+    output.putString("\r\n");
 }

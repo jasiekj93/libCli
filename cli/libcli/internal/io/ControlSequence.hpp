@@ -11,6 +11,9 @@
 #include <cstddef>
 #include <utility>
 
+#include <etl/map.h>
+#include <etl/string.h>
+
 namespace cli::internal::io
 {
     class ControlSequence
@@ -22,41 +25,40 @@ namespace cli::internal::io
 
         enum class Type
         {
-            ArrowUp,
-            ArrowDown,
-            ArrowLeft,
-            ArrowRight,
-            Delete,
-            Home,
-            End,
+            ARROW_UP,
+            ARROW_DOWN,
+            ARROW_LEFT,
+            ARROW_RIGHT,
+            DELETE,
+            HOME,
+            END,
 
-            Unknown,
+            UNKNOWN,
         };
 
         ControlSequence();
         ControlSequence(Type);
         ControlSequence(Type, unsigned int times);
         ControlSequence(std::initializer_list<char>);
-        ControlSequence(const char *);
+        ControlSequence(etl::string_view);
 
-        bool Put(char);
-        void Clear();
-        Type GetType();
+        bool put(char);
+        inline void clear() { data.clear(); }
+        Type getType();
         
-        bool IsFull();
-        bool IsNotEmpty();
-        bool IsEmpty();
-        
-        inline auto Data() const { return _data; }
-        inline auto operator[](size_t i) const { return _data[i]; }
+        inline auto isFull() const { return data.full(); }
+        inline bool isEmpty() const { return data.empty(); }
 
-        bool operator==(const ControlSequence &);
+        inline auto getData() const { return data; }
+        inline auto getSize() const { return data.size(); }
 
-    protected:
+        inline auto operator[](size_t i) const { return data[i]; }
+
+        inline auto operator==(const ControlSequence &other) const { return data == other.data; }
 
     private:
-        static const ControlSequence _knownCharacters[KNOWN_TYPES];
+        static const etl::map<Type, ControlSequence, KNOWN_TYPES> knownCharacters;
 
-        char _data[MAX_SIZE + 1];
+        etl::string<MAX_SIZE> data;
     };
 }

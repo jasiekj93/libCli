@@ -8,6 +8,8 @@
  * @details
  */
 
+#include <etl/string.h>
+
 #include <libcli/templates/Command.hpp>
 
 namespace cli::internal
@@ -17,12 +19,12 @@ namespace cli::internal
     public:
         virtual ~Presenter() {}
 
-        virtual void UnknownCommand(const char *) = 0;
-        virtual void NoMandatoryArguments(char argument, const templates::Command&) = 0;
-        virtual void InvalidArgument(char argument, const templates::Command&) = 0;
-        virtual void InvalidArgumentType(char argument, const templates::Command&) = 0;
-        virtual void Help(const templates::Command&) = 0;
-        virtual void Prompt(bool addNewLine = true) = 0;
-        virtual size_t PromptLength() = 0;
+        virtual void unknownCommand(etl::string_view) = 0;
+        virtual void noMandatoryArguments(char argument, const templates::Command&) = 0;
+        virtual void invalidArgument(char argument, const templates::Command&) = 0;
+        virtual void invalidArgumentType(char argument, const templates::Command&) = 0;
+        virtual void help(const templates::Command&) = 0;
+        virtual void prompt(bool addNewLine = true) = 0;
+        virtual size_t promptLength() = 0;
     };
 }

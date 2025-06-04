@@ -13,7 +13,7 @@ InputLineObserver::~InputLineObserver()
     delete[] line;
 }
 
-void InputLineObserver::receivedInputLineCallback(const char *text)
+void InputLineObserver::receivedInputLineCallback(etl::string_view text)
 {
-    std::strcpy(line, text);
+    std::strcpy(line, text.data());
 }

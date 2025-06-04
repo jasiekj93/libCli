@@ -14,29 +14,29 @@ OutputController::~OutputController()
     delete[] previousLine;
 }
 
-void OutputController::PutChar(char c)
+void OutputController::putChar(char c)
 {
     line.put(c);
 }
 
-void OutputController::PutString(const char *string)
+void OutputController::putString(etl::string_view string)
 {
-    line.putString(string);
+    line.putString(string.data());
 }
 
-void OutputController::MoveCursorLeft(unsigned int times)
+void OutputController::moveCursorLeft(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
         line.moveCursorLeft();
 }
 
-void OutputController::MoveCursorRight(unsigned int times)
+void OutputController::moveCursorRight(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
         line.moveCursorRight();
 }
 
-void OutputController::Backspace(unsigned int times)
+void OutputController::backspace(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
     {
@@ -45,19 +45,19 @@ void OutputController::Backspace(unsigned int times)
     }
 }
 
-void OutputController::Delete(unsigned int times)
+void OutputController::putDelete(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
         line.remove();
 }
 
-void OutputController::NewLine()
+void OutputController::newLine()
 {
     std::strcpy(previousLine, line.data());
     line.clear();
 }
 
-void OutputController::ClearScreen()
+void OutputController::clearScreen()
 {
     previousLine[0] = '\0';
     line.clear();

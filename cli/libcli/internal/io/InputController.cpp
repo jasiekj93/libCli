@@ -7,128 +7,126 @@ using namespace cli::internal::io;
 InputController::InputController(OutputController& output, 
     InputLineObserver& observer,
     container::LineBufferWithMemory& buffer)
-    : _output(output)
-    , _observer(observer)
-    , _buffer(buffer)
+    : output(output)
+    , observer(observer)
+    , buffer(buffer)
 {
 }
 
-void InputController::ReceivedCharCallback(char c)
+void InputController::receivedCharCallback(char c)
 {
-    if(_ProcessControlChar(c) == true)
+    if(processControlChar(c) == true)
         return;
     
     if(std::isprint(c))
     {
-        if(_buffer.put(c) == true)
-            _output.PutChar(c);
+        if(buffer.put(c) == true)
+            output.putChar(c);
     }
 }
 
-void InputController::ReceivedStringCallback(const char *string)
+void InputController::receivedStringCallback(etl::string_view string)
 {
-    auto length = std::strlen(string);
-
-    for(size_t i = 0; i < length; i++)
-        ReceivedCharCallback(string[i]);
+    for(auto& c : string)
+        receivedCharCallback(c);
 }
 
-void InputController::RestoreLine()
+void InputController::restoreLine()
 {
-    _output.PutString(_buffer.data());
-    _buffer.moveCursorMaxRight();
+    output.putString(buffer.data());
+    buffer.moveCursorMaxRight();
 }
 
-void InputController::ClearLine(unsigned int extraChars)
+void InputController::clearLine(unsigned int extraChars)
 {
-    _MoveEnd();
-    _output.Backspace(_buffer.count());
-    _output.Backspace(extraChars);
+    moveEnd();
+    output.backspace(buffer.count());
+    output.backspace(extraChars);
 }
 
-bool InputController::_ProcessControlChar(char c)
+bool InputController::processControlChar(char c)
 {
     if(c == ControlChar::ESCAPE_CHAR)
-        return _ProcessEscapeChar();
+        return processEscapeChar();
     else if(c == ControlChar::NEW_LINE)
-        return _ProcessNewLine();
+        return processNewLine();
     else if(c == ControlChar::BACKSPACE)
-        return _ProcessBackspace();
+        return processBackspace();
     else if(c == ControlChar::TAB)
-        return _ProcessTab();
-    else if(_controlSequence.IsNotEmpty())
-        return _ProcessConrolSequence(c);
+        return processTab();
+    else if(not controlSequence.isEmpty())
+        return processConrolSequence(c);
     else
         return false;
 }
 
-bool InputController::_ProcessEscapeChar()
+bool InputController::processEscapeChar()
 {
-    _controlSequence.Clear();
-    _controlSequence.Put(ControlChar::ESCAPE_CHAR);
+    controlSequence.clear();
+    controlSequence.put(ControlChar::ESCAPE_CHAR);
     return true;
 }
 
-bool InputController::_ProcessNewLine()
+bool InputController::processNewLine()
 {
-    _output.NewLine();
-    _observer.receivedInputLineCallback(_buffer.data());
-    _buffer.clearAndMemorize();
+    output.newLine();
+    observer.receivedInputLineCallback(buffer.data());
+    buffer.clearAndMemorize();
 
     return true;
 }
 
-bool InputController::_ProcessBackspace()
+bool InputController::processBackspace()
 {
-    if(_buffer.count() == _buffer.cursor() &&
-        (_buffer.moveCursorLeft() == true))
+    if(buffer.count() == buffer.cursor() &&
+        (buffer.moveCursorLeft() == true))
     {
-        _buffer.remove();
-        _output.Backspace();
+        buffer.remove();
+        output.backspace();
     }
 
     return true;
 }
 
-bool InputController::_ProcessTab()
+bool InputController::processTab()
 {
-    auto result = _observer.receivedAutoCompleteCallback(_buffer.data());
+    auto result = observer.receivedAutoCompleteCallback(buffer.data());
 
     if(result != nullptr)
     {
-        ClearLine();
+        clearLine();
         
-        _buffer.clear();
-        _buffer.putString(result);
-        
-        _output.PutString(result);
+        buffer.clear();
+        buffer.putString(result.data());
+
+        output.putString(result.data());
     }
 
     return true;
 }
 
-bool InputController::_ProcessConrolSequence(char c)
+bool InputController::processConrolSequence(char c)
 {
-    _controlSequence.Put(c);
+    controlSequence.put(c);
 
-    if(_ProcessControlSequenceByType() == true)
-        _controlSequence.Clear();
+    if(processControlSequenceByType() == true)
+        controlSequence.clear();
 
-    if(_controlSequence.IsFull())
-        _controlSequence.Clear();
+    if(controlSequence.isFull())
+        controlSequence.clear();
     
     return true;
 }
 
-bool InputController::_ProcessControlSequenceByType()
+bool InputController::processControlSequenceByType()
 {
-    auto type = _controlSequence.GetType();
+    auto type = controlSequence.getType();
     
     switch(type)
     {
-        case ControlSequence::Type::Delete:
-            if(_buffer.remove() == true)
-                _output.Delete();
+        case ControlSequence::Type::DELETE:
+            if(buffer.remove() == true)
+                output.putDelete();
             break;
         // case ControlSequence::Type::ArrowLeft:
         //     if(_buffer.MoveCursorLeft() == true)
@@ -144,20 +142,20 @@ bool InputController::_ProcessControlSequenceByType()
         // case ControlSequence::Type::Home:
         //     _MoveHome();
         //     break;
-        case ControlSequence::Type::ArrowUp:
-            if(_buffer.hasPrevious() == true)
+        case ControlSequence::Type::ARROW_UP:
+            if(buffer.hasPrevious() == true)
             {
-                ClearLine();
-                _buffer.setPrevious();
-                _output.PutString(_buffer.data());
+                clearLine();
+                buffer.setPrevious();
+                output.putString(buffer.data());
             }
             break;
-        case ControlSequence::Type::ArrowDown:
-            if(_buffer.hasNext() == true)
+        case ControlSequence::Type::ARROW_DOWN:
+            if(buffer.hasNext() == true)
             {
-                ClearLine();
-                _buffer.setNext();
-                _output.PutString(_buffer.data());
+                clearLine();
+                buffer.setNext();
+                output.putString(buffer.data());
             }
             break;
         default:
@@ -167,30 +165,30 @@ bool InputController::_ProcessControlSequenceByType()
     return true;
 }
 
-void InputController::_MoveHome()
+void InputController::moveHome()
 {
     // while(_buffer.MoveCursorLeft())
     //     _output.MoveCursorLeft();
 
-    auto times = _buffer.moveCursorMaxLeft();
+    auto times = buffer.moveCursorMaxLeft();
 
     while(times != 0)
     {
-        _output.MoveCursorLeft(times);
-        times = _buffer.moveCursorMaxLeft();
+        output.moveCursorLeft(times);
+        times = buffer.moveCursorMaxLeft();
     }
 }
 
-void InputController::_MoveEnd()
+void InputController::moveEnd()
 {
     // while(_buffer.MoveCursorRight())
     //     _output.MoveCursorRight();
 
-    auto times = _buffer.moveCursorMaxRight();
+    auto times = buffer.moveCursorMaxRight();
 
     while(times != 0)
     {
-        _output.MoveCursorRight(times);
-        times = _buffer.moveCursorMaxRight();
+        output.moveCursorRight(times);
+        times = buffer.moveCursorMaxRight();
     }
 }

@@ -18,16 +18,16 @@ namespace cli::internal::io
     public:
         OutputControllerImpl(Output&);
 
-        void PutChar(char) override;
-        void PutString(const char *) override;
-        void MoveCursorLeft(unsigned int) override;
-        void MoveCursorRight(unsigned int) override;
-        void Backspace(unsigned int) override;
-        void Delete(unsigned int) override;
-        void NewLine() override;
-        void ClearScreen() override;
+        void putChar(char) override;
+        void putString(etl::string_view) override;
+        void moveCursorLeft(unsigned int) override;
+        void moveCursorRight(unsigned int) override;
+        void backspace(unsigned int) override;
+        void putDelete(unsigned int) override;
+        void newLine() override;
+        void clearScreen() override;
 
     private:
-        Output& _output;
+        Output& output;
     };
 }

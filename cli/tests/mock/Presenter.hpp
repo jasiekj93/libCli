@@ -18,14 +18,14 @@ namespace mock
             Prompt
         };
 
-        void UnknownCommand(const char*) override;
-        void NoMandatoryArguments(char argument, const cli::templates::Command&) override;
-        void InvalidArgument(char argument, const cli::templates::Command&) override;
-        void InvalidArgumentType(char argument, const cli::templates::Command&) override;
-        void Help(const cli::templates::Command&) override;
-        void Prompt(bool) override;
+        void unknownCommand(etl::string_view) override;
+        void noMandatoryArguments(char argument, const cli::templates::Command&) override;
+        void invalidArgument(char argument, const cli::templates::Command&) override;
+        void invalidArgumentType(char argument, const cli::templates::Command&) override;
+        void help(const cli::templates::Command&) override;
+        void prompt(bool) override;
         
-        inline size_t PromptLength() override { return 5; }
+        inline size_t promptLength() override { return 5; }
 
         Operation operation = Operation::Idle;
     };

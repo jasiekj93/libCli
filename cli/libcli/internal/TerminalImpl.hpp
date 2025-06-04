@@ -33,7 +33,7 @@ namespace cli::internal
 
         void receivedCharCallback(char) override;
         void receivedStringCallback(const char *) override;
-        const char * receivedAutoCompleteCallback(const char *) override;
+        etl::string_view receivedAutoCompleteCallback(etl::string_view) override;
 
         inline TemplatesBuffer& templates() override { return _verifier.templates(); }
 
@@ -44,7 +44,7 @@ namespace cli::internal
         inline bool isInputEnabled() override { return _isInputEnabled; }
 
     protected:
-        void receivedInputLineCallback(const char *) override;
+        void receivedInputLineCallback(etl::string_view) override;
 
     private:
         CommandObserver &_observer;

@@ -4,52 +4,52 @@
 using namespace cli;
 using namespace cli::internal;
 
-model::Argument CommandVerifier::_help('h', nullptr);
+model::Argument CommandVerifier::help('h', "");
 
 CommandVerifier::CommandVerifier(Presenter &presenter)
-    : _presenter(presenter)
+    : presenter(presenter)
 {
 }
 
-bool CommandVerifier::Verify(const model::Command &command)
+bool CommandVerifier::verify(const model::Command &command)
 {
-    if(_buffer.contains(command.getName()) == false)
+    if(buffer.contains(command.getName()) == false)
     {
-        _presenter.UnknownCommand(command.getName().data());
+        presenter.unknownCommand(command.getName().data());
         return false;
     }
 
-    if(_CheckMandatoryArguments(command) == false)
+    if(checkMandatoryArguments(command) == false)
         return false;
         
-    return _CheckOptionalArguments(command);
+    return checkOptionalArguments(command);
 }
 
-const char * CommandVerifier::Find(const char *substring)
+etl::string_view CommandVerifier::find(etl::string_view substring)
 {
-    if(std::strlen(substring) == 0)
-        return nullptr;
+    if(substring.empty())
+        return "";
 
-    for(auto& command : _buffer)
+    for(auto& command : buffer)
     {
-        auto found = std::strstr(command.first.data(), substring);
+        auto found = std::strstr(command.first.data(), substring.data());
 
         if(found != nullptr)
         {
-            if(std::strcmp(found, substring) == 0)
-                return nullptr; 
+            if(std::strcmp(found, substring.data()) == 0)
+                return "";
             else if(found == command.first.data())
                 return found; 
         }
     }
 
-    return nullptr;
+    return "";
 }
 
 
-bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
+bool CommandVerifier::checkMandatoryArguments(const model::Command &command)
 {
-    auto templateCommand = _buffer.at(command.getName());
+    auto templateCommand = buffer.at(command.getName());
 
     for(auto& argument : templateCommand.getArguments())
     {
@@ -57,13 +57,13 @@ bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
         {
             if(command.getArguments().at(argument.first).getType() != argument.second.getType())
             {
-                _presenter.InvalidArgumentType(argument.first, templateCommand);
+                presenter.invalidArgumentType(argument.first, templateCommand);
                 return false;
             }
         }
         else if(argument.second.isMandatory())
         {
-            _presenter.NoMandatoryArguments(argument.first, templateCommand);
+            presenter.noMandatoryArguments(argument.first, templateCommand);
             return false;
         }
     }
@@ -71,22 +71,22 @@ bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
     return true;
 }
 
-bool CommandVerifier::_CheckOptionalArguments(const model::Command &command)
+bool CommandVerifier::checkOptionalArguments(const model::Command &command)
 {
-    auto templateCommand = _buffer.at(command.getName());
+    auto templateCommand = buffer.at(command.getName());
 
     for(auto& argument : command.getArguments())
     {
         if(not templateCommand.getArguments().contains(argument.first))
         {
-            if(argument.second == _help)
+            if(argument.second == help)
             {
-                _presenter.Help(templateCommand);
+                presenter.help(templateCommand);
                 return false;
             }
             else
             {
-                _presenter.InvalidArgument(argument.first, templateCommand);
+                presenter.invalidArgument(argument.first, templateCommand);
                 return false;
             }
         }

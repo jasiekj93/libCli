@@ -19,8 +19,8 @@ namespace mock
         InputLineObserver(size_t);
         ~InputLineObserver();
 
-        void receivedInputLineCallback(const char*) override;
-        const char* receivedAutoCompleteCallback(const char*) override { return nullptr; }
+        void receivedInputLineCallback(etl::string_view) override;
+        etl::string_view receivedAutoCompleteCallback(etl::string_view) override { return ""; }
 
         char* line;
 

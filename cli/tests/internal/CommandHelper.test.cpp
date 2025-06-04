@@ -30,7 +30,7 @@ TEST(CommandHelperTest, OnlyName)
     mock::Output output;
     CommandHelper helper(output);
 
-    helper.DisplayHelp(command);
+    helper.displayHelp(command);
 
     STRCMP_EQUAL(expected, output.buffer.c_str());
 }
@@ -45,7 +45,7 @@ TEST(CommandHelperTest, NameWithHelp)
     mock::Output output;
     CommandHelper helper(output);
 
-    helper.DisplayHelp(command);
+    helper.displayHelp(command);
 
     STRCMP_EQUAL(expected, output.buffer.c_str());
 }
@@ -64,7 +64,7 @@ TEST(CommandHelperTest, OneArgument_Mandatory)
     mock::Output output;
     CommandHelper helper(output);
 
-    helper.DisplayHelp(command);
+    helper.displayHelp(command);
 
     STRCMP_EQUAL(expected, output.buffer.c_str());
 }
@@ -83,7 +83,7 @@ TEST(CommandHelperTest, OneArgument_Optional)
     mock::Output output;
     CommandHelper helper(output);
 
-    helper.DisplayHelp(command);
+    helper.displayHelp(command);
 
     STRCMP_EQUAL(expected, output.buffer.c_str());
 }
@@ -101,7 +101,7 @@ TEST(CommandHelperTest, OneArgument_NoCommandHelp)
     mock::Output output;
     CommandHelper helper(output);
 
-    helper.DisplayHelp(command);
+    helper.displayHelp(command);
 
     STRCMP_EQUAL(expected, output.buffer.c_str());
 }
@@ -128,7 +128,7 @@ TEST(CommandHelperTest, ManyArguments)
     mock::Output output;
     CommandHelper helper(output);
 
-    helper.DisplayHelp(command);
+    helper.displayHelp(command);
 
     STRCMP_EQUAL(expected, output.buffer.c_str());
 }

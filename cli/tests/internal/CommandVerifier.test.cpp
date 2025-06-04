@@ -40,7 +40,7 @@ TEST(CommandVerifierTest, OnlyMandatoryArguments)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK(verifier.Verify(command));
+    CHECK(verifier.verify(command));
 }
 
 TEST(CommandVerifierTest, MissingMandatoryArgument)
@@ -59,7 +59,7 @@ TEST(CommandVerifierTest, MissingMandatoryArgument)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK_FALSE(verifier.Verify(command));
+    CHECK_FALSE(verifier.verify(command));
     CHECK(mock::Presenter::Operation::NoMandatoryArguments == presenter.operation);
 }
 
@@ -78,7 +78,7 @@ TEST(CommandVerifierTest, OptionalArgument)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK(verifier.Verify(command));
+    CHECK(verifier.verify(command));
 }
 
 TEST(CommandVerifierTest, OptionalArgument_IsMissing)
@@ -97,7 +97,7 @@ TEST(CommandVerifierTest, OptionalArgument_IsMissing)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK(verifier.Verify(command));
+    CHECK(verifier.verify(command));
 }
 
 TEST(CommandVerifierTest, NotDefinedArgument)
@@ -114,7 +114,7 @@ TEST(CommandVerifierTest, NotDefinedArgument)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK_FALSE(verifier.Verify(command));
+    CHECK_FALSE(verifier.verify(command));
     CHECK(mock::Presenter::Operation::InvalidArgument == presenter.operation);
 }
 
@@ -133,7 +133,7 @@ TEST(CommandVerifierTest, DifferentType)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK_FALSE(verifier.Verify(command));
+    CHECK_FALSE(verifier.verify(command));
     CHECK(mock::Presenter::Operation::InvalidArgumentType == presenter.operation);
 }
 
@@ -152,7 +152,7 @@ TEST(CommandVerifierTest, DifferentType_Optional)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK_FALSE(verifier.Verify(command));
+    CHECK_FALSE(verifier.verify(command));
     CHECK(mock::Presenter::Operation::InvalidArgumentType == presenter.operation);
 
 }
@@ -172,7 +172,7 @@ TEST(CommandVerifierTest, WithHelp)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK_FALSE(verifier.Verify(command));
+    CHECK_FALSE(verifier.verify(command));
     CHECK(mock::Presenter::Operation::Help == presenter.operation);
 }
 
@@ -192,7 +192,7 @@ TEST(CommandVerifierTest, CustomHelp)
         });
 
     verifier.templates()[name] = (commandTemp);
-    CHECK(verifier.Verify(command));
+    CHECK(verifier.verify(command));
 }
 
 TEST(CommandVerifierTest, Find)
@@ -204,10 +204,10 @@ TEST(CommandVerifierTest, Find)
     verifier.templates()["bar"] = templates::Command("bar");
     verifier.templates()["baz"] = templates::Command("baz");
 
-    auto found = verifier.Find("f");
+    auto found = verifier.find("f");
 
     CHECK(found != nullptr);
-    STRCMP_EQUAL("foo", found);
+    STRCMP_EQUAL("foo", found.data());
 }
 
 TEST(CommandVerifierTest, Find_TwoAreMatch)
@@ -219,10 +219,10 @@ TEST(CommandVerifierTest, Find_TwoAreMatch)
     verifier.templates()["bar"] = templates::Command("bar");
     verifier.templates()["baz"] = templates::Command("baz");
 
-    auto found = verifier.Find("b");
+    auto found = verifier.find("b");
 
     CHECK(found != nullptr);
-    STRCMP_EQUAL("bar", found);
+    STRCMP_EQUAL("bar", found.data());
 }
 
 TEST(CommandVerifierTest, Find_SubstringMatchComaand)
@@ -234,7 +234,7 @@ TEST(CommandVerifierTest, Find_SubstringMatchComaand)
     verifier.templates()["bar"] = templates::Command("bar");
     verifier.templates()["baz"] = templates::Command("baz");
 
-    auto found = verifier.Find("baz");
+    auto found = verifier.find("baz");
 
     CHECK(found == nullptr);
 }
@@ -248,7 +248,7 @@ TEST(CommandVerifierTest, Find_SubstringAreLongerThanCommand)
     verifier.templates()["bar"] = templates::Command("bar");
     verifier.templates()["baz"] = templates::Command("baz");
 
-    auto found = verifier.Find("baz -t");
+    auto found = verifier.find("baz -t");
 
     CHECK(found == nullptr);
 }
@@ -262,7 +262,7 @@ TEST(CommandVerifierTest, SpacesOnTheBeggining)
     verifier.templates()["bar"] = templates::Command("bar");
     verifier.templates()["baz"] = templates::Command("baz");
 
-    auto found = verifier.Find(" baz");
+    auto found = verifier.find(" baz");
 
     CHECK(found == nullptr);
 }
@@ -276,7 +276,7 @@ TEST(CommandVerifierTest, EmptyString)
     verifier.templates()["bar"] = templates::Command("bar");
     verifier.templates()["baz"] = templates::Command("baz");
 
-    auto found = verifier.Find("");
+    auto found = verifier.find("");
 
     CHECK(found == nullptr);
 }

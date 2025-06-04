@@ -8,6 +8,8 @@
  * @details
  */
 
+#include <etl/string.h> 
+
 #include <libcli/internal/io/InputLineObserver.hpp>
 #include <libcli/internal/io/ControlSequence.hpp>
 #include <libcli/internal/io/ControlChar.hpp>
@@ -20,32 +22,32 @@ namespace cli::internal::io
     {
     public:
         InputController(OutputController&, 
-        InputLineObserver&,
-        container::LineBufferWithMemory&);
+            InputLineObserver&,
+            container::LineBufferWithMemory&);
 
-        void ReceivedCharCallback(char);
-        void ReceivedStringCallback(const char*);
+        void receivedCharCallback(char);
+        void receivedStringCallback(etl::string_view);
 
-        void RestoreLine();
-        void ClearLine(unsigned int extraChars = 0);
+        void restoreLine();
+        void clearLine(unsigned int extraChars = 0);
 
     protected:
-        bool _ProcessControlChar(char c);
-        bool _ProcessEscapeChar();
-        bool _ProcessNewLine();
-        bool _ProcessBackspace();
-        bool _ProcessTab();
-        bool _ProcessConrolSequence(char c);
-        bool _ProcessControlSequenceByType();
+        bool processControlChar(char c);
+        bool processEscapeChar();
+        bool processNewLine();
+        bool processBackspace();
+        bool processTab();
+        bool processConrolSequence(char c);
+        bool processControlSequenceByType();
 
-        void _MoveHome();
-        void _MoveEnd();
+        void moveHome();
+        void moveEnd();
 
     private:
-        OutputController& _output;
-        InputLineObserver& _observer;
-        container::LineBufferWithMemory& _buffer;
+        OutputController& output;
+        InputLineObserver& observer;
+        container::LineBufferWithMemory& buffer;
 
-        ControlSequence _controlSequence;
+        ControlSequence controlSequence;
     };
 }

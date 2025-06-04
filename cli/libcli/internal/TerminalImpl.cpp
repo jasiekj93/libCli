@@ -35,43 +35,43 @@ TerminalImpl::~TerminalImpl()
 void TerminalImpl::receivedCharCallback(char c)
 {
     if(_isInputEnabled)
-        _inputController.ReceivedCharCallback(c);
+        _inputController.receivedCharCallback(c);
 }
 
 void TerminalImpl::receivedStringCallback(const char *string)
 {
     if(_isInputEnabled)
-        _inputController.ReceivedStringCallback(string);
+        _inputController.receivedStringCallback(string);
 }
 
-void TerminalImpl::receivedInputLineCallback(const char *line)
+void TerminalImpl::receivedInputLineCallback(etl::string_view line)
 {
     model::Command command(line);
 
     if(command.isNull())
     {
-        _presenter.Prompt(false);
+        _presenter.prompt(false);
         return;
     }
 
-    if(_verifier.Verify(command) == false)
+    if(_verifier.verify(command) == false)
         return;
 
     _isInputEnabled = false;
     _observer.receivedCommandCallback(command);
-    _presenter.Prompt();
+    _presenter.prompt();
     _isInputEnabled = true;
 }
 
-const char * TerminalImpl::receivedAutoCompleteCallback(const char *substring)
+etl::string_view TerminalImpl::receivedAutoCompleteCallback(etl::string_view substring)
 {
-    return _verifier.Find(substring);
+    return _verifier.find(substring);
 }
 
 void TerminalImpl::putString(const char *string)
 {
     if(_isInputEnabled == true)
-        _presenter.NewLine();
+        _presenter.newLine();
     
     _output.putString(string);
 
@@ -102,14 +102,14 @@ size_t TerminalImpl::printf(const char *format, ...)
 
 void TerminalImpl::disableInput()
 {
-    auto promptLength = _presenter.PromptLength();
+    auto promptLength = _presenter.promptLength();
     _isInputEnabled = false;
-    _inputController.ClearLine(promptLength);
+    _inputController.clearLine(promptLength);
 }
 
 void TerminalImpl::enableInput()
 {
     _isInputEnabled = true;
-    _presenter.Prompt();
-    _inputController.RestoreLine();
+    _presenter.prompt();
+    _inputController.restoreLine();
 }

@@ -8,6 +8,8 @@
  * @details
  */
 
+#include <etl/string.h>
+
 namespace cli::internal::io
 {
     class InputLineObserver
@@ -15,7 +17,7 @@ namespace cli::internal::io
     public:
         virtual ~InputLineObserver() {}
 
-        virtual void receivedInputLineCallback(const char*) = 0;
-        virtual const char * receivedAutoCompleteCallback(const char*) = 0;
+        virtual void receivedInputLineCallback(etl::string_view) = 0;
+        virtual etl::string_view receivedAutoCompleteCallback(etl::string_view) = 0;
     };
 }

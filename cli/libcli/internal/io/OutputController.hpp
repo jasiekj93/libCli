@@ -7,6 +7,9 @@
  * @brief 
  * @details
  */
+
+#include <etl/string.h>
+
 namespace cli::internal::io
 {
     class OutputController
@@ -14,13 +17,13 @@ namespace cli::internal::io
     public:
         virtual ~OutputController() {}
 
-        virtual void PutChar(char) = 0;
-        virtual void PutString(const char *) = 0;
-        virtual void MoveCursorLeft(unsigned int times = 1) = 0;
-        virtual void MoveCursorRight(unsigned int times = 1) = 0;
-        virtual void Backspace(unsigned int times = 1) = 0;
-        virtual void Delete(unsigned int times = 1) = 0;
-        virtual void NewLine() = 0;
-        virtual void ClearScreen() = 0;
+        virtual void putChar(char) = 0;
+        virtual void putString(etl::string_view) = 0;
+        virtual void moveCursorLeft(unsigned int times = 1) = 0;
+        virtual void moveCursorRight(unsigned int times = 1) = 0;
+        virtual void backspace(unsigned int times = 1) = 0;
+        virtual void putDelete(unsigned int times = 1) = 0;
+        virtual void newLine() = 0;
+        virtual void clearScreen() = 0;
     };
 }

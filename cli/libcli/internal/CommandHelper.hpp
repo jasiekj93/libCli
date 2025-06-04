@@ -18,16 +18,16 @@ namespace cli::internal
     public:
         CommandHelper(Output&);
 
-        void DisplayHelp(const templates::Command&);
+        void displayHelp(const templates::Command&);
 
     protected:
-        void _PrintUsage(const templates::Command&);
-        void _PrintArgumentUsage(const templates::Command&);
-        void _PrintCommandHelp(const templates::Command&);
-        void _PrintArguments(const templates::Command&);
-        void _PrintArgumentType(const templates::Argument&);
+        void printUsage(const templates::Command&);
+        void printArgumentUsage(const templates::Command&);
+        void printCommandHelp(const templates::Command&);
+        void printArguments(const templates::Command&);
+        void printArgumentType(const templates::Argument&);
     
     private:
-        Output& _output;
+        Output& output;
     };
 }

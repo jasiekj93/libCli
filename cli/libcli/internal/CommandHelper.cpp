@@ -5,95 +5,95 @@ using namespace cli;
 using namespace cli::internal;
 
 CommandHelper::CommandHelper(Output& output)
-    : _output(output)
+    : output(output)
 {
 }
 
 
-void CommandHelper::DisplayHelp(const templates::Command &command)
+void CommandHelper::displayHelp(const templates::Command &command)
 {
-    _PrintUsage(command);
+    printUsage(command);
 
     if(not command.getHelp().empty())
-        _PrintCommandHelp(command);
+        printCommandHelp(command);
 
     if (not command.getArguments().empty())
-        _PrintArguments(command);
+        printArguments(command);
 }
 
-void CommandHelper::_PrintUsage(const templates::Command &command)
+void CommandHelper::printUsage(const templates::Command &command)
 {
-    _output.putString("zastosowanie: ");
-    _output.putString(command.getName().c_str());
+    output.putString("zastosowanie: ");
+    output.putString(command.getName().c_str());
 
     if (not command.getArguments().empty())
     {
-        _output.putChar(' ');
-        _PrintArgumentUsage(command);
+        output.putChar(' ');
+        printArgumentUsage(command);
     }
 
-    _output.putString("\r\n");
+    output.putString("\r\n");
 }
 
-void CommandHelper::_PrintArgumentUsage(const templates::Command &command)
+void CommandHelper::printArgumentUsage(const templates::Command &command)
 {
     for(auto& argument : command.getArguments())
     {
         if (argument.second.isMandatory() == false)
-            _output.putChar('[');
+            output.putChar('[');
 
-        _output.putChar('-');
-        _output.putChar(argument.first);
+        output.putChar('-');
+        output.putChar(argument.first);
 
         if (argument.second.isMandatory() == false)
-            _output.putChar(']');
+            output.putChar(']');
 
-        _output.putChar(' ');
+        output.putChar(' ');
     }
 }
 
-void CommandHelper::_PrintCommandHelp(const templates::Command &command)
+void CommandHelper::printCommandHelp(const templates::Command &command)
 {
-    _output.putChar('\t');
-    _output.putString(command.getHelp().c_str());
-    _output.putString("\r\n");
+    output.putChar('\t');
+    output.putString(command.getHelp().c_str());
+    output.putString("\r\n");
 }
 
-void CommandHelper::_PrintArguments(const templates::Command &command)
+void CommandHelper::printArguments(const templates::Command &command)
 {
-    _output.putString("\r\n");
+    output.putString("\r\n");
 
     for (auto& argument : command.getArguments())
     {
-        _output.putChar('-');
-        _output.putChar(argument.first);
-        _output.putChar('\t');
-        _PrintArgumentType(argument.second);
+        output.putChar('-');
+        output.putChar(argument.first);
+        output.putChar('\t');
+        printArgumentType(argument.second);
 
 
         if (not argument.second.getHelp().empty())
         {
-            _output.putChar('\t');
-            _output.putString(argument.second.getHelp().c_str());
+            output.putChar('\t');
+            output.putString(argument.second.getHelp().c_str());
         }
 
-        _output.putString("\r\n");
+        output.putString("\r\n");
     }
 }
 
-void CommandHelper::_PrintArgumentType(const templates::Argument &argument)
+void CommandHelper::printArgumentType(const templates::Argument &argument)
 {
     switch(argument.getType())
     {
         case model::Argument::Type::DECIMAL:
-            return _output.putString("calkowity");
+            return output.putString("calkowity");
         case model::Argument::Type::DOUBLE:
-            return _output.putString("zmiennoprzecinkowy");
+            return output.putString("zmiennoprzecinkowy");
         case model::Argument::Type::EMPTY:
-            return _output.putString(" ");
+            return output.putString(" ");
         case model::Argument::Type::HEX:
-            return _output.putString("szesnastkowy");
+            return output.putString("szesnastkowy");
         case model::Argument::Type::STRING:
-            return _output.putString("ciag znakow");
+            return output.putString("ciag znakow");
     }
 }

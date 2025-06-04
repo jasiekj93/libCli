@@ -8,7 +8,7 @@
  * @details
  */
 
-#include <cstring>
+#include <etl/string.h>
 
 #include <libcli/Configuration.hpp>
 #include <libcli/Output.hpp>
@@ -22,22 +22,22 @@ namespace cli::internal
     public:
         static constexpr char PROMPT_CHAR = '$';
 
-        PresenterImpl(Output&, const char *userName = nullptr);
+        PresenterImpl(Output&, etl::string_view userName = "");
 
-        void UnknownCommand(const char *) override;
-        void NoMandatoryArguments(char argument, const templates::Command&) override;
-        void InvalidArgument(char argument, const templates::Command&) override;
-        void InvalidArgumentType(char argument, const templates::Command&) override;
-        void Help(const templates::Command&) override;
-        void Prompt(bool addNewLine = true) override;
+        void unknownCommand(etl::string_view) override;
+        void noMandatoryArguments(char argument, const templates::Command&) override;
+        void invalidArgument(char argument, const templates::Command&) override;
+        void invalidArgumentType(char argument, const templates::Command&) override;
+        void help(const templates::Command&) override;
+        void prompt(bool addNewLine = true) override;
         
-        inline size_t PromptLength() override { return (std::strlen(_userName) + 2); }
+        inline size_t promptLength() override { return (userName.size() + 2); }
         
-        void NewLine();
+        void newLine();
 
     private:
-        Output &_output;
-        CommandHelper _helper;
-        char _userName[Configuration::MAX_USER_NAME + 1];
+        Output& output;
+        CommandHelper helper;
+        etl::string<Configuration::MAX_USER_NAME> userName;
     };
 }

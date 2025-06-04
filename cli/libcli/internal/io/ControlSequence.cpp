@@ -5,27 +5,27 @@
 
 using namespace cli::internal::io;
 
-const ControlSequence ControlSequence::_knownCharacters[ControlSequence::KNOWN_TYPES] = 
+const etl::map<ControlSequence::Type, ControlSequence, ControlSequence::KNOWN_TYPES> ControlSequence::knownCharacters = 
 {
-    { '\e', '[', 'A' },
-    { '\e', '[', 'B' },
-    { '\e', '[', 'D' },
-    { '\e', '[', 'C' },
-    { '\e', '[', '3', '~' },
-    { '\e', '[', '1', '~' },
-    { '\e', '[', '4', '~' },
+    { ControlSequence::Type::ARROW_UP, ControlSequence{ '\e', '[', 'A' }},
+    { ControlSequence::Type::ARROW_DOWN, ControlSequence{ '\e', '[', 'B' }},
+    { ControlSequence::Type::ARROW_LEFT, ControlSequence{ '\e', '[', 'D' }},
+    { ControlSequence::Type::ARROW_RIGHT, ControlSequence{ '\e', '[', 'C' }},
+    { ControlSequence::Type::DELETE, ControlSequence{ '\e', '[', '3', '~' }},
+    { ControlSequence::Type::HOME, ControlSequence{ '\e', '[', '1', '~' }},
+    { ControlSequence::Type::END, ControlSequence{ '\e', '[', '4', '~' }},
 };
 
 ControlSequence::ControlSequence()
 {
-    Clear();
+    clear();
 }
 
 ControlSequence::ControlSequence(Type type)
     : ControlSequence()
 {
-    if(type != Type::Unknown)
-        *this = _knownCharacters[(int)type];
+    if(type != Type::UNKNOWN)
+        *this = knownCharacters.at(type);
 }
 
 ControlSequence::ControlSequence(Type type, unsigned int times)
@@ -34,73 +34,44 @@ ControlSequence::ControlSequence(Type type, unsigned int times)
     if(times > MAX_ARROW_REPEAT)
         return;
 
-    if(type == Type::ArrowRight ||
-        type == Type::ArrowLeft)
+    if(type == Type::ARROW_RIGHT ||
+        type == Type::ARROW_LEFT)
     {
-        _data[3] = _data[2];
-        _data[2] = '0' + times;
-        _data[4] = '\0';
+        data[3] = data[2];
+        data[2] = '0' + times;
+        data[4] = '\0';
     }
 }
 
 ControlSequence::ControlSequence(std::initializer_list<char> list)
 {
     if(list.size() <= MAX_SIZE)
-    {
-        std::copy(list.begin(), list.end(), std::begin(_data));
-        _data[list.size()] = '\0';
-    }
+        data = list;
 }
 
-ControlSequence::ControlSequence(const char *string)
+ControlSequence::ControlSequence(etl::string_view string)
 {
-   std::strcpy(_data, string);
+   if(string.size() <= data.max_size())
+        data = string;
 }
 
 
-bool ControlSequence::Put(char c)
-{
-    auto length = std::strlen(_data);
-
-    if(length == MAX_SIZE)
+bool ControlSequence::put(char c)
+{   
+    if(data.full())
         return false;
-    
-    _data[length++] = c;
-    _data[length] = '\0';
+
+    data.push_back(c);
     return true;
 }
 
-void ControlSequence::Clear()
+ControlSequence::Type ControlSequence::getType()
 {
-    _data[0] = '\0';
-}
-
-ControlSequence::Type ControlSequence::GetType()
-{
-    for(size_t i = 0; i < KNOWN_TYPES; i++)
-        if(*this == _knownCharacters[i])
-            return (Type)i;
+    for(auto& [type, knownCharacter] : knownCharacters)
+    {
+        if(*this == knownCharacter)
+            return type;
+    }
     
-    return Type::Unknown;
-}
-
-bool ControlSequence::IsFull()
-{
-    return (std::strlen(_data) == MAX_SIZE);
-}
-
-bool ControlSequence::IsNotEmpty()
-{
-    return (IsEmpty() == false);
-}
-
-bool ControlSequence::IsEmpty()
-{
-    return (std::strlen(_data) == 0);
-}
-
-
-bool ControlSequence::operator==(const ControlSequence &second)
-{
-    return (std::strcmp(this->_data, second._data) == 0);
+    return Type::UNKNOWN;
 }

@@ -7,49 +7,49 @@ using namespace cli::internal;
 using namespace cli::internal::io;
 
 OutputControllerImpl::OutputControllerImpl(Output& output)
-    : _output(output)
+    : output(output)
 {
 }
 
 
-void OutputControllerImpl::PutChar(char c)
+void OutputControllerImpl::putChar(char c)
 {
-    _output.putChar(c);
+    output.putChar(c);
 }
 
-void OutputControllerImpl::PutString(const char *string)
+void OutputControllerImpl::putString(etl::string_view string)
 {
-    _output.putString(string);
+    output.putString(string.data());
 }
 
-void OutputControllerImpl::MoveCursorLeft(unsigned int times)
+void OutputControllerImpl::moveCursorLeft(unsigned int times)
 {
-    _output.putString(ControlSequence(ControlSequence::Type::ArrowLeft, times).Data());
+    output.putString(ControlSequence(ControlSequence::Type::ARROW_LEFT, times).getData().data());
 }
 
-void OutputControllerImpl::MoveCursorRight(unsigned int times)
+void OutputControllerImpl::moveCursorRight(unsigned int times)
 {
-    _output.putString(ControlSequence(ControlSequence::Type::ArrowRight, times).Data());
+    output.putString(ControlSequence(ControlSequence::Type::ARROW_RIGHT, times).getData().data());
 }
 
-void OutputControllerImpl::Backspace(unsigned int times)
+void OutputControllerImpl::backspace(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
-        _output.putChar(ControlChar::BACKSPACE);
+        output.putChar(ControlChar::BACKSPACE);
 }
 
-void OutputControllerImpl::Delete(unsigned int times)
+void OutputControllerImpl::putDelete(unsigned int times)
 {
     //not used
 }
 
-void OutputControllerImpl::NewLine()
+void OutputControllerImpl::newLine()
 {
-    _output.putChar('\r');
-    _output.putChar('\n');
+    output.putChar('\r');
+    output.putChar('\n');
 }
 
-void OutputControllerImpl::ClearScreen()
+void OutputControllerImpl::clearScreen()
 {
-    _output.putChar('\f');
+    output.putChar('\f');
 }

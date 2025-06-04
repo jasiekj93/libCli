@@ -46,7 +46,7 @@ TEST(InputControllerTest, OneChar)
 
     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedCharCallback(c);
+    controller.receivedCharCallback(c);
 
     CHECK_EQUAL(c, (*buffer)[0]);
     CHECK_EQUAL(c, output->line[0]);
@@ -58,7 +58,7 @@ TEST(InputControllerTest, OneChar_NotPrintable)
 
     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedCharCallback(c);
+    controller.receivedCharCallback(c);
 
     CHECK_EQUAL(0, buffer->count());
     CHECK_EQUAL(0, output->line.count());
@@ -163,8 +163,8 @@ TEST(InputControllerTest, Backspace)
 
     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedStringCallback(text);
-    controller.ReceivedCharCallback(ControlChar::BACKSPACE);
+    controller.receivedStringCallback(text);
+    controller.receivedCharCallback(ControlChar::BACKSPACE);
 
     STRCMP_EQUAL(expected, buffer->data());
     STRCMP_EQUAL(expected, output->line.data());
@@ -176,8 +176,8 @@ TEST(InputControllerTest, Enter)
 
     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedStringCallback(text);
-    controller.ReceivedCharCallback(ControlChar::NEW_LINE);
+    controller.receivedStringCallback(text);
+    controller.receivedCharCallback(ControlChar::NEW_LINE);
 
     CHECK_EQUAL(0, buffer->count());
     CHECK_EQUAL(0, output->line.count());
@@ -189,14 +189,14 @@ TEST(InputControllerTest, ArrowUp)
     const char text1[] = "Text1";
     const char text2[] = "Text2";
 
-    ControlSequence arrowUp(ControlSequence::Type::ArrowUp);
+    ControlSequence arrowUp(ControlSequence::Type::ARROW_UP);
 
     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedStringCallback(text1);
-    controller.ReceivedCharCallback(ControlChar::NEW_LINE);
-    controller.ReceivedStringCallback(text2);
-    controller.ReceivedStringCallback(arrowUp.Data());
+    controller.receivedStringCallback(text1);
+    controller.receivedCharCallback(ControlChar::NEW_LINE);
+    controller.receivedStringCallback(text2);
+    controller.receivedStringCallback(arrowUp.getData());
 
     STRCMP_EQUAL(text1, output->previousLine);
     STRCMP_EQUAL(text1, output->line.data());
@@ -208,16 +208,16 @@ TEST(InputControllerTest, ArrowDown)
     const char text1[] = "Text1";
     const char text2[] = "Text2";
 
-    ControlSequence arrowUp(ControlSequence::Type::ArrowUp);
-    ControlSequence arrowDown(ControlSequence::Type::ArrowDown);
+    ControlSequence arrowUp(ControlSequence::Type::ARROW_UP);
+    ControlSequence arrowDown(ControlSequence::Type::ARROW_DOWN);
 
     InputController controller(*output, *inputObserver, *buffer);
 
-    controller.ReceivedStringCallback(text1);
-    controller.ReceivedCharCallback(ControlChar::NEW_LINE);
-    controller.ReceivedStringCallback(text2);
-    controller.ReceivedStringCallback(arrowUp.Data());
-    controller.ReceivedStringCallback(arrowDown.Data());
+    controller.receivedStringCallback(text1);
+    controller.receivedCharCallback(ControlChar::NEW_LINE);
+    controller.receivedStringCallback(text2);
+    controller.receivedStringCallback(arrowUp.getData());
+    controller.receivedStringCallback(arrowDown.getData());
 
     STRCMP_EQUAL(text1, output->previousLine);
     STRCMP_EQUAL(text2, output->line.data());

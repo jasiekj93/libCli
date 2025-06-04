@@ -19,14 +19,14 @@ namespace mock
         OutputController(size_t);
         ~OutputController();
 
-        void PutChar(char) override;
-        void PutString(const char *) override;
-        void MoveCursorLeft(unsigned int times) override;
-        void MoveCursorRight(unsigned int times) override;
-        void Backspace(unsigned int times) override;
-        void Delete(unsigned int times) override;
-        void NewLine() override;
-        void ClearScreen() override;
+        void putChar(char) override;
+        void putString(etl::string_view) override;
+        void moveCursorLeft(unsigned int times) override;
+        void moveCursorRight(unsigned int times) override;
+        void backspace(unsigned int times) override;
+        void putDelete(unsigned int times) override;
+        void newLine() override;
+        void clearScreen() override;
 
 
         char* previousLine;
