@@ -8,20 +8,11 @@
  * @details
  */
 
-#include <libcli/utils/Buffer.hpp>
+#include <etl/map.h>
+#include <etl/string.h>
 
 namespace cli::utils
 {
     template<class T, size_t SIZE>
-    class Dictionary : public Buffer<T, SIZE>
-    {
-    public:
-        bool Put(const T &) override;
-
-        bool Contains(const char *) const;
-        int At(const char *) const;
-        T Get(const char *) const;
-    };
+    using Dictionary = etl::map<etl::string_view, T, SIZE>;
 }
-
-#include <libcli/utils/Dictionary.tpp>

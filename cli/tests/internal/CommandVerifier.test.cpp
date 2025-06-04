@@ -39,7 +39,7 @@ TEST(CommandVerifierTest, OnlyMandatoryArguments)
             { 'e', Argument::Type::EMPTY, true },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK(verifier.Verify(command));
 }
 
@@ -58,7 +58,7 @@ TEST(CommandVerifierTest, MissingMandatoryArgument)
             { 'f', Argument::Type::EMPTY, true },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK_FALSE(verifier.Verify(command));
     CHECK(mock::Presenter::Operation::NoMandatoryArguments == presenter.operation);
 }
@@ -77,7 +77,7 @@ TEST(CommandVerifierTest, OptionalArgument)
             { 'e', Argument::Type::EMPTY, false },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK(verifier.Verify(command));
 }
 
@@ -96,7 +96,7 @@ TEST(CommandVerifierTest, OptionalArgument_IsMissing)
             { 'f', Argument::Type::EMPTY, false },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK(verifier.Verify(command));
 }
 
@@ -113,7 +113,7 @@ TEST(CommandVerifierTest, NotDefinedArgument)
             { 'd', Argument::Type::HEX, false },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK_FALSE(verifier.Verify(command));
     CHECK(mock::Presenter::Operation::InvalidArgument == presenter.operation);
 }
@@ -132,7 +132,7 @@ TEST(CommandVerifierTest, DifferentType)
             { 'e', Argument::Type::EMPTY, false },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK_FALSE(verifier.Verify(command));
     CHECK(mock::Presenter::Operation::InvalidArgumentType == presenter.operation);
 }
@@ -151,7 +151,7 @@ TEST(CommandVerifierTest, DifferentType_Optional)
             { 'e', Argument::Type::EMPTY, false },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK_FALSE(verifier.Verify(command));
     CHECK(mock::Presenter::Operation::InvalidArgumentType == presenter.operation);
 
@@ -171,7 +171,7 @@ TEST(CommandVerifierTest, WithHelp)
             { 'e', Argument::Type::EMPTY, false },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK_FALSE(verifier.Verify(command));
     CHECK(mock::Presenter::Operation::Help == presenter.operation);
 }
@@ -191,7 +191,7 @@ TEST(CommandVerifierTest, CustomHelp)
             { 'h', Argument::Type::EMPTY, false },
         });
 
-    CHECK(verifier.templates().Put(commandTemp));
+    verifier.templates()[name] = (commandTemp);
     CHECK(verifier.Verify(command));
 }
 
@@ -200,9 +200,9 @@ TEST(CommandVerifierTest, Find)
     mock::Presenter presenter;
     CommandVerifier verifier(presenter);
 
-    verifier.templates().Put("foo");
-    verifier.templates().Put("bar");
-    verifier.templates().Put("baz");
+    verifier.templates()["foo"] = "foo";
+    verifier.templates()["bar"] = "bar";
+    verifier.templates()["baz"] = "baz";
 
     auto found = verifier.Find("f");
 
@@ -215,9 +215,9 @@ TEST(CommandVerifierTest, Find_TwoAreMatch)
     mock::Presenter presenter;
     CommandVerifier verifier(presenter);
 
-    verifier.templates().Put("foo");
-    verifier.templates().Put("bar");
-    verifier.templates().Put("baz");
+    verifier.templates()["foo"] = "foo";
+    verifier.templates()["bar"] = "bar";
+    verifier.templates()["baz"] = "baz";
 
     auto found = verifier.Find("b");
 
@@ -230,9 +230,9 @@ TEST(CommandVerifierTest, Find_SubstringMatchComaand)
     mock::Presenter presenter;
     CommandVerifier verifier(presenter);
 
-    verifier.templates().Put("foo");
-    verifier.templates().Put("bar");
-    verifier.templates().Put("baz");
+    verifier.templates()["foo"] = "foo";
+    verifier.templates()["bar"] = "bar";
+    verifier.templates()["baz"] = "baz";
 
     auto found = verifier.Find("baz");
 
@@ -244,9 +244,9 @@ TEST(CommandVerifierTest, Find_SubstringAreLongerThanCommand)
     mock::Presenter presenter;
     CommandVerifier verifier(presenter);
 
-    verifier.templates().Put("foo");
-    verifier.templates().Put("bar");
-    verifier.templates().Put("baz");
+    verifier.templates()["foo"] = "foo";
+    verifier.templates()["bar"] = "bar";
+    verifier.templates()["baz"] = "baz";
 
     auto found = verifier.Find("baz -t");
 
@@ -258,9 +258,9 @@ TEST(CommandVerifierTest, SpacesOnTheBeggining)
     mock::Presenter presenter;
     CommandVerifier verifier(presenter);
 
-    verifier.templates().Put("foo");
-    verifier.templates().Put("bar");
-    verifier.templates().Put("baz");
+    verifier.templates()["foo"] = "foo";
+    verifier.templates()["bar"] = "bar";
+    verifier.templates()["baz"] = "baz";
 
     auto found = verifier.Find(" baz");
 
@@ -272,9 +272,9 @@ TEST(CommandVerifierTest, EmptyString)
     mock::Presenter presenter;
     CommandVerifier verifier(presenter);
 
-    verifier.templates().Put("foo");
-    verifier.templates().Put("bar");
-    verifier.templates().Put("baz");
+    verifier.templates()["foo"] = "foo";
+    verifier.templates()["bar"] = "bar";
+    verifier.templates()["baz"] = "baz";
 
     auto found = verifier.Find("");
 

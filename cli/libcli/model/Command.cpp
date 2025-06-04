@@ -23,7 +23,7 @@ Command::Command(const char *string)
         return;
 
     if(_FindArguments() == false)
-        _arguments.Clear();
+        _arguments.clear();
 }
 
 
@@ -69,18 +69,23 @@ bool Command::_FindArguments()
                 return false;
 
             if(name != nullptr)
-                 if(_arguments.Put(Argument(*name, nullptr)) == false)
+                if(_arguments.full())
                     return false;
+                else
+                    _arguments[*name] = Argument(*name, nullptr);
 
             name = &token[1];
 
             
             if(std::strlen(token) > 2)
             {
-                if(_arguments.Put(Argument(*name, &token[2])) == false)
+                if(_arguments.full())
                     return false;
                 else
+                {
+                    _arguments[*name] = Argument(*name, &token[2]);
                     name = nullptr;
+                }
             }
         }
         else
@@ -89,20 +94,29 @@ bool Command::_FindArguments()
                 return false;
             else
             {
-                if(_arguments.Put(Argument(*name, token)) == false)
+                if(_arguments.full())
                     return false;
                 else
+                {
+                    _arguments[*name] = Argument(*name, token);
                     name = nullptr;
+                }
             }
         }
 
         token = std::strtok(nullptr, " ");
     }
 
-
     if(name != nullptr)
-        if(_arguments.Put(Argument(*name, nullptr)) == false)
+    {
+        if(_arguments.full())
             return false;
+        else
+        {
+            _arguments[*name] = Argument(*name, nullptr);
+        }
+
+    }
 
     return true;
 }

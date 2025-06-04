@@ -17,7 +17,7 @@ void CommandHelper::DisplayHelp(const templates::Command &command)
     if (std::strlen(command.Help()) > 0)
         _PrintCommandHelp(command);
 
-    if(command.Arguments().Count() > 0)
+    if (not command.Arguments().empty())
         _PrintArguments(command);
 }
 
@@ -26,7 +26,7 @@ void CommandHelper::_PrintUsage(const templates::Command &command)
     _output.putString("zastosowanie: ");
     _output.putString(command.Name());
 
-    if (command.Arguments().Count() > 0)
+    if (not command.Arguments().empty())
     {
         _output.putChar(' ');
         _PrintArgumentUsage(command);
@@ -37,17 +37,15 @@ void CommandHelper::_PrintUsage(const templates::Command &command)
 
 void CommandHelper::_PrintArgumentUsage(const templates::Command &command)
 {
-    for (size_t i = 0; i < command.Arguments().Count(); i++)
+    for(auto& argument : command.Arguments())
     {
-        auto argument = command.Arguments()[i];
-
-        if (argument.isMandatory() == false)
+        if (argument.second.isMandatory() == false)
             _output.putChar('[');
 
         _output.putChar('-');
-        _output.putChar(argument.getName());
+        _output.putChar(argument.first);
 
-        if (argument.isMandatory() == false)
+        if (argument.second.isMandatory() == false)
             _output.putChar(']');
 
         _output.putChar(' ');
@@ -65,20 +63,18 @@ void CommandHelper::_PrintArguments(const templates::Command &command)
 {
     _output.putString("\r\n");
 
-    for (size_t i = 0; i < command.Arguments().Count(); i++)
+    for (auto& argument : command.Arguments())
     {
-        auto argument = command.Arguments()[i];
-
         _output.putChar('-');
-        _output.putChar(argument.getName());
+        _output.putChar(argument.first);
         _output.putChar('\t');
-        _PrintArgumentType(argument);
+        _PrintArgumentType(argument.second);
 
 
-        if (std::strlen(argument.help()) > 0)
+        if (std::strlen(argument.second.help()) > 0)
         {
             _output.putChar('\t');
-            _output.putString(argument.help());
+            _output.putString(argument.second.help());
         }
 
         _output.putString("\r\n");

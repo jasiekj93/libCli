@@ -32,7 +32,7 @@ TEST(CommandHelperTest, OnlyName)
 
     helper.DisplayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.Data());
+    STRCMP_EQUAL(expected, output.buffer.c_str());
 }
 
 TEST(CommandHelperTest, NameWithHelp)
@@ -47,7 +47,7 @@ TEST(CommandHelperTest, NameWithHelp)
 
     helper.DisplayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.Data());
+    STRCMP_EQUAL(expected, output.buffer.c_str());
 }
 
 TEST(CommandHelperTest, OneArgument_Mandatory)
@@ -66,7 +66,7 @@ TEST(CommandHelperTest, OneArgument_Mandatory)
 
     helper.DisplayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.Data());
+    STRCMP_EQUAL(expected, output.buffer.c_str());
 }
 
 TEST(CommandHelperTest, OneArgument_Optional)
@@ -85,7 +85,7 @@ TEST(CommandHelperTest, OneArgument_Optional)
 
     helper.DisplayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.Data());
+    STRCMP_EQUAL(expected, output.buffer.c_str());
 }
 
 TEST(CommandHelperTest, OneArgument_NoCommandHelp)
@@ -103,7 +103,7 @@ TEST(CommandHelperTest, OneArgument_NoCommandHelp)
 
     helper.DisplayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.Data());
+    STRCMP_EQUAL(expected, output.buffer.c_str());
 }
 
 TEST(CommandHelperTest, ManyArguments)
@@ -130,5 +130,5 @@ TEST(CommandHelperTest, ManyArguments)
 
     helper.DisplayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.Data());
+    STRCMP_EQUAL(expected, output.buffer.c_str());
 }

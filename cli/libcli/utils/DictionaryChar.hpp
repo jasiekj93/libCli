@@ -8,20 +8,10 @@
  * @details
  */
 
-#include <libcli/utils/Buffer.hpp>
+#include <etl/map.h>
 
 namespace cli::utils
 {
     template<class T, size_t SIZE>
-    class DictionaryChar : public Buffer<T, SIZE>
-    {
-    public:
-        bool Put(const T &) override;
-
-        bool Contains(char) const;
-        int At(char) const;
-        T Get(char) const;
-    };
+    using DictionaryChar = etl::map<char, T, SIZE>;
 }
-
-#include <libcli/utils/DictionaryChar.tpp>

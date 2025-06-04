@@ -13,7 +13,7 @@ CommandVerifier::CommandVerifier(Presenter &presenter)
 
 bool CommandVerifier::Verify(const model::Command &command)
 {
-    if(_buffer.Contains(command.GetName()) == false)
+    if(_buffer.contains(command.GetName()) == false)
     {
         _presenter.UnknownCommand(command.GetName());
         return false;
@@ -30,16 +30,16 @@ const char * CommandVerifier::Find(const char *substring)
     if(std::strlen(substring) == 0)
         return nullptr;
 
-    for(size_t i = 0; i < _buffer.Count(); i++)
+    for(auto& command : _buffer)
     {
-        auto found = std::strstr(_buffer[i].Name(), substring);
+        auto found = std::strstr(command.first.data(), substring);
 
         if(found != nullptr)
         {
             if(std::strcmp(found, substring) == 0)
-                return nullptr;
-            else if(found == _buffer[i].Name())
-                return found;
+                return nullptr; 
+            else if(found == command.first.data())
+                return found; 
         }
     }
 
@@ -49,23 +49,21 @@ const char * CommandVerifier::Find(const char *substring)
 
 bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
 {
-    auto templateCommand = _buffer.Get(command.GetName());
+    auto templateCommand = _buffer.at(command.GetName());
 
-    for(size_t i = 0; i < templateCommand.Arguments().Count(); i++)
+    for(auto& argument : templateCommand.Arguments())
     {
-        auto &argument = templateCommand.Arguments()[i];
-        
-        if(command.Arguments().Contains(argument.getName()) == true)
+        if(command.Arguments().contains(argument.first)) 
         {
-            if(command.Arguments().Get(argument.getName()).getType() != argument.getType())
+            if(command.Arguments().at(argument.first).getType() != argument.second.getType())
             {
-                _presenter.InvalidArgumentType(argument.getName(), templateCommand);
+                _presenter.InvalidArgumentType(argument.second.getName(), templateCommand);
                 return false;
             }
         }
-        else if(argument.isMandatory() == true)
+        else if(argument.second.isMandatory())
         {
-            _presenter.NoMandatoryArguments(argument.getName(), templateCommand);
+            _presenter.NoMandatoryArguments(argument.first, templateCommand);
             return false;
         }
     }
@@ -75,21 +73,25 @@ bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
 
 bool CommandVerifier::_CheckOptionalArguments(const model::Command &command)
 {
-    auto templateCommand = _buffer.Get(command.GetName());
-    
-    for(size_t i = 0; i < command.Arguments().Count(); i++)
+    auto templateCommand = _buffer.at(command.GetName());
+
+    for(auto& argument : command.Arguments())
     {
-       if(templateCommand.Arguments().Contains(command.Arguments()[i].getName()) == false)
-       {
-            if(command.Arguments()[i] == _help)
+        if(not templateCommand.Arguments().contains(argument.first))
+        {
+            if(argument.second == _help)
+            {
                 _presenter.Help(templateCommand);
+                return false;
+            }
             else
-                _presenter.InvalidArgument(command.Arguments()[i].getName(), templateCommand);
-
-            return false;
-       }
+            {
+                _presenter.InvalidArgument(argument.first, templateCommand);
+                return false;
+            }
+        }
     }
-
+    
     return true;
 }
 

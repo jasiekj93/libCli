@@ -26,7 +26,7 @@ TEST(CommandTest, EmptyString)
 
     CHECK(command.IsNull());
     CHECK(nullptr == command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 
@@ -38,7 +38,7 @@ TEST(CommandTest, OnlyName)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(text, command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTest, TooLongNameName)
@@ -49,7 +49,7 @@ TEST(CommandTest, TooLongNameName)
 
     CHECK(command.IsNull());
     CHECK(nullptr == command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTest, OnlyName_SpacesAtBeginning)
@@ -61,7 +61,7 @@ TEST(CommandTest, OnlyName_SpacesAtBeginning)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTest, TwoWords_NotAnArgument)
@@ -73,7 +73,7 @@ TEST(CommandTest, TwoWords_NotAnArgument)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTest, OneArgument)
@@ -85,11 +85,11 @@ TEST(CommandTest, OneArgument)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(1, command.Arguments().Count());
+    CHECK_EQUAL(1, command.Arguments().size());
 
-    CHECK_EQUAL('a', command.Arguments()[0].getName());
-    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
+    CHECK(command.Arguments().contains('a'));
+    CHECK(Argument::Type::STRING == command.Arguments().at('a').getType());
+    STRCMP_EQUAL("arg", command.Arguments().at('a').asString().data());
 }
 
 TEST(CommandTest, OneArgument_MoreSpaces)
@@ -101,11 +101,11 @@ TEST(CommandTest, OneArgument_MoreSpaces)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(1, command.Arguments().Count());
+    CHECK_EQUAL(1, command.Arguments().size());
 
-    CHECK_EQUAL('a', command.Arguments()[0].getName());
-    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
+    CHECK(command.Arguments().contains('a'));
+    CHECK(Argument::Type::STRING == command.Arguments().at('a').getType());
+    STRCMP_EQUAL("arg", command.Arguments().at('a').asString().data());
 }
 
 TEST(CommandTest, OneArgument_NoSpace)
@@ -117,11 +117,11 @@ TEST(CommandTest, OneArgument_NoSpace)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(1, command.Arguments().Count());
+    CHECK_EQUAL(1, command.Arguments().size());
 
-    CHECK_EQUAL('a', command.Arguments()[0].getName());
-    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
+    CHECK(command.Arguments().contains('a'));
+    CHECK(Argument::Type::STRING == command.Arguments().at('a').getType());
+    STRCMP_EQUAL("arg", command.Arguments().at('a').asString().data());
 }
 
 TEST(CommandTest, TwoArguments)
@@ -134,15 +134,15 @@ TEST(CommandTest, TwoArguments)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(2, command.Arguments().Count());
+    CHECK_EQUAL(2, command.Arguments().size());
 
-    CHECK_EQUAL('a', command.Arguments()[0].getName());
-    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
+    CHECK(command.Arguments().contains('a'));
+    CHECK(Argument::Type::STRING == command.Arguments().at('a').getType());
+    STRCMP_EQUAL("arg", command.Arguments().at('a').asString().data());
 
-    CHECK_EQUAL('u', command.Arguments()[1].getName());
-    CHECK(Argument::Type::HEX == command.Arguments()[1].getType());
-    CHECK(command.Arguments()[1].asHex(hex));
+    CHECK(command.Arguments().contains('u'));
+    CHECK(Argument::Type::HEX == command.Arguments().at('u').getType());
+    CHECK(command.Arguments().at('u').asHex(hex));
     CHECK_EQUAL(0x5F, hex);
 }
 
@@ -155,14 +155,14 @@ TEST(CommandTest, TwoArguments_OneEmpty)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(2, command.Arguments().Count());
+    CHECK_EQUAL(2, command.Arguments().size());
 
-    CHECK_EQUAL('a', command.Arguments()[0].getName());
-    CHECK(Argument::Type::STRING == command.Arguments()[0].getType());
-    STRCMP_EQUAL("arg", command.Arguments()[0].asString().data());
+    CHECK(command.Arguments().contains('a'));
+    CHECK(Argument::Type::STRING == command.Arguments().at('a').getType());
+    STRCMP_EQUAL("arg", command.Arguments().at('a').asString().data());
 
-    CHECK_EQUAL('u', command.Arguments()[1].getName());
-    CHECK(Argument::Type::EMPTY == command.Arguments()[1].getType());
+    CHECK_EQUAL('u', command.Arguments().at('u').getName());
+    CHECK(Argument::Type::EMPTY == command.Arguments().at('u').getType());
 }
 
 TEST(CommandTest, TwoArguments_OneIvalid)
@@ -174,7 +174,7 @@ TEST(CommandTest, TwoArguments_OneIvalid)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTest, TwoArguments_TwoEmpty)
@@ -187,13 +187,13 @@ TEST(CommandTest, TwoArguments_TwoEmpty)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(2, command.Arguments().Count());
+    CHECK_EQUAL(2, command.Arguments().size());
 
-    CHECK_EQUAL('a', command.Arguments()[0].getName());
-    CHECK(Argument::Type::EMPTY == command.Arguments()[0].getType());
+    CHECK(command.Arguments().contains('a'));
+    CHECK(Argument::Type::EMPTY == command.Arguments().at('a').getType());
 
-    CHECK_EQUAL('b', command.Arguments()[1].getName());
-    CHECK(Argument::Type::EMPTY == command.Arguments()[1].getType());
+    CHECK_EQUAL('b', command.Arguments().at('b').getName());
+    CHECK(Argument::Type::EMPTY == command.Arguments().at('b').getType());
 }
 
 TEST(CommandTest, TooMuchArguments)
@@ -205,7 +205,7 @@ TEST(CommandTest, TooMuchArguments)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTest, TwoArguments_NoSpace)
@@ -217,7 +217,7 @@ TEST(CommandTest, TwoArguments_NoSpace)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTest, TwoHyphens)
@@ -229,5 +229,5 @@ TEST(CommandTest, TwoHyphens)
 
     CHECK_FALSE(command.IsNull());
     STRCMP_EQUAL(expectedName, command.GetName());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }

@@ -1,7 +1,8 @@
 #pragma once
 
+#include <etl/string.h>
+
 #include <libcli/Output.hpp>
-#include <libcli/utils/StringBuffer.hpp>
 #include <cstring>
 
 namespace mock
@@ -11,16 +12,13 @@ namespace mock
     public:
         static constexpr size_t SIZE = 1024;
 
-        inline void putChar(char c) override { buffer.Put(c); }
+        inline void putChar(char c) override { buffer.push_back(c); }
+
         inline void putString(const char* string) override 
         { 
-            while(*string != '\0')
-            {
-                putChar(*string);
-                string++;
-            }
+            buffer.insert(buffer.end(), string, string + std::strlen(string));
         }
 
-        cli::utils::StringBuffer<SIZE> buffer;
+        etl::string<SIZE> buffer;
     };
 }

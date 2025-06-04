@@ -47,8 +47,8 @@ Command::Command(const char * string,
     if(list.size() > Configuration::MAX_ARGUMENT_COUNT)
         return;
 
-    for(auto argument : list)
-        _arguments.Put(argument);    
+    for(auto& argument : list)
+        _arguments[argument.getName()] = argument;
 }
 
 
@@ -60,12 +60,8 @@ bool Command::operator==(const Command &command) const
     if(std::strcmp(this->_help, command._help) != 0)
         return false;
 
-    if(this->_arguments.Count() != command._arguments.Count())
+    if(this->_arguments != command._arguments)
         return false;
-
-    for(size_t i = 0; i < this->_arguments.Count(); i++)
-        if(this->_arguments[i] != command._arguments[i])
-            return false;
             
     return true;
 }

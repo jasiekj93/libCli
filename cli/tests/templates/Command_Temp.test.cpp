@@ -25,7 +25,7 @@ TEST(CommandTempTest, DefaultConstructor)
     Command command;
 
     CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor)
@@ -33,7 +33,7 @@ TEST(CommandTempTest, NameConstructor)
     Command command("hello");
 
     STRCMP_EQUAL("hello", command.Name());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor_Nullptr)
@@ -41,7 +41,7 @@ TEST(CommandTempTest, NameConstructor_Nullptr)
     Command command(nullptr);
 
     CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor_TooLong)
@@ -49,7 +49,7 @@ TEST(CommandTempTest, NameConstructor_TooLong)
     Command command("ThisIsAVeryVeryLongNameProbablyToLong");
 
     CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor_Help)
@@ -58,7 +58,7 @@ TEST(CommandTempTest, NameConstructor_Help)
 
     STRCMP_EQUAL("hello", command.Name());
     STRCMP_EQUAL("help", command.Help());
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor_Help_TooLong)
@@ -67,7 +67,7 @@ TEST(CommandTempTest, NameConstructor_Help_TooLong)
 
     CHECK_EQUAL(0, std::strlen(command.Name()));
     CHECK_EQUAL(0, std::strlen(command.Help()));
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
 
 TEST(CommandTempTest, InitalizerListConstructor)
@@ -75,7 +75,7 @@ TEST(CommandTempTest, InitalizerListConstructor)
     Command command("hello", { { 'a', model::Argument::Type::DOUBLE, true }, {'b', model::Argument::Type::HEX, false } });
 
     STRCMP_EQUAL("hello", command.Name());
-    CHECK_EQUAL(2, command.Arguments().Count());
+    CHECK_EQUAL(2, command.Arguments().size());
 }
 
 TEST(CommandTempTest, InitalizerListConstructor_InvalidName)
@@ -83,5 +83,5 @@ TEST(CommandTempTest, InitalizerListConstructor_InvalidName)
     Command command(nullptr, { { 'a', model::Argument::Type::DOUBLE, true }, {'b', model::Argument::Type::HEX, false } });
 
     CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK_EQUAL(0, command.Arguments().Count());
+    CHECK(command.Arguments().empty());
 }
