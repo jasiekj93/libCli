@@ -57,7 +57,7 @@ bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
         {
             if(command.Arguments().at(argument.first).getType() != argument.second.getType())
             {
-                _presenter.InvalidArgumentType(argument.second.getName(), templateCommand);
+                _presenter.InvalidArgumentType(argument.first, templateCommand);
                 return false;
             }
         }

@@ -71,10 +71,10 @@ void CommandHelper::_PrintArguments(const templates::Command &command)
         _PrintArgumentType(argument.second);
 
 
-        if (std::strlen(argument.second.help()) > 0)
+        if (not argument.second.getHelp().empty())
         {
             _output.putChar('\t');
-            _output.putString(argument.second.help());
+            _output.putString(argument.second.getHelp().c_str());
         }
 
         _output.putString("\r\n");

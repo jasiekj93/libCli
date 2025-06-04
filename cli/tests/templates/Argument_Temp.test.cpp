@@ -22,53 +22,45 @@ TEST(ArgumentTempTest, DefaultConstuctor)
 {
     Argument arg;
 
-    CHECK_EQUAL(model::Argument::INVALID_NAME, arg.getName());
     CHECK(model::Argument::Type::EMPTY == arg.getType());
     CHECK_FALSE(arg.isMandatory());
-    STRCMP_EQUAL("", arg.help());
+    STRCMP_EQUAL("", arg.getHelp().c_str());
 }
 
 TEST(ArgumentTempTest, WithoutHelp)
 {
-    char name = 'a';
     model::Argument::Type type = model::Argument::Type::DOUBLE;
     bool isMandatory = true;
 
+    Argument arg(type, isMandatory);
 
-    Argument arg(name, type, isMandatory);
-
-    CHECK_EQUAL(name, arg.getName());
     CHECK(type == arg.getType());
     CHECK(arg.isMandatory());
-    STRCMP_EQUAL("", arg.help());
+    STRCMP_EQUAL("", arg.getHelp().c_str());
 }
 
 TEST(ArgumentTempTest, WithHelp)
 {
-    char name = 'a';
     model::Argument::Type type = model::Argument::Type::DOUBLE;
     bool isMandatory = true;
     const char help[] = "This is help";
 
-    Argument arg(name, type, isMandatory, help);
+    Argument arg(type, isMandatory, help);
 
-    CHECK_EQUAL(name, arg.getName());
     CHECK(type == arg.getType());
     CHECK(arg.isMandatory());
-    STRCMP_EQUAL(help, arg.help());
+    STRCMP_EQUAL(help, arg.getHelp().c_str());
 }
 
 TEST(ArgumentTempTest, WithHelp_TooLong)
 {
-    char name = 'a';
     model::Argument::Type type = model::Argument::Type::DOUBLE;
     bool isMandatory = true;
     const char help[] = "This is too long help to be supported by this library";
 
-    Argument arg(name, type, isMandatory, help);
+    Argument arg(type, isMandatory, help);
 
-    CHECK_EQUAL(model::Argument::INVALID_NAME, arg.getName());
-    CHECK(model::Argument::Type::EMPTY == arg.getType());
-    CHECK_FALSE(arg.isMandatory());
-    STRCMP_EQUAL("", arg.help());
+    CHECK(model::Argument::Type::DOUBLE == arg.getType());
+    CHECK(arg.isMandatory());
+    STRCMP_EQUAL("", arg.getHelp().c_str());
 }

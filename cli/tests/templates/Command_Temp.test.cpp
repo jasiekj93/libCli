@@ -73,8 +73,8 @@ TEST(CommandTempTest, NameConstructor_Help_TooLong)
 TEST(CommandTempTest, InitalizerListConstructor)
 {
     Command command("hello", { 
-        { 'a', { 'a', model::Argument::Type::DOUBLE, true }}, 
-        { 'b', { 'b', model::Argument::Type::HEX, false } } 
+        { 'a', { model::Argument::Type::DOUBLE, true }}, 
+        { 'b', { model::Argument::Type::HEX, false } } 
     });
 
     STRCMP_EQUAL("hello", command.getName().c_str());
@@ -84,8 +84,8 @@ TEST(CommandTempTest, InitalizerListConstructor)
 TEST(CommandTempTest, InitalizerListConstructor_InvalidName)
 {
     Command command("", { 
-        { 'a', { 'a', model::Argument::Type::DOUBLE, true }}, 
-        {'b', { 'b', model::Argument::Type::HEX, false } } 
+        { 'a', { model::Argument::Type::DOUBLE, true }}, 
+        {'b', { model::Argument::Type::HEX, false } } 
     });
 
     CHECK(command.getName().empty());

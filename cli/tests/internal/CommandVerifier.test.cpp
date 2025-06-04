@@ -32,11 +32,11 @@ TEST(CommandVerifierTest, OnlyMandatoryArguments)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::DECIMAL, true } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, true } },
-            { 'e', { 'e', Argument::Type::EMPTY, true } },
+            { 'a', { Argument::Type::DECIMAL, true } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, true } },
+            { 'e', { Argument::Type::EMPTY, true } },
         });
 
     verifier.templates()[name] = (commandTemp);
@@ -50,12 +50,12 @@ TEST(CommandVerifierTest, MissingMandatoryArgument)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::DECIMAL, true } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, true } },
-            { 'e', { 'e', Argument::Type::EMPTY, true } },
-            { 'f', { 'f', Argument::Type::EMPTY, true } },
+            { 'a', { Argument::Type::DECIMAL, true } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, true } },
+            { 'e', { Argument::Type::EMPTY, true } },
+            { 'f', { Argument::Type::EMPTY, true } },
         });
 
     verifier.templates()[name] = (commandTemp);
@@ -70,11 +70,11 @@ TEST(CommandVerifierTest, OptionalArgument)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::DECIMAL, true } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, true } },
-            { 'e', { 'e', Argument::Type::EMPTY, false } },
+            { 'a', { Argument::Type::DECIMAL, true } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, true } },
+            { 'e', { Argument::Type::EMPTY, false } },
         });
 
     verifier.templates()[name] = (commandTemp);
@@ -88,12 +88,12 @@ TEST(CommandVerifierTest, OptionalArgument_IsMissing)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::DECIMAL, true } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, true } },
-            { 'e', { 'e', Argument::Type::EMPTY, false } },
-            { 'f', { 'f', Argument::Type::EMPTY, false } },
+            { 'a', { Argument::Type::DECIMAL, true } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, true } },
+            { 'e', { Argument::Type::EMPTY, false } },
+            { 'f', { Argument::Type::EMPTY, false } },
         });
 
     verifier.templates()[name] = (commandTemp);
@@ -107,10 +107,10 @@ TEST(CommandVerifierTest, NotDefinedArgument)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::DECIMAL, true } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, false } },
+            { 'a', { Argument::Type::DECIMAL, true } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, false } },
         });
 
     verifier.templates()[name] = (commandTemp);
@@ -125,11 +125,11 @@ TEST(CommandVerifierTest, DifferentType)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::STRING, true } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, true } },
-            { 'e', { 'e', Argument::Type::EMPTY, false } },
+            { 'a', { Argument::Type::STRING, true } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, true } },
+            { 'e', { Argument::Type::EMPTY, false } },
         });
 
     verifier.templates()[name] = (commandTemp);
@@ -144,11 +144,11 @@ TEST(CommandVerifierTest, DifferentType_Optional)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::STRING, false } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, true } },
-            { 'e', { 'e', Argument::Type::EMPTY, false } },
+            { 'a', { Argument::Type::STRING, false } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, true } },
+            { 'e', { Argument::Type::EMPTY, false } },
         });
 
     verifier.templates()[name] = (commandTemp);
@@ -164,11 +164,11 @@ TEST(CommandVerifierTest, WithHelp)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::DECIMAL, true } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, true } },
-            { 'e', { 'e', Argument::Type::EMPTY, false } },
+            { 'a', { Argument::Type::DECIMAL, true } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, true } },
+            { 'e', { Argument::Type::EMPTY, false } },
         });
 
     verifier.templates()[name] = (commandTemp);
@@ -183,12 +183,12 @@ TEST(CommandVerifierTest, CustomHelp)
     CommandVerifier verifier(presenter);
     templates::Command commandTemp(name,
         {
-            { 'a', { 'a', Argument::Type::DECIMAL, true } },
-            { 'b', { 'b', Argument::Type::STRING, true } },
-            { 'c', { 'c', Argument::Type::DOUBLE, true } },
-            { 'd', { 'd', Argument::Type::HEX, true } },
-            { 'e', { 'e', Argument::Type::EMPTY, false } },
-            { 'h', { 'h', Argument::Type::EMPTY, false } },
+            { 'a', { Argument::Type::DECIMAL, true } },
+            { 'b', { Argument::Type::STRING, true } },
+            { 'c', { Argument::Type::DOUBLE, true } },
+            { 'd', { Argument::Type::HEX, true } },
+            { 'e', { Argument::Type::EMPTY, false } },
+            { 'h', { Argument::Type::EMPTY, false } },
         });
 
     verifier.templates()[name] = (commandTemp);

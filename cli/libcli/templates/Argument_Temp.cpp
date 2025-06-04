@@ -4,48 +4,34 @@
 using namespace cli::templates;
 
 Argument::Argument()
-    : name(model::Argument::INVALID_NAME)
-    , type(model::Argument::Type::EMPTY)
+    : type(model::Argument::Type::EMPTY)
     , mandatoryValue(false)
-    , helpMessage{'\0'}
+    , helpMessage("")
 {
 }
 
-Argument::Argument(char name, 
-    model::Argument::Type type, 
+Argument::Argument(model::Argument::Type type, 
     bool isMandatory, 
-    const char * help)
+    etl::string_view help)
     : Argument()
     {
-        if(help != nullptr)
-        {
-            if(std::strlen(help) > Configuration::MAX_ARGUMENT_HELP_LENGTH)
-                return;
-            else
-                std::strcpy(helpMessage, help);
-        }
+        if(not help.empty() and
+           help.size() <= Configuration::MAX_ARGUMENT_HELP_LENGTH)
+            helpMessage = help;
 
-        this->name = name;
         this->type = type;
         this->mandatoryValue = isMandatory;
     }
 
 
-bool Argument::operator==(const Argument &arg) const
+bool Argument::operator==(const Argument& arg) const
 {
-    if(this->name != arg.name)
-        return false;
-
-    if(this->type != arg.type)
-        return false;
-
-    if(this->mandatoryValue != arg.mandatoryValue)
-        return false;
-
-    return (std::strcmp(this->helpMessage, arg.helpMessage) == 0);
+    return (this->type == arg.type and
+            this->mandatoryValue == arg.mandatoryValue and
+            this->helpMessage == arg.helpMessage);
 }
 
-bool Argument::operator!=(const Argument &arg) const
+bool Argument::operator!=(const Argument& arg) const
 {
     return ((*this == arg) == false);
 }
