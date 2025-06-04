@@ -4,9 +4,9 @@
 using namespace cli::templates;
 
 Command::Command()
-    : _name("")
-    , _help("")
-    , _arguments()
+    : name("")
+    , help("")
+    , arguments()
 {
 }
 
@@ -28,14 +28,14 @@ Command::Command(etl::string_view name,
        help.length() > Configuration::MAX_COMMAND_HELP_LENGTH)
         return;
         
-    this->_name = name;
-    this->_help = help;
-    _arguments = list;
+    this->name = name;
+    this->help = help;
+    arguments = list;
 }
 
 bool Command::operator==(const Command &command) const
 {
-    return (this->_name == command._name) and
-           (this->_help == command._help) and
-           (this->_arguments == command._arguments);
+    return (this->name == command.name) and
+           (this->help == command.help) and
+           (this->arguments == command.arguments);
 }

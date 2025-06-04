@@ -8,8 +8,11 @@
  * @details
  */
 
+#include <etl/string.h>
+#include <etl/map.h>
+#include <etl/array.h>
+
 #include <libcli/Configuration.hpp>
-#include <libcli/utils/DictionaryChar.hpp>
 #include <libcli/model/Argument.hpp>
 
 namespace cli::model
@@ -17,22 +20,23 @@ namespace cli::model
     class Command
     {
     public:
+        using Arguments = etl::map<char, Argument, Configuration::MAX_ARGUMENT_COUNT>;
+
         Command();
-        Command(const char *);
+        Command(etl::string_view);
 
-        bool IsNull() const;
-        const char * GetName() const;
-
-        inline const auto & Arguments() const { return _arguments; }
+        inline auto isNull() const { return name.empty(); }
+        inline auto& getName() const { return name; }
+        inline const auto& getArguments() const { return arguments; }
 
     protected:
-        bool _FindName();
-        bool _FindArguments();
-        unsigned int _HyphenCount(const char *) const;
+        bool findName();
+        bool findArguments();
+        unsigned int hyphenCount(const char*) const;
 
     private:
-        char _data[Configuration::MAX_COMMAND_LENGTH + 1];
-        char *_name;
-        utils::DictionaryChar<Argument, Configuration::MAX_ARGUMENT_COUNT> _arguments;
+        etl::array<char, Configuration::MAX_COMMAND_LENGTH + 1> buffer;
+        etl::string_view name;
+        Arguments arguments;
     };
 }

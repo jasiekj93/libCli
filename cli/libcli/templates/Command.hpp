@@ -29,15 +29,15 @@ namespace cli::templates
         Command(etl::string_view name, const Arguments&);
         Command(etl::string_view name, etl::string_view help = "", const Arguments& = {});
 
-        inline auto& getName() const { return _name; }
-        inline auto& getHelp() const { return _help; }
-        inline auto& getArguments() const { return _arguments; }
+        inline auto& getName() const { return name; }
+        inline auto& getHelp() const { return help; }
+        inline auto& getArguments() const { return arguments; }
 
         bool operator==(const Command&) const;
 
     private:
-        Name _name;
-        Help _help;
-        Arguments _arguments;
+        Name name;
+        Help help;
+        Arguments arguments;
     };
 }

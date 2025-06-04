@@ -5,62 +5,50 @@
 using namespace cli::model;
 
 Command::Command()
-    : _data("")
-    , _name(nullptr)
+    : name("")
 {
 
 }
 
-Command::Command(const char *string)
+Command::Command(etl::string_view string)
     : Command()
 {
-    if(std::strlen(string) > Configuration::MAX_COMMAND_LENGTH)
+    if(string.size() > Configuration::MAX_COMMAND_LENGTH)
         return;
 
-    std::strcpy(_data, string);
-    
-    if(_FindName() == false)
+    std::strcpy(buffer.data(), string.data());
+
+    if(findName() == false)
         return;
 
-    if(_FindArguments() == false)
-        _arguments.clear();
+    if(findArguments() == false)
+        arguments.clear();
 }
 
-
-bool Command::IsNull() const
+bool Command::findName()
 {
-    return (_name == nullptr);
-}
+    auto namePointer = std::strtok(buffer.data(), " ");    
 
-const char * Command::GetName() const
-{
-    return _name;
-}
-
-bool Command::_FindName()
-{
-    _name = std::strtok(_data, " ");
-
-    if(_name == nullptr)
+    if(namePointer == nullptr)
         return false;
 
-    if(std::strlen(_name) > Configuration::MAX_COMMAND_NAME)
+    if(std::strlen(namePointer) <= Configuration::MAX_COMMAND_NAME)
     {
-        _name = nullptr;
-        return false;
+        name = namePointer;
+        return true;
     }
     else
-        return true;
+        return false;
 }
 
-bool Command::_FindArguments()
+bool Command::findArguments()
 {
     char * token = std::strtok(nullptr, " ");
     const char *name = nullptr; 
 
     while(token != nullptr)
     {
-        if(_HyphenCount(token) > 1)
+        if(hyphenCount(token) > 1)
             return false;
 
         if(token[0] == '-')
@@ -69,21 +57,21 @@ bool Command::_FindArguments()
                 return false;
 
             if(name != nullptr)
-                if(_arguments.full())
+                if(arguments.full())
                     return false;
                 else
-                    _arguments[*name] = Argument(*name, nullptr);
+                    arguments[*name] = Argument(*name, nullptr);
 
             name = &token[1];
 
             
             if(std::strlen(token) > 2)
             {
-                if(_arguments.full())
+                if(arguments.full())
                     return false;
                 else
                 {
-                    _arguments[*name] = Argument(*name, &token[2]);
+                    arguments[*name] = Argument(*name, &token[2]);
                     name = nullptr;
                 }
             }
@@ -94,11 +82,11 @@ bool Command::_FindArguments()
                 return false;
             else
             {
-                if(_arguments.full())
+                if(arguments.full())
                     return false;
                 else
                 {
-                    _arguments[*name] = Argument(*name, token);
+                    arguments[*name] = Argument(*name, token);
                     name = nullptr;
                 }
             }
@@ -109,11 +97,11 @@ bool Command::_FindArguments()
 
     if(name != nullptr)
     {
-        if(_arguments.full())
+        if(arguments.full())
             return false;
         else
         {
-            _arguments[*name] = Argument(*name, nullptr);
+            arguments[*name] = Argument(*name, nullptr);
         }
 
     }
@@ -121,7 +109,7 @@ bool Command::_FindArguments()
     return true;
 }
 
-unsigned int Command::_HyphenCount(const char *token) const
+unsigned int Command::hyphenCount(const char *token) const
 {
     unsigned int result = 0;
 

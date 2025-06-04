@@ -13,9 +13,9 @@ CommandVerifier::CommandVerifier(Presenter &presenter)
 
 bool CommandVerifier::Verify(const model::Command &command)
 {
-    if(_buffer.contains(command.GetName()) == false)
+    if(_buffer.contains(command.getName()) == false)
     {
-        _presenter.UnknownCommand(command.GetName());
+        _presenter.UnknownCommand(command.getName().data());
         return false;
     }
 
@@ -49,13 +49,13 @@ const char * CommandVerifier::Find(const char *substring)
 
 bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
 {
-    auto templateCommand = _buffer.at(command.GetName());
+    auto templateCommand = _buffer.at(command.getName());
 
     for(auto& argument : templateCommand.getArguments())
     {
-        if(command.Arguments().contains(argument.first)) 
+        if(command.getArguments().contains(argument.first)) 
         {
-            if(command.Arguments().at(argument.first).getType() != argument.second.getType())
+            if(command.getArguments().at(argument.first).getType() != argument.second.getType())
             {
                 _presenter.InvalidArgumentType(argument.first, templateCommand);
                 return false;
@@ -73,9 +73,9 @@ bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
 
 bool CommandVerifier::_CheckOptionalArguments(const model::Command &command)
 {
-    auto templateCommand = _buffer.at(command.GetName());
+    auto templateCommand = _buffer.at(command.getName());
 
-    for(auto& argument : command.Arguments())
+    for(auto& argument : command.getArguments())
     {
         if(not templateCommand.getArguments().contains(argument.first))
         {

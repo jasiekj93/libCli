@@ -48,7 +48,7 @@ void TerminalImpl::receivedInputLineCallback(const char *line)
 {
     model::Command command(line);
 
-    if(command.IsNull())
+    if(command.isNull())
     {
         _presenter.Prompt(false);
         return;
