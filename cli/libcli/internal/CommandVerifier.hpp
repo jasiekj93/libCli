@@ -8,9 +8,10 @@
  * @details
  */
 
+#include <etl/map.h>
+
 #include <libcli/templates/Command.hpp>
 #include <libcli/model/Command.hpp>
-#include <libcli/utils/Dictionary.hpp>
 #include <libcli/internal/Presenter.hpp>
 
 namespace cli::internal
@@ -18,6 +19,8 @@ namespace cli::internal
     class CommandVerifier
     {
     public:
+        using Templates = etl::map<etl::string_view, templates::Command, Configuration::MAX_COMMAND_TEMPLATES_COUNT>;
+
         CommandVerifier(Presenter&);
 
         bool Verify(const model::Command&);
@@ -34,6 +37,6 @@ namespace cli::internal
         static model::Argument _help;
 
         Presenter &_presenter;
-        utils::Dictionary<templates::Command, Configuration::MAX_COMMAND_TEMPLATES_COUNT> _buffer;
+        Templates _buffer;
     };
 }

@@ -35,7 +35,7 @@ namespace cli::internal
         void receivedStringCallback(const char *) override;
         const char * receivedAutoCompleteCallback(const char *) override;
 
-        inline TemplatessBuffer & templates() override { return _verifier.templates(); }
+        inline TemplatesBuffer& templates() override { return _verifier.templates(); }
 
         void putString(const char *) override;
         size_t printf(const char *, ...) override;

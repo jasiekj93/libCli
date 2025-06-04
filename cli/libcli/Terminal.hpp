@@ -8,7 +8,9 @@
  * @details
  */
 
-#include <libcli/utils/Dictionary.hpp>
+#include <etl/map.h>
+#include <etl/string.h>
+
 #include <libcli/templates/Command.hpp>
 #include <libcli/Configuration.hpp>
 
@@ -17,14 +19,14 @@ namespace cli
     class Terminal
     {
     public:
-        using TemplatessBuffer = utils::Dictionary<templates::Command, Configuration::MAX_COMMAND_TEMPLATES_COUNT>;
+        using TemplatesBuffer = etl::map<etl::string_view, templates::Command, Configuration::MAX_COMMAND_TEMPLATES_COUNT>;
 
         virtual ~Terminal() {}
 
         virtual void receivedCharCallback(char) = 0;
         virtual void receivedStringCallback(const char*) = 0;
         
-        virtual TemplatessBuffer & templates() = 0;
+        virtual TemplatesBuffer& templates() = 0;
 
         virtual void putString(const char*) = 0;
         virtual size_t printf(const char*, ...) = 0;
