@@ -10,30 +10,34 @@
 
 #include <utility>
 
+#include <etl/string.h>
+#include <etl/map.h>
+
 #include <libcli/Configuration.hpp>
 #include <libcli/templates/Argument.hpp>
-#include <libcli/utils/DictionaryChar.hpp>
 
 namespace cli::templates
 {
     class Command
     {
     public:
+        using Name = etl::string<Configuration::MAX_COMMAND_NAME>;
+        using Help = etl::string<Configuration::MAX_COMMAND_HELP_LENGTH>;
+        using Arguments = etl::map<char, Argument, Configuration::MAX_ARGUMENT_COUNT>;
+
         Command();
-        Command(const char* name, const char* help = nullptr);
-        Command(const char* name, std::initializer_list<Argument>);
-        Command(const char* name, const char* help, std::initializer_list<Argument>);
+        Command(etl::string_view name, const Arguments&);
+        Command(etl::string_view name, etl::string_view help = "", const Arguments& = {});
 
-        inline auto Name() const { return _name; }
-        inline auto Help() const { return _help; }
-        inline auto Arguments() const { return _arguments; }
+        inline auto& getName() const { return _name; }
+        inline auto& getHelp() const { return _help; }
+        inline auto& getArguments() const { return _arguments; }
 
-        bool operator==(const Command &) const;
-        bool operator!=(const Command &) const;
+        bool operator==(const Command&) const;
 
     private:
-        char _name[Configuration::MAX_COMMAND_NAME + 1];
-        char _help[Configuration::MAX_COMMAND_HELP_LENGTH + 1];
-        utils::DictionaryChar<Argument, Configuration::MAX_ARGUMENT_COUNT> _arguments;
+        Name _name;
+        Help _help;
+        Arguments _arguments;
     };
 }

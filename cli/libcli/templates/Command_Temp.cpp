@@ -4,64 +4,38 @@
 using namespace cli::templates;
 
 Command::Command()
-    : _name{'\0'}
-    , _help{'\0'}
+    : _name("")
+    , _help("")
     , _arguments()
 {
 }
 
-Command::Command(const char *string, const char *help)
-    : Command()
-{
-    if(string == nullptr)
-        return;
-
-    if(std::strlen(string) > Configuration::MAX_COMMAND_NAME)
-        return;
-
-    if(help != nullptr)
-    {
-        if(std::strlen(help) > Configuration::MAX_COMMAND_HELP_LENGTH)
-            return;
-        else
-            std::strcpy(_help, help);
-    }
-
-    std::strcpy(_name, string);    
-}
-
-Command::Command(const char * string, 
-    std::initializer_list<Argument> list)
-    : Command(string, nullptr, list)
+Command::Command(etl::string_view name, 
+    const Arguments& list)
+    : Command(name, "", list)
 {  
 }
 
-Command::Command(const char * string, 
-    const char *help,
-    std::initializer_list<Argument> list)
-    : Command(string, help)
+Command::Command(etl::string_view name, 
+    etl::string_view help,
+    const Arguments& list)
+    : Command()
 {
-     if(std::strlen(_name) == 0)
+    if(name.empty())
         return;
 
-    if(list.size() > Configuration::MAX_ARGUMENT_COUNT)
+    if(name.length() > Configuration::MAX_COMMAND_NAME or
+       help.length() > Configuration::MAX_COMMAND_HELP_LENGTH)
         return;
-
-    for(auto& argument : list)
-        _arguments[argument.getName()] = argument;
+        
+    this->_name = name;
+    this->_help = help;
+    _arguments = list;
 }
-
 
 bool Command::operator==(const Command &command) const
 {
-    if(std::strcmp(this->_name, command._name) != 0)
-        return false;
-
-    if(std::strcmp(this->_help, command._help) != 0)
-        return false;
-
-    if(this->_arguments != command._arguments)
-        return false;
-            
-    return true;
+    return (this->_name == command._name) and
+           (this->_help == command._help) and
+           (this->_arguments == command._arguments);
 }

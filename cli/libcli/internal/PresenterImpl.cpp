@@ -25,7 +25,7 @@ void PresenterImpl::UnknownCommand(const char *name)
 
 void PresenterImpl::NoMandatoryArguments(char arg, const templates::Command& command)
 {
-    _output.putString(command.Name());
+    _output.putString(command.getName().c_str());
     _output.putString(": brak wymaganych argumentow: -");
     _output.putChar(arg);
     NewLine();
@@ -34,7 +34,7 @@ void PresenterImpl::NoMandatoryArguments(char arg, const templates::Command& com
 
 void PresenterImpl::InvalidArgument(char arg, const templates::Command& command)
 {
-    _output.putString(command.Name());
+    _output.putString(command.getName().c_str());
     _output.putString(": nieprawidlowy argument -");
     _output.putChar(arg);
     NewLine();
@@ -43,7 +43,7 @@ void PresenterImpl::InvalidArgument(char arg, const templates::Command& command)
 
 void PresenterImpl::InvalidArgumentType(char arg, const templates::Command& command)
 {
-    _output.putString(command.Name());
+    _output.putString(command.getName().c_str());
     _output.putString(": nieprawidlowy typ argumentu -");
     _output.putChar(arg);
     NewLine();

@@ -24,64 +24,70 @@ TEST(CommandTempTest, DefaultConstructor)
 {
     Command command;
 
-    CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK(command.Arguments().empty());
+    CHECK(command.getName().empty());
+    CHECK(command.getArguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor)
 {
     Command command("hello");
 
-    STRCMP_EQUAL("hello", command.Name());
-    CHECK(command.Arguments().empty());
+    STRCMP_EQUAL("hello", command.getName().c_str());
+    CHECK(command.getArguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor_Nullptr)
 {
     Command command(nullptr);
 
-    CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK(command.Arguments().empty());
+    CHECK(command.getName().empty());
+    CHECK(command.getArguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor_TooLong)
 {
     Command command("ThisIsAVeryVeryLongNameProbablyToLong");
 
-    CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK(command.Arguments().empty());
+    CHECK(command.getName().empty());
+    CHECK(command.getArguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor_Help)
 {
     Command command("hello", "help");
 
-    STRCMP_EQUAL("hello", command.Name());
-    STRCMP_EQUAL("help", command.Help());
-    CHECK(command.Arguments().empty());
+    STRCMP_EQUAL("hello", command.getName().c_str());
+    STRCMP_EQUAL("help", command.getHelp().c_str());
+    CHECK(command.getArguments().empty());
 }
 
 TEST(CommandTempTest, NameConstructor_Help_TooLong)
 {
     Command command("hello", "This Is A Very Very Long Name Probably To Long Very Very Long Help Should Be Shorter");
 
-    CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK_EQUAL(0, std::strlen(command.Help()));
-    CHECK(command.Arguments().empty());
+    CHECK(command.getName().empty());
+    CHECK(command.getHelp().empty());
+    CHECK(command.getArguments().empty());
 }
 
 TEST(CommandTempTest, InitalizerListConstructor)
 {
-    Command command("hello", { { 'a', model::Argument::Type::DOUBLE, true }, {'b', model::Argument::Type::HEX, false } });
+    Command command("hello", { 
+        { 'a', { 'a', model::Argument::Type::DOUBLE, true }}, 
+        { 'b', { 'b', model::Argument::Type::HEX, false } } 
+    });
 
-    STRCMP_EQUAL("hello", command.Name());
-    CHECK_EQUAL(2, command.Arguments().size());
+    STRCMP_EQUAL("hello", command.getName().c_str());
+    CHECK_EQUAL(2, command.getArguments().size());
 }
 
 TEST(CommandTempTest, InitalizerListConstructor_InvalidName)
 {
-    Command command(nullptr, { { 'a', model::Argument::Type::DOUBLE, true }, {'b', model::Argument::Type::HEX, false } });
+    Command command("", { 
+        { 'a', { 'a', model::Argument::Type::DOUBLE, true }}, 
+        {'b', { 'b', model::Argument::Type::HEX, false } } 
+    });
 
-    CHECK_EQUAL(0, std::strlen(command.Name()));
-    CHECK(command.Arguments().empty());
+    CHECK(command.getName().empty());
+    CHECK(command.getArguments().empty());
 }

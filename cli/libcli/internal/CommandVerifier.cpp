@@ -51,7 +51,7 @@ bool CommandVerifier::_CheckMandatoryArguments(const model::Command &command)
 {
     auto templateCommand = _buffer.at(command.GetName());
 
-    for(auto& argument : templateCommand.Arguments())
+    for(auto& argument : templateCommand.getArguments())
     {
         if(command.Arguments().contains(argument.first)) 
         {
@@ -77,7 +77,7 @@ bool CommandVerifier::_CheckOptionalArguments(const model::Command &command)
 
     for(auto& argument : command.Arguments())
     {
-        if(not templateCommand.Arguments().contains(argument.first))
+        if(not templateCommand.getArguments().contains(argument.first))
         {
             if(argument.second == _help)
             {

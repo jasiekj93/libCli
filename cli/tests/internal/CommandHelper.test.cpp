@@ -58,7 +58,7 @@ TEST(CommandHelperTest, OneArgument_Mandatory)
                             "-a\tcalkowity\tThis is number\r\n";
 
     templates::Command command("hello", "This is help", {
-        { 'a', model::Argument::Type::DECIMAL, true, "This is number" }
+        { 'a', { 'a', model::Argument::Type::DECIMAL, true, "This is number" }}
     });
 
     mock::Output output;
@@ -77,7 +77,7 @@ TEST(CommandHelperTest, OneArgument_Optional)
                             "-a\tcalkowity\tThis is number\r\n";
 
     templates::Command command("hello", "This is help", {
-        { 'a', model::Argument::Type::DECIMAL, false, "This is number" }
+        { 'a', { 'a', model::Argument::Type::DECIMAL, false, "This is number" } }
     });
 
     mock::Output output;
@@ -95,7 +95,7 @@ TEST(CommandHelperTest, OneArgument_NoCommandHelp)
                             "-a\tcalkowity\tThis is number\r\n";
 
     templates::Command command("hello", {
-        { 'a', model::Argument::Type::DECIMAL, true, "This is number" }
+        { 'a', { 'a', model::Argument::Type::DECIMAL, true, "This is number" } }
     });
 
     mock::Output output;
@@ -118,11 +118,11 @@ TEST(CommandHelperTest, ManyArguments)
                             "-e\tciag znakow\tThis is string\r\n";
 
     templates::Command command("hello", "This is help", {
-        { 'a', model::Argument::Type::DECIMAL, false, "This is number" },
-        { 'b', model::Argument::Type::DOUBLE, true, "This is double" },
-        { 'c', model::Argument::Type::EMPTY, false, "This is empty" },
-        { 'd', model::Argument::Type::HEX, true, "This is hex" },
-        { 'e', model::Argument::Type::STRING, true, "This is string" },
+        { 'a', { 'a', model::Argument::Type::DECIMAL, false, "This is number" } },
+        { 'b', { 'b', model::Argument::Type::DOUBLE, true, "This is double" } },
+        { 'c', { 'c', model::Argument::Type::EMPTY, false, "This is empty" } },
+        { 'd', { 'd', model::Argument::Type::HEX, true, "This is hex" } },
+        { 'e', { 'e', model::Argument::Type::STRING, true, "This is string" } },
     });
 
     mock::Output output;

@@ -14,19 +14,19 @@ void CommandHelper::DisplayHelp(const templates::Command &command)
 {
     _PrintUsage(command);
 
-    if (std::strlen(command.Help()) > 0)
+    if(not command.getHelp().empty())
         _PrintCommandHelp(command);
 
-    if (not command.Arguments().empty())
+    if (not command.getArguments().empty())
         _PrintArguments(command);
 }
 
 void CommandHelper::_PrintUsage(const templates::Command &command)
 {
     _output.putString("zastosowanie: ");
-    _output.putString(command.Name());
+    _output.putString(command.getName().c_str());
 
-    if (not command.Arguments().empty())
+    if (not command.getArguments().empty())
     {
         _output.putChar(' ');
         _PrintArgumentUsage(command);
@@ -37,7 +37,7 @@ void CommandHelper::_PrintUsage(const templates::Command &command)
 
 void CommandHelper::_PrintArgumentUsage(const templates::Command &command)
 {
-    for(auto& argument : command.Arguments())
+    for(auto& argument : command.getArguments())
     {
         if (argument.second.isMandatory() == false)
             _output.putChar('[');
@@ -55,7 +55,7 @@ void CommandHelper::_PrintArgumentUsage(const templates::Command &command)
 void CommandHelper::_PrintCommandHelp(const templates::Command &command)
 {
     _output.putChar('\t');
-    _output.putString(command.Help());
+    _output.putString(command.getHelp().c_str());
     _output.putString("\r\n");
 }
 
@@ -63,7 +63,7 @@ void CommandHelper::_PrintArguments(const templates::Command &command)
 {
     _output.putString("\r\n");
 
-    for (auto& argument : command.Arguments())
+    for (auto& argument : command.getArguments())
     {
         _output.putChar('-');
         _output.putChar(argument.first);
