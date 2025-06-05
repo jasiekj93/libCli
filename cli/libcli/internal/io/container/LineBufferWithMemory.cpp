@@ -3,74 +3,60 @@
 
 using namespace cli::internal::io::container;
 
-LineBufferWithMemory::LineBufferWithMemory(size_t size, size_t depth)
-    : LineBuffer(size)
-    , _size(size)
-    , _depth(depth)
-    , _lifo(size, depth)
-    , _index(0)
+LineBufferWithMemory::LineBufferWithMemory()
+    : LineBuffer()
+    , cursor(memory.begin())
 {
-    _currentData = new char[_size + 1];
-}
-
-LineBufferWithMemory::~LineBufferWithMemory()
-{
-    delete[] _currentData;
 }
 
 bool LineBufferWithMemory::setPrevious()
 {
-    if (_index == _depth)
+    if(cursor == memory.begin())
         return false;
-
-    if (_index >= _lifo.count())
-        return false;
-
-    if (_index == 0)
-        this->copyTo(_currentData);
-
-    _index++;
-    this->copyFrom(_lifo.get(_index - 1));
-
+    
+    if(cursor == memory.end())
+        this->copyTo(currentData);
+    
+    cursor--;
+    this->copyFrom(*cursor);
     return true;
 }
 
 bool LineBufferWithMemory::setNext()
 {
-    if (_index == 0)
+    if (cursor == memory.end())
         return false;
 
-    _index--;
-    if (_index == 0)
-        this->copyFrom(_currentData);
+    cursor++;
+    if (cursor == memory.end())
+        this->copyFrom(currentData);
     else
-        this->copyFrom(_lifo.get(_index - 1));
+        this->copyFrom(*cursor);
 
     return true;
 }
 
 void LineBufferWithMemory::setCurrent()
 {
-    _index = 0;
-    this->copyFrom(_currentData);
-}
-
-bool LineBufferWithMemory::hasNext()
-{
-    return (_index > 0);
+    cursor = memory.end();
+    this->copyFrom(currentData);
 }
 
 bool LineBufferWithMemory::hasPrevious()
 {
-    return (_index < _depth);
+    return (cursor > memory.begin());
+}
+
+bool LineBufferWithMemory::hasNext()
+{
+    return (cursor < memory.end());
 }
 
 void LineBufferWithMemory::clearAndMemorize()
 {
-    if((_lifo.count() == 0) ||
-        (std::strcmp(this->data(), _lifo.get(0)) != 0))
-        _lifo.push(this->data());
+    if(memory.empty() or (this->getData() != memory[0]))
+        memory.push_back(this->getData());
 
-    _index = 0;
+    cursor = memory.end();
     this->clear();
 }

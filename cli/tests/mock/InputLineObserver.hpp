@@ -16,13 +16,12 @@ namespace mock
     class InputLineObserver : public cli::internal::io::InputLineObserver
     {
     public:
-        InputLineObserver(size_t);
-        ~InputLineObserver();
+        InputLineObserver() = default;
 
         void receivedInputLineCallback(etl::string_view) override;
         etl::string_view receivedAutoCompleteCallback(etl::string_view) override { return ""; }
 
-        char* line;
+        etl::string<1024> line;
 
     private:
         InputLineObserver(const InputLineObserver&) = delete;

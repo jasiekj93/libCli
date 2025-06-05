@@ -12,7 +12,7 @@ TerminalImpl::TerminalImpl(Output &output,
     size_t printfBufferSize)
     : _observer(observer)
     , _output(output)
-    , _inputBuffer(Configuration::MAX_COMMAND_LENGTH, depth)
+    , _inputBuffer()
     , _outputController(output)
     , _inputController(_outputController,
         *this,

@@ -3,119 +3,100 @@
 
 using namespace cli::internal::io::container;
 
-LineBuffer::LineBuffer(size_t size)
-    : _size(size)
-    , _count(0)
-    , _cursor(0)
+LineBuffer::LineBuffer()
+    : cursor(buffer.begin())
 {
-    _data = new char[size + 1];
-    _data[0] = '\0';
 }
-
-LineBuffer::~LineBuffer()
-{
-    delete[] _data;
-    _data = nullptr;
-}
-
 
 bool LineBuffer::put(char c)
 {
-    if (_cursor == _size)
+    if(buffer.full())
         return false;
 
-    _data[_cursor] = c;
+    if(cursor == buffer.end())
+        buffer.push_back(c);
+    else
+        *cursor = c;
 
-    if (_count == _cursor)
-    {
-        _count++;
-        _data[_count] = '\0';
-    }
-
-    _cursor++;
+    cursor++;
     return true;
 }
 
-bool LineBuffer::putString(const char *string)
+bool LineBuffer::putString(etl::string_view string)
 {
-    auto length = std::strlen(string);
-
-    if ((_cursor + length + 1) == _size)
+    if (buffer.available() < string.size())
         return false;
 
-    for (size_t i = 0; i < length; i++)
-        put(string[i]);
-
+    buffer.insert(cursor, string.begin(), string.end());
+    cursor += string.size();
     return true;
 }
 
 void LineBuffer::clear()
 {
-    _count = 0;
-    _cursor = 0;
-    _data[0] = '\0';
+    buffer.clear();
+    cursor = buffer.begin();
 }
 
 bool LineBuffer::moveCursorLeft()
 {
-    if (_cursor == 0)
+    if (cursor == buffer.begin())
         return false;
 
-    _cursor--;
+    cursor--;
     return true;
 }
 
 bool LineBuffer::moveCursorRight()
 {
-    if (_cursor == _count)
+    if (cursor == buffer.end())
         return false;
 
-    _cursor++;
+    cursor++;
     return true;
 }
 
 unsigned int LineBuffer::moveCursorMaxLeft()
 {
-    unsigned int times = _cursor;
+    auto times = etl::distance(buffer.begin(), cursor);
 
     if(times > MAX_CURSOR_MOVE_SIZE)
         times = MAX_CURSOR_MOVE_SIZE;
 
-    _cursor -= times;
+    cursor -= times;
     return times;
 }
 
 unsigned int LineBuffer::moveCursorMaxRight()
 {
-    unsigned int times = _count - _cursor;
+    auto times = etl::distance(cursor, buffer.end());
     
     if(times > MAX_CURSOR_MOVE_SIZE)
         times = MAX_CURSOR_MOVE_SIZE;
 
-    _cursor += times;
+    cursor += times;
     return times;
 }
 
 bool LineBuffer::remove()
 {
-    if (_cursor == _count)
+    if (cursor == buffer.end())
         return false;
 
-    auto size = _count - _cursor;
-    std::memmove(&_data[_cursor], &_data[_cursor + 1], size);
-    _count--;
-
+    buffer.erase(cursor);
     return true;
 }
 
-void LineBuffer::copyTo(char *output) const
+void LineBuffer::copyTo(etl::istring& output) const
 {
-    std::strcpy(output, _data);
+    output = buffer;
 }
 
-void LineBuffer::copyFrom(const char *input)
+void LineBuffer::copyFrom(const etl::istring& input)
 {
-    std::strcpy(_data, input);
-    _count = strlen(input);
-    _cursor = _count;
+    if(buffer.max_size() < input.size())
+        return;
+
+    buffer = input;
+    cursor = buffer.end();
 }

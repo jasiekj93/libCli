@@ -8,16 +8,22 @@
  * @details
  */
 
+#include <etl/string.h>
+#include <etl/vector.h>
+
 #include <libcli/internal/io/container/LineBuffer.hpp>
-#include <libcli/internal/io/container/StringCircularLifo.hpp>
 
 namespace cli::internal::io::container
 {
     class LineBufferWithMemory : public LineBuffer
     {
     public:
-        LineBufferWithMemory(size_t size, size_t depth);
-        ~LineBufferWithMemory();
+        static constexpr auto DEPTH = Configuration::MAX_HISTORY;
+        static constexpr auto SIZE = Configuration::MAX_COMMAND_LENGTH;
+
+        using Memory = etl::vector<etl::string<SIZE>, DEPTH>;
+
+        LineBufferWithMemory();
 
         bool setPrevious();
         bool setNext();
@@ -28,16 +34,13 @@ namespace cli::internal::io::container
 
         void clearAndMemorize();
 
-        inline auto memoryCount() const { return _lifo.count(); }
-        inline auto clearMemory() { _lifo.clear(); }
+        inline auto memoryCount() const { return memory.size(); }
+        inline auto clearMemory() { memory.clear(); }
 
     private:
-        const size_t _size;
-        const size_t _depth;
-
-        char *_currentData;
-        StringCircularLifo _lifo;
-        size_t _index;
+        etl::string<SIZE> currentData;
+        Memory memory;
+        Memory::iterator cursor;
 
         LineBufferWithMemory(const LineBufferWithMemory &) = delete;
         auto operator=(const LineBufferWithMemory &) = delete;

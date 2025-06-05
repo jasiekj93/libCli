@@ -16,8 +16,7 @@ namespace mock
     class OutputController : public cli::internal::io::OutputController
     {
     public:
-        OutputController(size_t);
-        ~OutputController();
+        OutputController();
 
         void putChar(char) override;
         void putString(etl::string_view) override;
@@ -29,7 +28,7 @@ namespace mock
         void clearScreen() override;
 
 
-        char* previousLine;
+        etl::string<cli::internal::io::container::LineBuffer::SIZE> previousLine;
         cli::internal::io::container::LineBuffer line;
 
     private:

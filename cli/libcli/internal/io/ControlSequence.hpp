@@ -49,7 +49,7 @@ namespace cli::internal::io
         inline auto isFull() const { return data.full(); }
         inline bool isEmpty() const { return data.empty(); }
 
-        inline auto getData() const { return data; }
+        inline auto& getData() const { return data; }
         inline auto getSize() const { return data.size(); }
 
         inline auto operator[](size_t i) const { return data[i]; }

@@ -16,9 +16,6 @@
 
 using namespace cli::internal::io;
 
-static constexpr size_t SIZE = 5;
-static constexpr size_t DEPTH = 3;
-
 mock::InputLineObserver *inputObserver;
 mock::OutputController *output;
 container::LineBufferWithMemory *buffer;
@@ -27,9 +24,9 @@ TEST_GROUP(InputControllerTest)
 {
     void setup()
     {
-        inputObserver = new mock::InputLineObserver(SIZE);
-        output = new mock::OutputController(SIZE);
-        buffer = new container::LineBufferWithMemory(SIZE, DEPTH);
+        inputObserver = new mock::InputLineObserver();
+        output = new mock::OutputController();
+        buffer = new container::LineBufferWithMemory();
     }
 
     void teardown()
@@ -60,8 +57,8 @@ TEST(InputControllerTest, OneChar_NotPrintable)
 
     controller.receivedCharCallback(c);
 
-    CHECK_EQUAL(0, buffer->count());
-    CHECK_EQUAL(0, output->line.count());
+    CHECK_EQUAL(0, buffer->getCount());
+    CHECK_EQUAL(0, output->line.getCount());
 }
 
 // TEST(InputControllerTest, ArrowLeft)
@@ -166,8 +163,8 @@ TEST(InputControllerTest, Backspace)
     controller.receivedStringCallback(text);
     controller.receivedCharCallback(ControlChar::BACKSPACE);
 
-    STRCMP_EQUAL(expected, buffer->data());
-    STRCMP_EQUAL(expected, output->line.data());
+    STRCMP_EQUAL(expected, buffer->getData().c_str());
+    STRCMP_EQUAL(expected, output->line.getData().c_str());
 }
 
 TEST(InputControllerTest, Enter)
@@ -179,9 +176,9 @@ TEST(InputControllerTest, Enter)
     controller.receivedStringCallback(text);
     controller.receivedCharCallback(ControlChar::NEW_LINE);
 
-    CHECK_EQUAL(0, buffer->count());
-    CHECK_EQUAL(0, output->line.count());
-    STRCMP_EQUAL(text, output->previousLine);
+    CHECK_EQUAL(0, buffer->getCount());
+    CHECK_EQUAL(0, output->line.getCount());
+    STRCMP_EQUAL(text, output->previousLine.c_str());
 }
 
 TEST(InputControllerTest, ArrowUp)
@@ -198,9 +195,9 @@ TEST(InputControllerTest, ArrowUp)
     controller.receivedStringCallback(text2);
     controller.receivedStringCallback(arrowUp.getData());
 
-    STRCMP_EQUAL(text1, output->previousLine);
-    STRCMP_EQUAL(text1, output->line.data());
-    STRCMP_EQUAL(text1, buffer->data());
+    STRCMP_EQUAL(text1, output->previousLine.c_str());
+    STRCMP_EQUAL(text1, output->line.getData().c_str());
+    STRCMP_EQUAL(text1, buffer->getData().c_str());
 }
 
 TEST(InputControllerTest, ArrowDown)
@@ -219,7 +216,7 @@ TEST(InputControllerTest, ArrowDown)
     controller.receivedStringCallback(arrowUp.getData());
     controller.receivedStringCallback(arrowDown.getData());
 
-    STRCMP_EQUAL(text1, output->previousLine);
-    STRCMP_EQUAL(text2, output->line.data());
-    STRCMP_EQUAL(text2, buffer->data());
+    STRCMP_EQUAL(text1, output->previousLine.c_str());
+    STRCMP_EQUAL(text2, output->line.getData().c_str());
+    STRCMP_EQUAL(text2, buffer->getData().c_str());
 }

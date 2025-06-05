@@ -33,14 +33,14 @@ void InputController::receivedStringCallback(etl::string_view string)
 
 void InputController::restoreLine()
 {
-    output.putString(buffer.data());
+    output.putString(buffer.getData());
     buffer.moveCursorMaxRight();
 }
 
 void InputController::clearLine(unsigned int extraChars)
 {
     moveEnd();
-    output.backspace(buffer.count());
+    output.backspace(buffer.getCount());
     output.backspace(extraChars);
 }
 
@@ -70,7 +70,7 @@ bool InputController::processEscapeChar()
 bool InputController::processNewLine()
 {
     output.newLine();
-    observer.receivedInputLineCallback(buffer.data());
+    observer.receivedInputLineCallback(buffer.getData());
     buffer.clearAndMemorize();
 
     return true;
@@ -78,7 +78,7 @@ bool InputController::processNewLine()
 
 bool InputController::processBackspace()
 {
-    if(buffer.count() == buffer.cursor() &&
+    if(buffer.getCount() == buffer.getCursor() &&
         (buffer.moveCursorLeft() == true))
     {
         buffer.remove();
@@ -90,7 +90,7 @@ bool InputController::processBackspace()
 
 bool InputController::processTab()
 {
-    auto result = observer.receivedAutoCompleteCallback(buffer.data());
+    auto result = observer.receivedAutoCompleteCallback(buffer.getData());
 
     if(result != nullptr)
     {
@@ -147,7 +147,7 @@ bool InputController::processControlSequenceByType()
             {
                 clearLine();
                 buffer.setPrevious();
-                output.putString(buffer.data());
+                output.putString(buffer.getData());
             }
             break;
         case ControlSequence::Type::ARROW_DOWN:
@@ -155,7 +155,7 @@ bool InputController::processControlSequenceByType()
             {
                 clearLine();
                 buffer.setNext();
-                output.putString(buffer.data());
+                output.putString(buffer.getData());
             }
             break;
         default:

@@ -13,25 +13,21 @@
 
 using namespace cli::internal::io::container;
 
-static constexpr size_t SIZE = 5;
-static constexpr size_t DEPTH = 3;
-
 TEST_GROUP(LineBufferWithMemoryTest)
 {
-
 };
 
 TEST(LineBufferWithMemoryTest, Constructor)
 {
-    LineBufferWithMemory buffer(SIZE, DEPTH);
+    LineBufferWithMemory buffer;
 
-    CHECK_EQUAL(0, buffer.count());
-    CHECK_EQUAL(0, buffer.cursor());
+    CHECK_EQUAL(0, buffer.getCount());
+    CHECK_EQUAL(0, buffer.getCursor());
 }
 
 TEST(LineBufferWithMemoryTest, AddSecond_IsTheSame)
 {
-    LineBufferWithMemory buffer(SIZE, DEPTH);
+    LineBufferWithMemory buffer;
 
     const char string[] = "aa";
 
@@ -44,7 +40,7 @@ TEST(LineBufferWithMemoryTest, AddSecond_IsTheSame)
 
 TEST(LineBufferWithMemoryTest, SetPrevious)
 {
-    LineBufferWithMemory buffer(SIZE, DEPTH);
+    LineBufferWithMemory buffer;
 
     const char * strings[] =
     {
@@ -57,19 +53,19 @@ TEST(LineBufferWithMemoryTest, SetPrevious)
     buffer.putString(strings[1]);
 
     CHECK_EQUAL(1, buffer.memoryCount());
-    STRCMP_EQUAL(strings[1], buffer.data());
-    CHECK_EQUAL(std::strlen(strings[1]), buffer.cursor());
-    CHECK_EQUAL(std::strlen(strings[1]), buffer.count());
+    STRCMP_EQUAL(strings[1], buffer.getData().c_str());
+    CHECK_EQUAL(std::strlen(strings[1]), buffer.getCursor());
+    CHECK_EQUAL(std::strlen(strings[1]), buffer.getCount());
 
     CHECK(buffer.setPrevious());
-    STRCMP_EQUAL(strings[0], buffer.data());
-    CHECK_EQUAL(std::strlen(strings[0]), buffer.cursor());
-    CHECK_EQUAL(std::strlen(strings[0]), buffer.count());
+    STRCMP_EQUAL(strings[0], buffer.getData().c_str());
+    CHECK_EQUAL(std::strlen(strings[0]), buffer.getCursor());
+    CHECK_EQUAL(std::strlen(strings[0]), buffer.getCount());
 }
 
 TEST(LineBufferWithMemoryTest, SetPrevious_NoPrevious)
 {
-    LineBufferWithMemory buffer(SIZE, DEPTH);
+    LineBufferWithMemory buffer;
 
     const char * strings[] =
     {
@@ -84,7 +80,7 @@ TEST(LineBufferWithMemoryTest, SetPrevious_NoPrevious)
 
 TEST(LineBufferWithMemoryTest, SetNext)
 {
-    LineBufferWithMemory buffer(SIZE, DEPTH);
+    LineBufferWithMemory buffer;
 
     const char * strings[] =
     {
@@ -98,12 +94,12 @@ TEST(LineBufferWithMemoryTest, SetNext)
 
     CHECK(buffer.setPrevious());
     CHECK(buffer.setNext());
-    STRCMP_EQUAL(strings[1], buffer.data());
+    STRCMP_EQUAL(strings[1], buffer.getData().c_str());
 }
 
 TEST(LineBufferWithMemoryTest, SetCurrent)
 {
-    LineBufferWithMemory buffer(SIZE, DEPTH);
+    LineBufferWithMemory buffer;
 
     const char * strings[] =
     {
@@ -121,9 +117,9 @@ TEST(LineBufferWithMemoryTest, SetCurrent)
     CHECK_EQUAL(2, buffer.memoryCount());
     buffer.setPrevious();
     buffer.setPrevious();
-    STRCMP_EQUAL(strings[0], buffer.data());
+    STRCMP_EQUAL(strings[0], buffer.getData().c_str());
 
     buffer.setCurrent();
 
-    STRCMP_EQUAL(strings[2], buffer.data());
+    STRCMP_EQUAL(strings[2], buffer.getData().c_str());
 }

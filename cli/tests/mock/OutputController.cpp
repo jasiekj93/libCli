@@ -3,15 +3,8 @@
 
 using namespace mock;
 
-OutputController::OutputController(size_t size)
-    : line(size)
+OutputController::OutputController()
 {
-    previousLine = new char[size + 1];
-}
-
-OutputController::~OutputController()
-{
-    delete[] previousLine;
 }
 
 void OutputController::putChar(char c)
@@ -53,12 +46,12 @@ void OutputController::putDelete(unsigned int times)
 
 void OutputController::newLine()
 {
-    std::strcpy(previousLine, line.data());
+    previousLine = line.getData();
     line.clear();
 }
 
 void OutputController::clearScreen()
 {
-    previousLine[0] = '\0';
+    previousLine.clear();
     line.clear();
 }
