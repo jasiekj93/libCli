@@ -30,6 +30,7 @@ namespace cli
 
         virtual void putString(const char*) = 0;
         virtual size_t printf(const char*, ...) = 0;
+
         virtual void disableInput() = 0;
         virtual void enableInput() = 0;
         virtual bool isInputEnabled() = 0;

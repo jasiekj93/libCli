@@ -23,11 +23,10 @@ namespace cli::internal
         , public io::InputLineObserver
     {
     public:
-        TerminalImpl(Output &,
-            CommandObserver &,
-            size_t depth,
-            const char *userName,
-            size_t );
+        TerminalImpl(Output&,
+            CommandObserver&,
+            etl::string_view userName,
+            size_t printBufferSize);
 
         ~TerminalImpl();
 
@@ -35,29 +34,29 @@ namespace cli::internal
         void receivedStringCallback(const char *) override;
         etl::string_view receivedAutoCompleteCallback(etl::string_view) override;
 
-        inline TemplatesBuffer& templates() override { return _verifier.templates(); }
+        inline TemplatesBuffer& templates() override { return verifier.templates(); }
 
         void putString(const char *) override;
         size_t printf(const char *, ...) override;
         virtual void disableInput() override;
         virtual void enableInput() override;
-        inline bool isInputEnabled() override { return _isInputEnabled; }
+        inline bool isInputEnabled() override { return inputEnabledFlag; }
 
     protected:
         void receivedInputLineCallback(etl::string_view) override;
 
     private:
-        CommandObserver &_observer;
-        Output &_output;
+        CommandObserver& observer;
+        Output& output;
 
-        io::container::LineBufferWithMemory _inputBuffer;
-        io::OutputControllerImpl _outputController;
-        io::InputController _inputController;
+        io::container::LineBufferWithMemory inputBuffer;
+        io::OutputControllerImpl outputController;
+        io::InputController inputController;
         
-        PresenterImpl _presenter;
-        CommandVerifier _verifier;
-        bool _isInputEnabled;
-        char *_printfBuffer;
-        const size_t _printfBufferSize;
+        PresenterImpl presenter;
+        CommandVerifier verifier;
+        bool inputEnabledFlag;
+        char* printfBuffer;
+        const size_t printfBufferSize;
     };
 }

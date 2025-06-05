@@ -8,15 +8,18 @@
  * @details
  */
 
+#include <memory>
+
+#include <etl/string.h>
+
 #include <libcli/Terminal.hpp>
 #include <libcli/CommandObserver.hpp>
 #include <libcli/Output.hpp>
 
 namespace cli::Factory
 {
-    Terminal* createNewTerminal(Output&, 
+    std::shared_ptr<Terminal> createNewTerminal(Output&, 
         CommandObserver&,
-        size_t depth = 5, 
-        const char* userName = nullptr,
+        etl::string_view userName = "",
         size_t printfBufferSize = 256); 
 }

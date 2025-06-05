@@ -3,15 +3,13 @@
 
 using namespace cli;
 
-Terminal* Factory::createNewTerminal(Output& output, 
+std::shared_ptr<Terminal> Factory::createNewTerminal(Output& output, 
     CommandObserver& observer, 
-    size_t depth,
-    const char* userName,
+    etl::string_view userName,
     size_t printfBufferSize)
 {
-    return new internal::TerminalImpl(output, 
+    return std::make_shared<internal::TerminalImpl>(output, 
         observer, 
-        depth, 
         userName, 
         printfBufferSize);
 }

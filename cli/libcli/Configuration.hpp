@@ -20,4 +20,5 @@ namespace cli::Configuration
     static constexpr size_t MAX_ARGUMENT_HELP_LENGTH = 32;
     static constexpr size_t MAX_USER_NAME = 16;
     static constexpr size_t MAX_HISTORY = 8;
+    static constexpr size_t MAX_PRINT_SIZE = 512;
 }

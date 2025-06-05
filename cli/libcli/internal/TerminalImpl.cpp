@@ -7,41 +7,40 @@ using namespace cli::internal;
 
 TerminalImpl::TerminalImpl(Output &output,
     CommandObserver &observer,
-    size_t depth,
-    const char *userName,
+    etl::string_view userName,
     size_t printfBufferSize)
-    : _observer(observer)
-    , _output(output)
-    , _inputBuffer()
-    , _outputController(output)
-    , _inputController(_outputController,
+    : observer(observer)
+    , output(output)
+    , inputBuffer()
+    , outputController(output)
+    , inputController(outputController,
         *this,
-        _inputBuffer)
-    , _presenter(output, userName)
-    , _verifier(_presenter)
-    , _isInputEnabled(true)
-    , _printfBuffer(nullptr)
-    , _printfBufferSize(printfBufferSize)
+        inputBuffer)
+    , presenter(output, userName)
+    , verifier(presenter)
+    , inputEnabledFlag(true)
+    , printfBuffer(nullptr)
+    , printfBufferSize(printfBufferSize)
 {
-    _printfBuffer = new char[printfBufferSize];
+    printfBuffer = new char[printfBufferSize];
 }
 
 TerminalImpl::~TerminalImpl()
 {
-    delete[] _printfBuffer;
+    delete[] printfBuffer;
 }
 
 
 void TerminalImpl::receivedCharCallback(char c)
 {
-    if(_isInputEnabled)
-        _inputController.receivedCharCallback(c);
+    if(inputEnabledFlag)
+        inputController.receivedCharCallback(c);
 }
 
 void TerminalImpl::receivedStringCallback(const char *string)
 {
-    if(_isInputEnabled)
-        _inputController.receivedStringCallback(string);
+    if(inputEnabledFlag)
+        inputController.receivedStringCallback(string);
 }
 
 void TerminalImpl::receivedInputLineCallback(etl::string_view line)
@@ -50,32 +49,32 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
 
     if(command.isNull())
     {
-        _presenter.prompt(false);
+        presenter.prompt(false);
         return;
     }
 
-    if(_verifier.verify(command) == false)
+    if(verifier.verify(command) == false)
         return;
 
-    _isInputEnabled = false;
-    _observer.receivedCommandCallback(command);
-    _presenter.prompt();
-    _isInputEnabled = true;
+    inputEnabledFlag = false;
+    observer.receivedCommandCallback(command);
+    presenter.prompt();
+    inputEnabledFlag = true;
 }
 
 etl::string_view TerminalImpl::receivedAutoCompleteCallback(etl::string_view substring)
 {
-    return _verifier.find(substring);
+    return verifier.find(substring);
 }
 
 void TerminalImpl::putString(const char *string)
 {
-    if(_isInputEnabled == true)
-        _presenter.newLine();
+    if(isInputEnabled())
+        presenter.newLine();
     
-    _output.putString(string);
+    output.putString(string);
 
-    if(_isInputEnabled ==true)
+    if(isInputEnabled())
         enableInput();
 }
 
@@ -84,17 +83,17 @@ size_t TerminalImpl::printf(const char *format, ...)
     va_list args;
     va_start(args, format);
 
-    auto result = vsnprintf(_printfBuffer, 
-        _printfBufferSize,
+    auto result = vsnprintf(printfBuffer, 
+        printfBufferSize,
         format, 
         args);
     
-    putString(_printfBuffer);
+    putString(printfBuffer);
 
     if(result < 0)
         result = 0;
-    else if(result >= (int)_printfBufferSize)
-        result = (_printfBufferSize - 1);
+    else if(result >= (int)printfBufferSize)
+        result = (printfBufferSize - 1);
     
     va_end (args);
     return result;
@@ -102,14 +101,14 @@ size_t TerminalImpl::printf(const char *format, ...)
 
 void TerminalImpl::disableInput()
 {
-    auto promptLength = _presenter.promptLength();
-    _isInputEnabled = false;
-    _inputController.clearLine(promptLength);
+    auto promptLength = presenter.promptLength();
+    inputEnabledFlag = false;
+    inputController.clearLine(promptLength);
 }
 
 void TerminalImpl::enableInput()
 {
-    _isInputEnabled = true;
-    _presenter.prompt();
-    _inputController.restoreLine();
+    inputEnabledFlag = true;
+    presenter.prompt();
+    inputController.restoreLine();
 }
