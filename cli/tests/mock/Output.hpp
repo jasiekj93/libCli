@@ -12,11 +12,11 @@ namespace mock
     public:
         static constexpr size_t SIZE = 1024;
 
-        inline void putChar(char c) override { buffer.push_back(c); }
+        inline void write(char c) override { buffer.push_back(c); }
 
-        inline void putString(const char* string) override 
+        inline void write(etl::string_view string) override 
         { 
-            buffer.insert(buffer.end(), string, string + std::strlen(string));
+            buffer.insert(buffer.end(), string.begin(), string.end());
         }
 
         etl::string<SIZE> buffer;

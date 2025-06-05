@@ -23,16 +23,16 @@ void CommandHelper::displayHelp(const templates::Command &command)
 
 void CommandHelper::printUsage(const templates::Command &command)
 {
-    output.putString("zastosowanie: ");
-    output.putString(command.getName().c_str());
+    output.write("zastosowanie: ");
+    output.write(command.getName().c_str());
 
     if (not command.getArguments().empty())
     {
-        output.putChar(' ');
+        output.write(' ');
         printArgumentUsage(command);
     }
 
-    output.putString("\r\n");
+    output.write("\r\n");
 }
 
 void CommandHelper::printArgumentUsage(const templates::Command &command)
@@ -40,44 +40,44 @@ void CommandHelper::printArgumentUsage(const templates::Command &command)
     for(auto& argument : command.getArguments())
     {
         if (argument.second.isMandatory() == false)
-            output.putChar('[');
+            output.write('[');
 
-        output.putChar('-');
-        output.putChar(argument.first);
+        output.write('-');
+        output.write(argument.first);
 
         if (argument.second.isMandatory() == false)
-            output.putChar(']');
+            output.write(']');
 
-        output.putChar(' ');
+        output.write(' ');
     }
 }
 
 void CommandHelper::printCommandHelp(const templates::Command &command)
 {
-    output.putChar('\t');
-    output.putString(command.getHelp().c_str());
-    output.putString("\r\n");
+    output.write('\t');
+    output.write(command.getHelp().c_str());
+    output.write("\r\n");
 }
 
 void CommandHelper::printArguments(const templates::Command &command)
 {
-    output.putString("\r\n");
+    output.write("\r\n");
 
     for (auto& argument : command.getArguments())
     {
-        output.putChar('-');
-        output.putChar(argument.first);
-        output.putChar('\t');
+        output.write('-');
+        output.write(argument.first);
+        output.write('\t');
         printArgumentType(argument.second);
 
 
         if (not argument.second.getHelp().empty())
         {
-            output.putChar('\t');
-            output.putString(argument.second.getHelp().c_str());
+            output.write('\t');
+            output.write(argument.second.getHelp().c_str());
         }
 
-        output.putString("\r\n");
+        output.write("\r\n");
     }
 }
 
@@ -86,14 +86,14 @@ void CommandHelper::printArgumentType(const templates::Argument &argument)
     switch(argument.getType())
     {
         case model::Argument::Type::DECIMAL:
-            return output.putString("calkowity");
+            return output.write("calkowity");
         case model::Argument::Type::DOUBLE:
-            return output.putString("zmiennoprzecinkowy");
+            return output.write("zmiennoprzecinkowy");
         case model::Argument::Type::EMPTY:
-            return output.putString(" ");
+            return output.write(" ");
         case model::Argument::Type::HEX:
-            return output.putString("szesnastkowy");
+            return output.write("szesnastkowy");
         case model::Argument::Type::STRING:
-            return output.putString("ciag znakow");
+            return output.write("ciag znakow");
     }
 }

@@ -72,7 +72,7 @@ void TerminalImpl::putString(const char *string)
     if(isInputEnabled())
         presenter.newLine();
     
-    output.putString(string);
+    output.write(string);
 
     if(isInputEnabled())
         enableInput();

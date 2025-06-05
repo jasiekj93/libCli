@@ -14,28 +14,28 @@ OutputControllerImpl::OutputControllerImpl(Output& output)
 
 void OutputControllerImpl::putChar(char c)
 {
-    output.putChar(c);
+    output.write(c);
 }
 
 void OutputControllerImpl::putString(etl::string_view string)
 {
-    output.putString(string.data());
+    output.write(string.data());
 }
 
 void OutputControllerImpl::moveCursorLeft(unsigned int times)
 {
-    output.putString(ControlSequence(ControlSequence::Type::ARROW_LEFT, times).getData().data());
+    output.write(ControlSequence(ControlSequence::Type::ARROW_LEFT, times).getData().data());
 }
 
 void OutputControllerImpl::moveCursorRight(unsigned int times)
 {
-    output.putString(ControlSequence(ControlSequence::Type::ARROW_RIGHT, times).getData().data());
+    output.write(ControlSequence(ControlSequence::Type::ARROW_RIGHT, times).getData().data());
 }
 
 void OutputControllerImpl::backspace(unsigned int times)
 {
     for(unsigned int i = 0; i < times; i++)
-        output.putChar(ControlChar::BACKSPACE);
+        output.write(ControlChar::BACKSPACE);
 }
 
 void OutputControllerImpl::putDelete(unsigned int times)
@@ -45,11 +45,11 @@ void OutputControllerImpl::putDelete(unsigned int times)
 
 void OutputControllerImpl::newLine()
 {
-    output.putChar('\r');
-    output.putChar('\n');
+    output.write('\r');
+    output.write('\n');
 }
 
 void OutputControllerImpl::clearScreen()
 {
-    output.putChar('\f');
+    output.write('\f');
 }

@@ -17,34 +17,34 @@ PresenterImpl::PresenterImpl(Output& output, etl::string_view string)
 
 void PresenterImpl::unknownCommand(etl::string_view name)
 {
-    output.putString(name.data());
-    output.putString(": nie znaleziono polecenia");
+    output.write(name.data());
+    output.write(": nie znaleziono polecenia");
     prompt();
 }
 
 void PresenterImpl::noMandatoryArguments(char arg, const templates::Command& command)
 {
-    output.putString(command.getName().c_str());
-    output.putString(": brak wymaganych argumentow: -");
-    output.putChar(arg);
+    output.write(command.getName().c_str());
+    output.write(": brak wymaganych argumentow: -");
+    output.write(arg);
     newLine();
     help(command);
 }
 
 void PresenterImpl::invalidArgument(char arg, const templates::Command& command)
 {
-    output.putString(command.getName().c_str());
-    output.putString(": nieprawidlowy argument -");
-    output.putChar(arg);
+    output.write(command.getName().c_str());
+    output.write(": nieprawidlowy argument -");
+    output.write(arg);
     newLine();
     help(command);
 }
 
 void PresenterImpl::invalidArgumentType(char arg, const templates::Command& command)
 {
-    output.putString(command.getName().c_str());
-    output.putString(": nieprawidlowy typ argumentu -");
-    output.putChar(arg);
+    output.write(command.getName().c_str());
+    output.write(": nieprawidlowy typ argumentu -");
+    output.write(arg);
     newLine();
     help(command);
 }
@@ -60,13 +60,13 @@ void PresenterImpl::prompt(bool addNewLine)
     if(addNewLine == true)
         newLine();
         
-    output.putString(userName.data());
-    output.putChar(PROMPT_CHAR);
-    output.putChar(' ');
+    output.write(userName.data());
+    output.write(PROMPT_CHAR);
+    output.write(' ');
 }
 
 
 inline void PresenterImpl::newLine()    
 {
-    output.putString("\r\n");
+    output.write("\r\n");
 }

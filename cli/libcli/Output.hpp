@@ -8,6 +8,8 @@
  * @details
  */
 
+#include <etl/string_view.h>
+
 namespace cli
 {
     class Output
@@ -15,7 +17,7 @@ namespace cli
     public:
         virtual ~Output() {}
 
-        virtual void putChar(char c) = 0;
-        virtual void putString(const char*) = 0;
+        virtual void write(char c) = 0;
+        virtual void write(etl::string_view) = 0;
     };
 }
