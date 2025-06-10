@@ -30,6 +30,7 @@ internal_library_names = \
 
 # Project subprograms
 program_names = \
+cli-executor \
 
 # Project libraries
 library_names = \
