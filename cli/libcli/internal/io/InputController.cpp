@@ -69,7 +69,7 @@ bool InputController::processEscapeChar()
 
 bool InputController::processNewLine()
 {
-    output << newLine();
+    output << newLine;
     observer.receivedInputLineCallback(buffer.getData());
     buffer.clearAndMemorize();
 

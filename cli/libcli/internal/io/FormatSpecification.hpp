@@ -65,18 +65,7 @@ namespace cli::internal::io
         return formatspec::Repeated(formatspec::Type::DELETE, times);
     }
 
-    static constexpr formatspec::Base newLine()
-    {
-        return formatspec::Base(formatspec::Type::NEW_LINE);
-    }
-
-    static constexpr formatspec::Base clearScreen()
-    {
-        return formatspec::Base(formatspec::Type::CLEAR_SCREEN);
-    }
-
-    static constexpr formatspec::Base flush()
-    {
-        return formatspec::Base(formatspec::Type::FLUSH);
-    }
+    static constexpr formatspec::Base newLine(formatspec::Type::NEW_LINE);
+    static constexpr formatspec::Base clearScreen(formatspec::Type::CLEAR_SCREEN);
+    static constexpr formatspec::Base flush(formatspec::Type::FLUSH);
 }
