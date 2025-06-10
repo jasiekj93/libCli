@@ -107,7 +107,8 @@ bool InputController::processTab()
 
 bool InputController::processConrolSequence(char c)
 {
-    controlSequence.put(c);
+    if(not controlSequence.put(c))
+        return false;
 
     if(processControlSequenceByType() == true)
         controlSequence.clear();

@@ -9,7 +9,7 @@
  */
 
 #include <etl/string.h>
-#include <etl/vector.h>
+#include <etl/deque.h>
 
 #include <libcli/internal/io/container/LineBuffer.hpp>
 
@@ -21,7 +21,7 @@ namespace cli::internal::io::container
         static constexpr auto DEPTH = Configuration::MAX_HISTORY;
         static constexpr auto SIZE = Configuration::MAX_COMMAND_LENGTH;
 
-        using Memory = etl::vector<etl::string<SIZE>, DEPTH>;
+        using Memory = etl::deque<etl::string<SIZE>, DEPTH>;
 
         LineBufferWithMemory();
 

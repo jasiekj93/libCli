@@ -54,6 +54,9 @@ bool LineBufferWithMemory::hasNext()
 
 void LineBufferWithMemory::clearAndMemorize()
 {
+    if(memory.full())
+        memory.pop_front();
+
     if(memory.empty() or (this->getData() != memory[0]))
         memory.push_back(this->getData());
 
