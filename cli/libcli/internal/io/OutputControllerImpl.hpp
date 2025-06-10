@@ -18,14 +18,18 @@ namespace cli::internal::io
     public:
         OutputControllerImpl(Output&);
 
-        void putChar(char) override;
-        void putString(etl::string_view) override;
-        void moveCursorLeft(unsigned int) override;
-        void moveCursorRight(unsigned int) override;
-        void backspace(unsigned int) override;
-        void putDelete(unsigned int) override;
-        void newLine() override;
-        void clearScreen() override;
+        OutputController& operator<<(char) override;
+        OutputController& operator<<(etl::string_view) override;
+        OutputController& operator<<(const formatspec::Base&) override;
+        OutputController& operator<<(const formatspec::Repeated&) override;
+
+    protected:
+        void moveCursorLeft(unsigned int);
+        void moveCursorRight(unsigned int);
+        void backspace(unsigned int);
+        void putDelete(unsigned int);
+        void newLine();
+        void clearScreen();
 
     private:
         Output& output;

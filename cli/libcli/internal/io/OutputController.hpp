@@ -10,6 +10,8 @@
 
 #include <etl/string.h>
 
+#include <libcli/internal/io/FormatSpecification.hpp>
+
 namespace cli::internal::io
 {
     class OutputController
@@ -17,13 +19,9 @@ namespace cli::internal::io
     public:
         virtual ~OutputController() {}
 
-        virtual void putChar(char) = 0;
-        virtual void putString(etl::string_view) = 0;
-        virtual void moveCursorLeft(unsigned int times = 1) = 0;
-        virtual void moveCursorRight(unsigned int times = 1) = 0;
-        virtual void backspace(unsigned int times = 1) = 0;
-        virtual void putDelete(unsigned int times = 1) = 0;
-        virtual void newLine() = 0;
-        virtual void clearScreen() = 0;
+        virtual OutputController& operator<<(char) = 0;
+        virtual OutputController& operator<<(etl::string_view) = 0;
+        virtual OutputController& operator<<(const formatspec::Base&) = 0;
+        virtual OutputController& operator<<(const formatspec::Repeated&) = 0;
     };
 }

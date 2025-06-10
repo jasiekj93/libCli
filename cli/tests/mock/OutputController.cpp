@@ -7,14 +7,82 @@ OutputController::OutputController()
 {
 }
 
-void OutputController::putChar(char c)
+OutputController& OutputController::operator<<(char c)
 {
     line.put(c);
+    return *this;
 }
 
-void OutputController::putString(etl::string_view string)
+OutputController& OutputController::operator<<(etl::string_view string)
 {
     line.putString(string.data());
+    return *this;
+}
+
+OutputController& OutputController::operator<<(const cli::internal::io::formatspec::Base& format)
+{
+    switch (format.type) 
+    {
+    case cli::internal::io::formatspec::Type::CURSOR_LEFT:
+        moveCursorLeft(1);
+        break;
+    case cli::internal::io::formatspec::Type::CURSOR_RIGHT:
+        moveCursorRight(1);
+        break;
+    case cli::internal::io::formatspec::Type::BACKSPACE:
+        backspace(1);
+        break;
+    case cli::internal::io::formatspec::Type::DELETE:
+        putDelete(1);
+        break;
+    case cli::internal::io::formatspec::Type::NEW_LINE:
+        newLine();
+        break;
+    case cli::internal::io::formatspec::Type::CLEAR_SCREEN:
+        clearScreen();
+        break;
+    case cli::internal::io::formatspec::Type::FLUSH:
+        // Flush is not used in this implementation
+        break;
+    
+    default:
+        break;
+    }
+
+    return *this;
+}
+
+OutputController& OutputController::operator<<(const cli::internal::io::formatspec::Repeated& format)
+{
+    switch (format.type) 
+    {
+    case cli::internal::io::formatspec::Type::CURSOR_LEFT:
+        moveCursorLeft(format.times);
+        break;
+    case cli::internal::io::formatspec::Type::CURSOR_RIGHT:
+        moveCursorRight(format.times);
+        break;
+    case cli::internal::io::formatspec::Type::BACKSPACE:
+        backspace(format.times);
+        break;
+    case cli::internal::io::formatspec::Type::DELETE:
+        putDelete(format.times);
+        break;
+    case cli::internal::io::formatspec::Type::NEW_LINE:
+        newLine();
+        break;
+    case cli::internal::io::formatspec::Type::CLEAR_SCREEN:
+        clearScreen();
+        break;
+    case cli::internal::io::formatspec::Type::FLUSH:
+        // Flush is not used in this implementation
+        break;
+
+    default:
+        break;
+    }
+
+    return *this;
 }
 
 void OutputController::moveCursorLeft(unsigned int times)

@@ -18,18 +18,21 @@ namespace mock
     public:
         OutputController();
 
-        void putChar(char) override;
-        void putString(etl::string_view) override;
-        void moveCursorLeft(unsigned int times) override;
-        void moveCursorRight(unsigned int times) override;
-        void backspace(unsigned int times) override;
-        void putDelete(unsigned int times) override;
-        void newLine() override;
-        void clearScreen() override;
-
+        OutputController& operator<<(char) override;
+        OutputController& operator<<(etl::string_view) override;
+        OutputController& operator<<(const cli::internal::io::formatspec::Base&) override;
+        OutputController& operator<<(const cli::internal::io::formatspec::Repeated&) override;
 
         etl::string<cli::internal::io::container::LineBuffer::SIZE> previousLine;
         cli::internal::io::container::LineBuffer line;
+
+    protected:
+        void moveCursorLeft(unsigned int times);
+        void moveCursorRight(unsigned int times);
+        void backspace(unsigned int times);
+        void putDelete(unsigned int times);
+        void newLine();
+        void clearScreen();
 
     private:
         OutputController(const OutputController&) = delete;

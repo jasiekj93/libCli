@@ -21,7 +21,7 @@ void InputController::receivedCharCallback(char c)
     if(std::isprint(c))
     {
         if(buffer.put(c) == true)
-            output.putChar(c);
+            output << c;
     }
 }
 
@@ -33,15 +33,15 @@ void InputController::receivedStringCallback(etl::string_view string)
 
 void InputController::restoreLine()
 {
-    output.putString(buffer.getData());
+    output << buffer.getData();
     buffer.moveCursorMaxRight();
 }
 
 void InputController::clearLine(unsigned int extraChars)
 {
     moveEnd();
-    output.backspace(buffer.getCount());
-    output.backspace(extraChars);
+    output << backspace(buffer.getCount());
+    output << backspace(extraChars);
 }
 
 bool InputController::processControlChar(char c)
@@ -69,7 +69,7 @@ bool InputController::processEscapeChar()
 
 bool InputController::processNewLine()
 {
-    output.newLine();
+    output << newLine();
     observer.receivedInputLineCallback(buffer.getData());
     buffer.clearAndMemorize();
 
@@ -82,7 +82,7 @@ bool InputController::processBackspace()
         (buffer.moveCursorLeft() == true))
     {
         buffer.remove();
-        output.backspace();
+        output << backspace();
     }
 
     return true;
@@ -99,7 +99,7 @@ bool InputController::processTab()
         buffer.clear();
         buffer.putString(result.data());
 
-        output.putString(result.data());
+        output << result;
     }
 
     return true;
@@ -126,7 +126,7 @@ bool InputController::processControlSequenceByType()
     {
         case ControlSequence::Type::DELETE:
             if(buffer.remove() == true)
-                output.putDelete();
+                output << deleteChar();
             break;
         // case ControlSequence::Type::ArrowLeft:
         //     if(_buffer.MoveCursorLeft() == true)
@@ -147,7 +147,7 @@ bool InputController::processControlSequenceByType()
             {
                 clearLine();
                 buffer.setPrevious();
-                output.putString(buffer.getData());
+                output << buffer.getData();
             }
             break;
         case ControlSequence::Type::ARROW_DOWN:
@@ -155,7 +155,7 @@ bool InputController::processControlSequenceByType()
             {
                 clearLine();
                 buffer.setNext();
-                output.putString(buffer.getData());
+                output << buffer.getData();
             }
             break;
         default:
@@ -174,7 +174,7 @@ void InputController::moveHome()
 
     while(times != 0)
     {
-        output.moveCursorLeft(times);
+        output << cursorLeft(times);
         times = buffer.moveCursorMaxLeft();
     }
 }
@@ -188,7 +188,7 @@ void InputController::moveEnd()
 
     while(times != 0)
     {
-        output.moveCursorRight(times);
+        output << cursorRight(times);
         times = buffer.moveCursorMaxRight();
     }
 }
