@@ -9,9 +9,16 @@ Executor::Executor()
     : terminal(nullptr)
 {
     templates["pwd"] = cli::templates::Command("pwd", "Print working directory");
+    templates["whoami"] = cli::templates::Command("whoami", "Print current user name");
+    templates["clear"] = cli::templates::Command("clear", "Clear the terminal screen");
     templates["ls"] = cli::templates::Command("ls", "List directory contents", {
          { 'l', { cli::model::Argument::Type::EMPTY, false } },
          { 'a', { cli::model::Argument::Type::EMPTY, false } }
+    });
+    templates["ps"] = cli::templates::Command("ps", "Report a snapshot of current processes", {
+         { 'a', { cli::model::Argument::Type::EMPTY, false } },
+         { 'u', { cli::model::Argument::Type::EMPTY, false } },
+         { 'x', { cli::model::Argument::Type::EMPTY, false } }
     });
 }
 
@@ -42,7 +49,7 @@ void Executor::executeCommand(std::string_view command)
 
     if (not pipe)
     {
-        terminal->putString("Failed to execute command\n");
+        terminal->putString("Failed to execute command\r\n");
         return;
     }
 
