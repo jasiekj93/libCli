@@ -15,10 +15,7 @@ Argument::Argument(model::Argument::Type type,
     etl::string_view help)
     : Argument()
     {
-        if(not help.empty() and
-           help.size() <= Configuration::MAX_ARGUMENT_HELP_LENGTH)
-            helpMessage = help;
-
+        this->helpMessage = help;
         this->type = type;
         this->mandatoryValue = isMandatory;
     }

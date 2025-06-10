@@ -23,10 +23,6 @@ Command::Command(etl::string_view name,
 {
     if(name.empty())
         return;
-
-    if(name.length() > Configuration::MAX_COMMAND_NAME or
-       help.length() > Configuration::MAX_COMMAND_HELP_LENGTH)
-        return;
         
     this->name = name;
     this->help = help;

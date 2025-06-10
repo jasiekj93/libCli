@@ -32,13 +32,8 @@ bool Command::findName()
     if(namePointer == nullptr)
         return false;
 
-    if(std::strlen(namePointer) <= Configuration::MAX_COMMAND_NAME)
-    {
-        name = namePointer;
-        return true;
-    }
-    else
-        return false;
+    name = namePointer;
+    return true;
 }
 
 bool Command::findArguments()

@@ -21,8 +21,6 @@ namespace cli::templates
     class Command
     {
     public:
-        using Name = etl::string<Configuration::MAX_COMMAND_NAME>;
-        using Help = etl::string<Configuration::MAX_COMMAND_HELP_LENGTH>;
         using Arguments = etl::map<char, Argument, Configuration::MAX_ARGUMENT_COUNT>;
 
         Command();
@@ -36,8 +34,8 @@ namespace cli::templates
         bool operator==(const Command&) const;
 
     private:
-        Name name;
-        Help help;
+        etl::string_view name;
+        etl::string_view help;
         Arguments arguments;
     };
 }

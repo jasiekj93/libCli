@@ -41,16 +41,16 @@ TEST(CommandTest, OnlyName)
     CHECK(command.getArguments().empty());
 }
 
-TEST(CommandTest, TooLongNameName)
-{   
-    const char text[] = "helloThisIsVeryLongCommandTooBigToBeHandledByThisLibrary";
+// TEST(CommandTest, TooLongNameName)
+// {   
+//     const char text[] = "helloThisIsVeryLongCommandTooBigToBeHandledByThisLibrary";
 
-    Command command(text);
+//     Command command(text);
 
-    CHECK(command.isNull());
-    CHECK(command.getName().empty());
-    CHECK(command.getArguments().empty());
-}
+//     CHECK(command.isNull());
+//     CHECK(command.getName().empty());
+//     CHECK(command.getArguments().empty());
+// }
 
 TEST(CommandTest, OnlyName_SpacesAtBeginning)
 {   

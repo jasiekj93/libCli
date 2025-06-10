@@ -24,7 +24,7 @@ void CommandHelper::displayHelp(const templates::Command &command)
 void CommandHelper::printUsage(const templates::Command &command)
 {
     output.write("zastosowanie: ");
-    output.write(command.getName().c_str());
+    output.write(command.getName());
 
     if (not command.getArguments().empty())
     {
@@ -55,7 +55,7 @@ void CommandHelper::printArgumentUsage(const templates::Command &command)
 void CommandHelper::printCommandHelp(const templates::Command &command)
 {
     output.write('\t');
-    output.write(command.getHelp().c_str());
+    output.write(command.getHelp());
     output.write("\r\n");
 }
 
@@ -74,7 +74,7 @@ void CommandHelper::printArguments(const templates::Command &command)
         if (not argument.second.getHelp().empty())
         {
             output.write('\t');
-            output.write(argument.second.getHelp().c_str());
+            output.write(argument.second.getHelp());
         }
 
         output.write("\r\n");

@@ -24,7 +24,7 @@ void PresenterImpl::unknownCommand(etl::string_view name)
 
 void PresenterImpl::noMandatoryArguments(char arg, const templates::Command& command)
 {
-    output.write(command.getName().c_str());
+    output.write(command.getName());
     output.write(": brak wymaganych argumentow: -");
     output.write(arg);
     newLine();
@@ -33,7 +33,7 @@ void PresenterImpl::noMandatoryArguments(char arg, const templates::Command& com
 
 void PresenterImpl::invalidArgument(char arg, const templates::Command& command)
 {
-    output.write(command.getName().c_str());
+    output.write(command.getName());
     output.write(": nieprawidlowy argument -");
     output.write(arg);
     newLine();
@@ -42,7 +42,7 @@ void PresenterImpl::invalidArgument(char arg, const templates::Command& command)
 
 void PresenterImpl::invalidArgumentType(char arg, const templates::Command& command)
 {
-    output.write(command.getName().c_str());
+    output.write(command.getName());
     output.write(": nieprawidlowy typ argumentu -");
     output.write(arg);
     newLine();

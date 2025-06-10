@@ -33,6 +33,6 @@ namespace cli::templates
     private:
         model::Argument::Type type;
         bool mandatoryValue;
-        etl::string<Configuration::MAX_ARGUMENT_HELP_LENGTH> helpMessage;
+        etl::string_view helpMessage;
     };
 }
