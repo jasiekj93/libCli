@@ -28,8 +28,7 @@ namespace cli
         
         virtual TemplatesBuffer& templates() = 0;
 
-        virtual void putString(const char*) = 0;
-        virtual size_t printf(const char*, ...) = 0;
+        virtual void putString(etl::string_view) = 0;
 
         virtual void disableInput() = 0;
         virtual void enableInput() = 0;

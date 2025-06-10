@@ -66,13 +66,13 @@ TEST(InputControllerTest, OneChar_NotPrintable)
 //     char a = 'A';
 //     char b = 'B';
 
-//     ControlSequence arrowLeft(ControlSequence::Type::ArrowLeft);
+//     ControlSequence arrowLeft(ControlSequence::Type::ARROW_LEFT);
 
 //     InputController controller(*output, *inputObserver, *buffer);
 
-//     controller.ReceivedCharCallback(a);
-//     controller.ReceivedStringCallback(arrowLeft.Data());
-//     controller.ReceivedCharCallback(b);
+//     controller.receivedCharCallback(a);
+//     controller.receivedStringCallback(arrowLeft.getData());
+//     controller.receivedCharCallback(b);
 
 //     CHECK_EQUAL(b, (*buffer)[0]);
 //     CHECK_EQUAL(b, output->line[0]);
@@ -140,17 +140,17 @@ TEST(InputControllerTest, OneChar_NotPrintable)
 //     const char expected[] = "ext";
 //     const char text[] = "Text";
 
-//     ControlSequence deleteChar(ControlSequence::Type::Delete);
-//     ControlSequence home(ControlSequence::Type::Home);
+//     ControlSequence deleteChar(ControlSequence::Type::DELETE);
+//     ControlSequence home(ControlSequence::Type::HOME);
 
 //     InputController controller(*output, *inputObserver, *buffer);
 
-//     controller.ReceivedStringCallback(text);
-//     controller.ReceivedStringCallback(home.Data());
-//     controller.ReceivedStringCallback(deleteChar.Data());
+//     controller.receivedStringCallback(text);
+//     controller.receivedStringCallback(home.getData());
+//     controller.receivedStringCallback(deleteChar.getData());
 
-//     STRCMP_EQUAL(expected, buffer->Data());
-//     STRCMP_EQUAL(expected, output->line.Data());
+//     STRCMP_EQUAL(expected, buffer->getData().c_str());
+//     STRCMP_EQUAL(expected, output->line.getData().c_str());
 // }
 
 TEST(InputControllerTest, Backspace)

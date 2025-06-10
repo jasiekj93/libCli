@@ -41,8 +41,5 @@ namespace cli::internal::io::container
         etl::string<SIZE> currentData;
         Memory memory;
         Memory::iterator cursor;
-
-        LineBufferWithMemory(const LineBufferWithMemory &) = delete;
-        auto operator=(const LineBufferWithMemory &) = delete;
     };
 }

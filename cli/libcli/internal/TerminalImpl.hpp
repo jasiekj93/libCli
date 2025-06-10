@@ -25,10 +25,7 @@ namespace cli::internal
     public:
         TerminalImpl(Output&,
             CommandObserver&,
-            etl::string_view userName,
-            size_t printBufferSize);
-
-        ~TerminalImpl();
+            etl::string_view userName);
 
         void receivedCharCallback(char) override;
         void receivedStringCallback(const char *) override;
@@ -36,8 +33,8 @@ namespace cli::internal
 
         inline TemplatesBuffer& templates() override { return verifier.templates(); }
 
-        void putString(const char *) override;
-        size_t printf(const char *, ...) override;
+        void putString(etl::string_view) override;
+
         virtual void disableInput() override;
         virtual void enableInput() override;
         inline bool isInputEnabled() override { return inputEnabledFlag; }
@@ -56,7 +53,5 @@ namespace cli::internal
         PresenterImpl presenter;
         CommandVerifier verifier;
         bool inputEnabledFlag;
-        char* printfBuffer;
-        const size_t printfBufferSize;
     };
 }

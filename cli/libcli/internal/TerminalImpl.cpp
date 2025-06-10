@@ -1,5 +1,4 @@
 #include "TerminalImpl.hpp"
-#include <cstdarg>
 #include <cstdio>
 
 using namespace cli;
@@ -7,8 +6,7 @@ using namespace cli::internal;
 
 TerminalImpl::TerminalImpl(Output &output,
     CommandObserver &observer,
-    etl::string_view userName,
-    size_t printfBufferSize)
+    etl::string_view userName)
     : observer(observer)
     , output(output)
     , inputBuffer()
@@ -19,17 +17,8 @@ TerminalImpl::TerminalImpl(Output &output,
     , presenter(output, userName)
     , verifier(presenter)
     , inputEnabledFlag(true)
-    , printfBuffer(nullptr)
-    , printfBufferSize(printfBufferSize)
 {
-    printfBuffer = new char[printfBufferSize];
 }
-
-TerminalImpl::~TerminalImpl()
-{
-    delete[] printfBuffer;
-}
-
 
 void TerminalImpl::receivedCharCallback(char c)
 {
@@ -67,7 +56,7 @@ etl::string_view TerminalImpl::receivedAutoCompleteCallback(etl::string_view sub
     return verifier.find(substring);
 }
 
-void TerminalImpl::putString(const char *string)
+void TerminalImpl::putString(etl::string_view string)
 {
     if(isInputEnabled())
         presenter.newLine();
@@ -76,27 +65,6 @@ void TerminalImpl::putString(const char *string)
 
     if(isInputEnabled())
         enableInput();
-}
-
-size_t TerminalImpl::printf(const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-
-    auto result = vsnprintf(printfBuffer, 
-        printfBufferSize,
-        format, 
-        args);
-    
-    putString(printfBuffer);
-
-    if(result < 0)
-        result = 0;
-    else if(result >= (int)printfBufferSize)
-        result = (printfBufferSize - 1);
-    
-    va_end (args);
-    return result;
 }
 
 void TerminalImpl::disableInput()

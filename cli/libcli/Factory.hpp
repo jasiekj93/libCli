@@ -20,6 +20,5 @@ namespace cli::Factory
 {
     std::shared_ptr<Terminal> createNewTerminal(Output&, 
         CommandObserver&,
-        etl::string_view userName = "",
-        size_t printfBufferSize = 256); 
+        etl::string_view userName = "");
 }
