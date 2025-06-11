@@ -35,7 +35,7 @@ namespace cli::model
         unsigned int hyphenCount(const char*) const;
 
     private:
-        etl::array<char, Configuration::MAX_COMMAND_LENGTH + 1> buffer;
+        etl::array<char, Configuration::MAX_LINE_LENGTH + 1> buffer;
         etl::string_view name;
         Arguments arguments;
     };

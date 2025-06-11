@@ -13,7 +13,7 @@ Command::Command()
 Command::Command(etl::string_view string)
     : Command()
 {
-    if(string.size() > Configuration::MAX_COMMAND_LENGTH)
+    if(string.size() > Configuration::MAX_LINE_LENGTH)
         return;
 
     std::strcpy(buffer.data(), string.data());

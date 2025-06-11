@@ -20,7 +20,7 @@ namespace cli::internal::io::container
     {
     public:
         static constexpr unsigned int MAX_CURSOR_MOVE_SIZE = 9;
-        static constexpr size_t SIZE = Configuration::MAX_COMMAND_LENGTH;
+        static constexpr size_t SIZE = Configuration::MAX_LINE_LENGTH;
 
         LineBuffer();
 

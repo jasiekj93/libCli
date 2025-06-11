@@ -19,7 +19,7 @@ namespace cli::internal::io::container
     {
     public:
         static constexpr auto DEPTH = Configuration::MAX_HISTORY;
-        static constexpr auto SIZE = Configuration::MAX_COMMAND_LENGTH;
+        static constexpr auto SIZE = Configuration::MAX_LINE_LENGTH;
 
         using Memory = etl::deque<etl::string<SIZE>, DEPTH>;
 
