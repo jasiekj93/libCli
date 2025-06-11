@@ -22,7 +22,8 @@ Executor::Executor()
     });
 }
 
-void Executor::receivedCommandCallback(const cli::model::Command& command)
+void Executor::receivedCommandCallback(const cli::model::Command& command, 
+        cli::InputStream& input, cli::OutputStream& output)
 {
     std::string cmd = command.getName().data();
     cmd += ' ';

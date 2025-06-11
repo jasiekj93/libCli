@@ -9,6 +9,7 @@
  */
 
 #include <libcli/model/Command.hpp>
+#include <libcli/IOStream.hpp>
 
 namespace cli
 {
@@ -17,6 +18,6 @@ namespace cli
     public:
         virtual ~CommandObserver() {}
 
-        virtual void receivedCommandCallback(const model::Command&) = 0;
+        virtual void receivedCommandCallback(const model::Command&, InputStream&, OutputStream&) = 0;
     };
 }

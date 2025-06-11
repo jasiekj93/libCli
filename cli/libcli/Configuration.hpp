@@ -17,4 +17,5 @@ namespace cli::Configuration
     static constexpr size_t MAX_LINE_LENGTH = 128;
     static constexpr size_t MAX_USER_NAME = 16;
     static constexpr size_t MAX_HISTORY = 8;
+    static constexpr size_t IO_STREAM_SIZE = 2048;
 }

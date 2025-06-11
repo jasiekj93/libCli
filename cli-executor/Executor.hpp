@@ -14,7 +14,7 @@ class Executor : public cli::CommandObserver
 public:
     explicit Executor();
 
-    void receivedCommandCallback(const cli::model::Command&) override;
+    void receivedCommandCallback(const cli::model::Command&, cli::InputStream&, cli::OutputStream&) override;
 
     void setTerminal(const std::shared_ptr<cli::Terminal>&);
 

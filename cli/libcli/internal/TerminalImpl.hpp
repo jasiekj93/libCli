@@ -11,6 +11,7 @@
 #include <libcli/Terminal.hpp>
 #include <libcli/Output.hpp>
 #include <libcli/CommandObserver.hpp>
+#include <libcli/StringStream.hpp>
 #include <libcli/internal/io/InputController.hpp>
 #include <libcli/internal/io/OutputControllerExtendedImpl.hpp>
 #include <libcli/internal/CommandVerifier.hpp>
@@ -34,17 +35,16 @@ namespace cli::internal
 
         inline TemplatesBuffer& templates() override { return verifier.templates(); }
 
-        OutputController& operator<<(char) override;
-        OutputController& operator<<(etl::string_view) override;
-        OutputController& operator<<(const formatspec::Base&) override;
-
         virtual void disableInput() override;
         virtual void enableInput() override;
         inline bool isInputEnabled() override { return inputEnabledFlag; }
 
     protected:
         void receivedInputLineCallback(etl::string_view) override;
-        OutputController& putString(etl::string_view);
+        void putString(etl::string_view);
+        void write(char c) override;
+        void write(etl::string_view) override;
+        void flush() override;
 
     private:
         CommandObserver& observer;
@@ -55,6 +55,7 @@ namespace cli::internal
         
         PresenterImpl presenter;
         CommandVerifier verifier;
+        StringStream stream1, stream2;
         bool inputEnabledFlag;
     };
 }

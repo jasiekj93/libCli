@@ -34,6 +34,9 @@ void TerminalImpl::receivedStringCallback(const char *string)
 
 void TerminalImpl::receivedInputLineCallback(etl::string_view line)
 {
+    InputStream& input = stream1;
+    OutputStream& output = stream2;
+
     model::Command command(line);
 
     if(command.isNull())
@@ -46,7 +49,7 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
         return;
 
     inputEnabledFlag = false;
-    observer.receivedCommandCallback(command);
+    observer.receivedCommandCallback(command, input, output);
     presenter.prompt();
     inputEnabledFlag = true;
 }
@@ -56,22 +59,22 @@ etl::string_view TerminalImpl::receivedAutoCompleteCallback(etl::string_view sub
     return verifier.find(substring);
 }
 
-OutputController& TerminalImpl::operator<<(char c) 
+void TerminalImpl::write(char c)
 {
-    return putString({ &c, 1 });
+    putString(etl::string_view(&c, 1));
 }
 
-OutputController& TerminalImpl::operator<<(etl::string_view string) 
+void TerminalImpl::write(etl::string_view string)
 {
-    return putString(string);
+    putString(string);
 }
 
-OutputController& TerminalImpl::operator<<(const formatspec::Base& format) 
+void TerminalImpl::flush()
 {
-    return outputController << format;
+    //TODO
 }
 
-OutputController& TerminalImpl::putString(etl::string_view string)
+void TerminalImpl::putString(etl::string_view string)
 {
     if(isInputEnabled())
         outputController << newLine;
@@ -80,8 +83,6 @@ OutputController& TerminalImpl::putString(etl::string_view string)
 
     if(isInputEnabled())
         enableInput();
-
-    return *this;
 }
 
 void TerminalImpl::disableInput()
