@@ -10,9 +10,9 @@
 
 #include <etl/string.h>
 
-#include <libcli/internal/io/FormatSpecification.hpp>
+#include <libcli/FormatSpecification.hpp>
 
-namespace cli::internal::io
+namespace cli
 {
     class OutputController
     {
@@ -22,6 +22,5 @@ namespace cli::internal::io
         virtual OutputController& operator<<(char) = 0;
         virtual OutputController& operator<<(etl::string_view) = 0;
         virtual OutputController& operator<<(const formatspec::Base&) = 0;
-        virtual OutputController& operator<<(const formatspec::Repeated&) = 0;
     };
 }

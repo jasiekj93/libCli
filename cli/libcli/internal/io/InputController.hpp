@@ -13,7 +13,7 @@
 #include <libcli/internal/io/InputLineObserver.hpp>
 #include <libcli/internal/io/ControlSequence.hpp>
 #include <libcli/internal/io/ControlChar.hpp>
-#include <libcli/internal/io/OutputController.hpp>
+#include <libcli/internal/io/OutputControllerExtended.hpp>
 #include <libcli/internal/io/container/LineBufferWithMemory.hpp>
 
 namespace cli::internal::io
@@ -21,7 +21,7 @@ namespace cli::internal::io
     class InputController
     {
     public:
-        InputController(OutputController&, 
+        InputController(OutputControllerExtended&,
             InputLineObserver&,
             container::LineBufferWithMemory&);
 
@@ -44,7 +44,7 @@ namespace cli::internal::io
         void moveEnd();
 
     private:
-        OutputController& output;
+        OutputControllerExtended& output;
         InputLineObserver& observer;
         container::LineBufferWithMemory& buffer;
 

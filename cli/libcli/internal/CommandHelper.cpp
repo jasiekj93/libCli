@@ -4,7 +4,7 @@
 using namespace cli;
 using namespace cli::internal;
 
-CommandHelper::CommandHelper(Output& output)
+CommandHelper::CommandHelper(OutputController& output)
     : output(output)
 {
 }
@@ -23,61 +23,51 @@ void CommandHelper::displayHelp(const templates::Command &command)
 
 void CommandHelper::printUsage(const templates::Command &command)
 {
-    output.write("zastosowanie: ");
-    output.write(command.getName());
+    output << "zastosowanie: " << command.getName();
 
     if (not command.getArguments().empty())
     {
-        output.write(' ');
+        output << ' ';
         printArgumentUsage(command);
     }
 
-    output.write("\r\n");
+    output << newLine;
 }
 
 void CommandHelper::printArgumentUsage(const templates::Command &command)
 {
     for(auto& argument : command.getArguments())
     {
-        if (argument.second.isMandatory() == false)
-            output.write('[');
+        if (not argument.second.isMandatory())
+            output << '[';
 
-        output.write('-');
-        output.write(argument.first);
+        output << '-' << argument.first; 
 
-        if (argument.second.isMandatory() == false)
-            output.write(']');
+        if (not argument.second.isMandatory())
+            output << ']';
 
-        output.write(' ');
+        output << ' ';
     }
 }
 
 void CommandHelper::printCommandHelp(const templates::Command &command)
 {
-    output.write('\t');
-    output.write(command.getHelp());
-    output.write("\r\n");
+    output << '\t' << command.getHelp() << newLine;
 }
 
 void CommandHelper::printArguments(const templates::Command &command)
 {
-    output.write("\r\n");
+    output << newLine;
 
     for (auto& argument : command.getArguments())
     {
-        output.write('-');
-        output.write(argument.first);
-        output.write('\t');
+        output << '-' << argument.first << '\t';
         printArgumentType(argument.second);
 
-
         if (not argument.second.getHelp().empty())
-        {
-            output.write('\t');
-            output.write(argument.second.getHelp());
-        }
+            output << '\t' << argument.second.getHelp();
 
-        output.write("\r\n");
+        output << newLine;
     }
 }
 
@@ -86,14 +76,19 @@ void CommandHelper::printArgumentType(const templates::Argument &argument)
     switch(argument.getType())
     {
         case model::Argument::Type::DECIMAL:
-            return output.write("calkowity");
+            output << "calkowity";
+            return;
         case model::Argument::Type::DOUBLE:
-            return output.write("zmiennoprzecinkowy");
+            output << "zmiennoprzecinkowy";
+            return;
         case model::Argument::Type::EMPTY:
-            return output.write(" ");
+            output << " ";
+            return;
         case model::Argument::Type::HEX:
-            return output.write("szesnastkowy");
+            output << "szesnastkowy";
+            return;
         case model::Argument::Type::STRING:
-            return output.write("ciag znakow");
+            output << "ciag znakow";
+            return;
     }
 }

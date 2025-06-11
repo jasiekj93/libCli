@@ -12,7 +12,7 @@
 #include <libcli/Output.hpp>
 #include <libcli/CommandObserver.hpp>
 #include <libcli/internal/io/InputController.hpp>
-#include <libcli/internal/io/OutputControllerImpl.hpp>
+#include <libcli/internal/io/OutputControllerExtendedImpl.hpp>
 #include <libcli/internal/CommandVerifier.hpp>
 #include <libcli/internal/PresenterImpl.hpp>
 
@@ -33,7 +33,9 @@ namespace cli::internal
 
         inline TemplatesBuffer& templates() override { return verifier.templates(); }
 
-        void putString(etl::string_view) override;
+        OutputController& operator<<(char) override;
+        OutputController& operator<<(etl::string_view) override;
+        OutputController& operator<<(const formatspec::Base&) override;
 
         virtual void disableInput() override;
         virtual void enableInput() override;
@@ -41,13 +43,13 @@ namespace cli::internal
 
     protected:
         void receivedInputLineCallback(etl::string_view) override;
+        OutputController& putString(etl::string_view);
 
     private:
         CommandObserver& observer;
-        Output& output;
 
         io::container::LineBufferWithMemory inputBuffer;
-        io::OutputControllerImpl outputController;
+        io::OutputControllerExtendedImpl outputController;
         io::InputController inputController;
         
         PresenterImpl presenter;

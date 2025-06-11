@@ -9,14 +9,14 @@
  */
 
 #include <libcli/templates/Command.hpp>
-#include <libcli/Output.hpp>
+#include <libcli/OutputController.hpp>
 
 namespace cli::internal
 {
     class CommandHelper
     {
     public:
-        CommandHelper(Output&);
+        CommandHelper(OutputController&);
 
         void displayHelp(const templates::Command&);
 
@@ -28,6 +28,6 @@ namespace cli::internal
         void printArgumentType(const templates::Argument&);
     
     private:
-        Output& output;
+        OutputController& output;
     };
 }

@@ -19,5 +19,6 @@ namespace cli
 
         virtual void write(char c) = 0;
         virtual void write(etl::string_view) = 0;
+        virtual void flush() {}
     };
 }

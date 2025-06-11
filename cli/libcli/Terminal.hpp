@@ -13,10 +13,11 @@
 
 #include <libcli/templates/Command.hpp>
 #include <libcli/Configuration.hpp>
+#include <libcli/OutputController.hpp>
 
 namespace cli
 {
-    class Terminal
+    class Terminal : public OutputController
     {
     public:
         using TemplatesBuffer = etl::map<etl::string_view, templates::Command, Configuration::MAX_COMMAND_TEMPLATES_COUNT>;
@@ -28,7 +29,9 @@ namespace cli
         
         virtual TemplatesBuffer& templates() = 0;
 
-        virtual void putString(etl::string_view) = 0;
+        virtual OutputController& operator<<(char) override = 0;
+        virtual OutputController& operator<<(etl::string_view) override = 0;
+        virtual OutputController& operator<<(const formatspec::Base&) override = 0;
 
         virtual void disableInput() = 0;
         virtual void enableInput() = 0;

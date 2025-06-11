@@ -13,17 +13,19 @@
 
 namespace mock
 {
-    class OutputController : public cli::OutputController
+    class OutputControllerLarge : public cli::OutputController
     {
     public:
-        OutputController();
+        static constexpr auto SIZE = 4096UL;
+
+        OutputControllerLarge();
 
         OutputController& operator<<(char) override;
         OutputController& operator<<(etl::string_view) override;
         OutputController& operator<<(const cli::formatspec::Base&) override;
 
-        etl::string<cli::internal::io::container::LineBuffer::SIZE> previousLine;
-        cli::internal::io::container::LineBuffer line;
+        etl::string<SIZE> previousLine;
+        etl::string<SIZE> line;
 
     protected:
         void newLine();

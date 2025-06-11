@@ -1,10 +1,12 @@
 #pragma once
 
 /**
- * @file FormatSpecification.hpp
+ * @file FormatSpecificationExtended.hpp
  * @author Adrian Szczepanski
  * @date 05-06-2025
  */
+
+#include <libcli/FormatSpecification.hpp>
 
 namespace cli::internal::io
 {
@@ -16,29 +18,17 @@ namespace cli::internal::io
             CURSOR_RIGHT,
             BACKSPACE,
             DELETE,
-            NEW_LINE,
-            CLEAR_SCREEN,
-            FLUSH
         };
 
-        struct Base
-        {
-            constexpr Base(Type type)
-                : type(type)
-            {
-            }
-
-            const Type type;
-        };
-
-        struct Repeated : Base
+        struct Repeated 
         {
             constexpr Repeated(Type type, unsigned int times)
-                : Base(type)
+                : type(type)
                 , times(times)
             {
             }
 
+            const Type type;
             const unsigned int times;
         };
         
@@ -64,8 +54,4 @@ namespace cli::internal::io
     {
         return formatspec::Repeated(formatspec::Type::DELETE, times);
     }
-
-    static constexpr formatspec::Base newLine(formatspec::Type::NEW_LINE);
-    static constexpr formatspec::Base clearScreen(formatspec::Type::CLEAR_SCREEN);
-    static constexpr formatspec::Base flush(formatspec::Type::FLUSH);
 }

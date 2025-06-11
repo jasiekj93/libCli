@@ -8,13 +8,12 @@ TerminalImpl::TerminalImpl(Output &output,
     CommandObserver &observer,
     etl::string_view userName)
     : observer(observer)
-    , output(output)
     , inputBuffer()
     , outputController(output)
     , inputController(outputController,
         *this,
         inputBuffer)
-    , presenter(output, userName)
+    , presenter(outputController, userName)
     , verifier(presenter)
     , inputEnabledFlag(true)
 {
@@ -56,15 +55,32 @@ etl::string_view TerminalImpl::receivedAutoCompleteCallback(etl::string_view sub
     return verifier.find(substring);
 }
 
-void TerminalImpl::putString(etl::string_view string)
+OutputController& TerminalImpl::operator<<(char c) 
+{
+    return putString({ &c, 1 });
+}
+
+OutputController& TerminalImpl::operator<<(etl::string_view string) 
+{
+    return putString(string);
+}
+
+OutputController& TerminalImpl::operator<<(const formatspec::Base& format) 
+{
+    return outputController << format;
+}
+
+OutputController& TerminalImpl::putString(etl::string_view string)
 {
     if(isInputEnabled())
-        presenter.newLine();
-    
-    output.write(string);
+        outputController << newLine;
+
+    outputController << string;
 
     if(isInputEnabled())
         enableInput();
+
+    return *this;
 }
 
 void TerminalImpl::disableInput()

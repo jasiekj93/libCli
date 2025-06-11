@@ -49,7 +49,7 @@ void Executor::executeCommand(std::string_view command)
 
     if (not pipe)
     {
-        terminal->putString("Failed to execute command\r\n");
+        *terminal << "Failed to execute command" << cli::newLine;
         return;
     }
 
@@ -66,7 +66,7 @@ void Executor::executeCommand(std::string_view command)
     pclose(pipe);
 
     result = replaceNewlineWithCarriageReturn(result);
-    terminal->putString(result.data());
+    *terminal << result.c_str();
 }
 
 static std::string replaceNewlineWithCarriageReturn(std::string input)

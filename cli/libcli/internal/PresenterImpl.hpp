@@ -11,7 +11,7 @@
 #include <etl/string.h>
 
 #include <libcli/Configuration.hpp>
-#include <libcli/Output.hpp>
+#include <libcli/OutputController.hpp>
 #include <libcli/internal/Presenter.hpp>
 #include <libcli/internal/CommandHelper.hpp>
 
@@ -22,7 +22,7 @@ namespace cli::internal
     public:
         static constexpr char PROMPT_CHAR = '$';
 
-        PresenterImpl(Output&, etl::string_view userName = "");
+        PresenterImpl(OutputController&, etl::string_view userName = "");
 
         void unknownCommand(etl::string_view) override;
         void noMandatoryArguments(char argument, const templates::Command&) override;
@@ -33,10 +33,8 @@ namespace cli::internal
         
         inline size_t promptLength() override { return (userName.size() + 2); }
         
-        void newLine();
-
     private:
-        Output& output;
+        OutputController& output;
         CommandHelper helper;
         etl::string<Configuration::MAX_USER_NAME> userName;
     };

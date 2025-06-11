@@ -7,7 +7,7 @@
  */
 
 #include <libcli/internal/CommandHelper.hpp>
-#include <tests/mock/Output.hpp>
+#include <tests/mock/OutputControllerLarge.hpp>
 #include <cstring>
 
 #include <CppUTest/CommandLineTestRunner.h>
@@ -27,12 +27,12 @@ TEST(CommandHelperTest, OnlyName)
 
     templates::Command command("hello");
 
-    mock::Output output;
+    mock::OutputControllerLarge output;
     CommandHelper helper(output);
 
     helper.displayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.c_str());
+    STRCMP_EQUAL(expected, output.line.c_str());
 }
 
 TEST(CommandHelperTest, NameWithHelp)
@@ -42,12 +42,12 @@ TEST(CommandHelperTest, NameWithHelp)
 
     templates::Command command("hello", "This is help");
 
-    mock::Output output;
+    mock::OutputControllerLarge output;
     CommandHelper helper(output);
 
     helper.displayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.c_str());
+    STRCMP_EQUAL(expected, output.line.c_str());
 }
 
 TEST(CommandHelperTest, OneArgument_Mandatory)
@@ -61,12 +61,12 @@ TEST(CommandHelperTest, OneArgument_Mandatory)
         { 'a', { model::Argument::Type::DECIMAL, true, "This is number" }}
     });
 
-    mock::Output output;
+    mock::OutputControllerLarge output;
     CommandHelper helper(output);
 
     helper.displayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.c_str());
+    STRCMP_EQUAL(expected, output.line.c_str());
 }
 
 TEST(CommandHelperTest, OneArgument_Optional)
@@ -80,12 +80,12 @@ TEST(CommandHelperTest, OneArgument_Optional)
         { 'a', { model::Argument::Type::DECIMAL, false, "This is number" } }
     });
 
-    mock::Output output;
+    mock::OutputControllerLarge output;
     CommandHelper helper(output);
 
     helper.displayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.c_str());
+    STRCMP_EQUAL(expected, output.line.c_str());
 }
 
 TEST(CommandHelperTest, OneArgument_NoCommandHelp)
@@ -98,12 +98,12 @@ TEST(CommandHelperTest, OneArgument_NoCommandHelp)
         { 'a', { model::Argument::Type::DECIMAL, true, "This is number" } }
     });
 
-    mock::Output output;
+    mock::OutputControllerLarge output;
     CommandHelper helper(output);
 
     helper.displayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.c_str());
+    STRCMP_EQUAL(expected, output.line.c_str());
 }
 
 TEST(CommandHelperTest, ManyArguments)
@@ -125,10 +125,10 @@ TEST(CommandHelperTest, ManyArguments)
         { 'e', { model::Argument::Type::STRING, true, "This is string" } },
     });
 
-    mock::Output output;
+    mock::OutputControllerLarge output;
     CommandHelper helper(output);
 
     helper.displayHelp(command);
 
-    STRCMP_EQUAL(expected, output.buffer.c_str());
+    STRCMP_EQUAL(expected, output.line.c_str());
 }
