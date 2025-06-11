@@ -4,10 +4,11 @@
 using namespace cli;
 using namespace cli::internal;
 
-PresenterImpl::PresenterImpl(OutputController& output, etl::string_view string)
+PresenterImpl::PresenterImpl(OutputController& output, etl::string_view string, language::Dictionary dictionary)
     : output(output)
-    , helper(output)
+    , helper(output, dictionary)
     , userName("")
+    , dictionary(dictionary)
 {
     if(string.size() <= Configuration::MAX_USER_NAME)
         this->userName = string;
@@ -17,25 +18,25 @@ PresenterImpl::PresenterImpl(OutputController& output, etl::string_view string)
 
 void PresenterImpl::unknownCommand(etl::string_view name)
 {
-    output << name.data() << ": nie znaleziono polecenia";
+    output << name.data() << ": " << dictionary.unknownCommand;
     prompt();
 }
 
 void PresenterImpl::noMandatoryArguments(char arg, const templates::Command& command)
 {
-    output << command.getName() << ": brak wymaganych argumentow: -" << arg << newLine;
+    output << command.getName() << ": " << dictionary.noMandatoryArguments << ": -" << arg << newLine;
     help(command);
 }
 
 void PresenterImpl::invalidArgument(char arg, const templates::Command& command)
 {
-    output << command.getName() << ": nieprawidlowy argument -" << arg << newLine;
+    output << command.getName() << ": " << dictionary.invalidArgument << ": -" << arg << newLine;
     help(command);
 }
 
 void PresenterImpl::invalidArgumentType(char arg, const templates::Command& command)
 {
-    output << command.getName() << ": nieprawidlowy typ argumentu -" << arg << newLine;
+    output << command.getName() << ": " << dictionary.invalidArgumentType << ": -" << arg << newLine;
     help(command);
 }
 

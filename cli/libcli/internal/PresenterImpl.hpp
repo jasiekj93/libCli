@@ -12,6 +12,7 @@
 
 #include <libcli/Configuration.hpp>
 #include <libcli/OutputController.hpp>
+#include <libcli/Language.hpp>
 #include <libcli/internal/Presenter.hpp>
 #include <libcli/internal/CommandHelper.hpp>
 
@@ -22,7 +23,7 @@ namespace cli::internal
     public:
         static constexpr char PROMPT_CHAR = '$';
 
-        PresenterImpl(OutputController&, etl::string_view userName = "");
+        PresenterImpl(OutputController&, etl::string_view userName = "", language::Dictionary = language::english);
 
         void unknownCommand(etl::string_view) override;
         void noMandatoryArguments(char argument, const templates::Command&) override;
@@ -37,5 +38,6 @@ namespace cli::internal
         OutputController& output;
         CommandHelper helper;
         etl::string<Configuration::MAX_USER_NAME> userName;
+        language::Dictionary dictionary;
     };
 }

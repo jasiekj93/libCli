@@ -24,8 +24,8 @@ namespace cli::internal::io::container
 
         LineBuffer();
 
-        bool put(char);
-        bool putString(etl::string_view);
+        bool push(char);
+        bool push(etl::string_view);
         void clear();
 
         bool moveCursorLeft();

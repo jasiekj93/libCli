@@ -6,14 +6,15 @@ using namespace cli::internal;
 
 TerminalImpl::TerminalImpl(Output &output,
     CommandObserver &observer,
-    etl::string_view userName)
+    etl::string_view userName,
+    language::Dictionary dictionary)
     : observer(observer)
     , inputBuffer()
     , outputController(output)
     , inputController(outputController,
         *this,
         inputBuffer)
-    , presenter(outputController, userName)
+    , presenter(outputController, userName, dictionary)
     , verifier(presenter)
     , inputEnabledFlag(true)
 {

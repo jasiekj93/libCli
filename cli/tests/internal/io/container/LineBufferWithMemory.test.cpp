@@ -31,9 +31,9 @@ TEST(LineBufferWithMemoryTest, AddSecond_IsTheSame)
 
     const char string[] = "aa";
 
-    buffer.putString(string);
+    buffer.push(string);
     buffer.clearAndMemorize();
-    buffer.putString(string);
+    buffer.push(string);
 
     CHECK_EQUAL(1, buffer.memoryCount());
 }
@@ -48,9 +48,9 @@ TEST(LineBufferWithMemoryTest, SetPrevious)
         "bbb"
     };
 
-    buffer.putString(strings[0]);
+    buffer.push(strings[0]);
     buffer.clearAndMemorize();
-    buffer.putString(strings[1]);
+    buffer.push(strings[1]);
 
     CHECK_EQUAL(1, buffer.memoryCount());
     STRCMP_EQUAL(strings[1], buffer.getData().c_str());
@@ -73,7 +73,7 @@ TEST(LineBufferWithMemoryTest, SetPrevious_NoPrevious)
         "bar"
     };
 
-    buffer.putString(strings[0]);
+    buffer.push(strings[0]);
 
     CHECK_FALSE(buffer.setPrevious());
 }
@@ -88,9 +88,9 @@ TEST(LineBufferWithMemoryTest, SetNext)
         "bar"
     };
 
-    buffer.putString(strings[0]);
+    buffer.push(strings[0]);
     buffer.clearAndMemorize();
-    buffer.putString(strings[1]);
+    buffer.push(strings[1]);
 
     CHECK(buffer.setPrevious());
     CHECK(buffer.setNext());
@@ -108,11 +108,11 @@ TEST(LineBufferWithMemoryTest, SetCurrent)
         "baz"
     };
 
-    buffer.putString(strings[0]);
+    buffer.push(strings[0]);
     buffer.clearAndMemorize();
-    buffer.putString(strings[1]);
+    buffer.push(strings[1]);
     buffer.clearAndMemorize();
-    buffer.putString(strings[2]);
+    buffer.push(strings[2]);
 
     CHECK_EQUAL(2, buffer.memoryCount());
     buffer.setPrevious();

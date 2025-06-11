@@ -28,7 +28,7 @@ TEST(CommandHelperTest, OnlyName)
     templates::Command command("hello");
 
     mock::OutputControllerLarge output;
-    CommandHelper helper(output);
+    CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
 
@@ -43,7 +43,7 @@ TEST(CommandHelperTest, NameWithHelp)
     templates::Command command("hello", "This is help");
 
     mock::OutputControllerLarge output;
-    CommandHelper helper(output);
+    CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
 
@@ -62,7 +62,7 @@ TEST(CommandHelperTest, OneArgument_Mandatory)
     });
 
     mock::OutputControllerLarge output;
-    CommandHelper helper(output);
+    CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
 
@@ -81,7 +81,7 @@ TEST(CommandHelperTest, OneArgument_Optional)
     });
 
     mock::OutputControllerLarge output;
-    CommandHelper helper(output);
+    CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
 
@@ -99,7 +99,7 @@ TEST(CommandHelperTest, OneArgument_NoCommandHelp)
     });
 
     mock::OutputControllerLarge output;
-    CommandHelper helper(output);
+    CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
 
@@ -126,7 +126,7 @@ TEST(CommandHelperTest, ManyArguments)
     });
 
     mock::OutputControllerLarge output;
-    CommandHelper helper(output);
+    CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
 

@@ -8,7 +8,7 @@ LineBuffer::LineBuffer()
 {
 }
 
-bool LineBuffer::put(char c)
+bool LineBuffer::push(char c)
 {
     if(buffer.full())
         return false;
@@ -22,7 +22,7 @@ bool LineBuffer::put(char c)
     return true;
 }
 
-bool LineBuffer::putString(etl::string_view string)
+bool LineBuffer::push(etl::string_view string)
 {
     if (buffer.available() < string.size())
         return false;

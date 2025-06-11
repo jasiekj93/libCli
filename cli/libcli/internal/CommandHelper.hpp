@@ -10,13 +10,14 @@
 
 #include <libcli/templates/Command.hpp>
 #include <libcli/OutputController.hpp>
+#include <libcli/Language.hpp>
 
 namespace cli::internal
 {
     class CommandHelper
     {
     public:
-        CommandHelper(OutputController&);
+        CommandHelper(OutputController&, language::Dictionary = language::english);
 
         void displayHelp(const templates::Command&);
 
@@ -29,5 +30,6 @@ namespace cli::internal
     
     private:
         OutputController& output;
+        language::Dictionary dictionary;
     };
 }

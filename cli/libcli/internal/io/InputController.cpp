@@ -20,7 +20,7 @@ void InputController::receivedCharCallback(char c)
     
     if(std::isprint(c))
     {
-        if(buffer.put(c) == true)
+        if(buffer.push(c) == true)
             output << c;
     }
 }
@@ -97,7 +97,7 @@ bool InputController::processTab()
         clearLine();
         
         buffer.clear();
-        buffer.putString(result.data());
+        buffer.push(result.data());
 
         output << result;
     }

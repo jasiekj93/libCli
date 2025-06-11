@@ -9,13 +9,13 @@ OutputController::OutputController()
 
 OutputController& OutputController::operator<<(char c)
 {
-    line.put(c);
+    line.push(c);
     return *this;
 }
 
 OutputController& OutputController::operator<<(etl::string_view string)
 {
-    line.putString(string.data());
+    line.push(string.data());
     return *this;
 }
 

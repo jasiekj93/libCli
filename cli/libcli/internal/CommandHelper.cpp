@@ -4,8 +4,9 @@
 using namespace cli;
 using namespace cli::internal;
 
-CommandHelper::CommandHelper(OutputController& output)
+CommandHelper::CommandHelper(OutputController& output, language::Dictionary dictionary)
     : output(output)
+    , dictionary(dictionary)
 {
 }
 
@@ -23,7 +24,7 @@ void CommandHelper::displayHelp(const templates::Command &command)
 
 void CommandHelper::printUsage(const templates::Command &command)
 {
-    output << "zastosowanie: " << command.getName();
+    output << dictionary.usage << ": " << command.getName();
 
     if (not command.getArguments().empty())
     {
@@ -76,19 +77,19 @@ void CommandHelper::printArgumentType(const templates::Argument &argument)
     switch(argument.getType())
     {
         case model::Argument::Type::DECIMAL:
-            output << "calkowity";
+            output << dictionary.decimal;
             return;
         case model::Argument::Type::DOUBLE:
-            output << "zmiennoprzecinkowy";
+            output << dictionary.doubleStr;
             return;
         case model::Argument::Type::EMPTY:
-            output << " ";
+            output << dictionary.empty;
             return;
         case model::Argument::Type::HEX:
-            output << "szesnastkowy";
+            output << dictionary.hexadecimal;
             return;
         case model::Argument::Type::STRING:
-            output << "ciag znakow";
+            output << dictionary.string;
             return;
     }
 }

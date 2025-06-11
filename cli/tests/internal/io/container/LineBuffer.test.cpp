@@ -31,7 +31,7 @@ TEST(LineBufferTest, AddOneChar)
     LineBuffer buffer;
     char a = 'A';
 
-    CHECK(buffer.put(a));
+    CHECK(buffer.push(a));
     
     CHECK_EQUAL(1, buffer.getCount());
     CHECK_EQUAL(1, buffer.getCursor()); 
@@ -44,7 +44,7 @@ TEST(LineBufferTest, AddString)
     LineBuffer buffer;
     char string[] = "Hello";
 
-    CHECK(buffer.putString(string));
+    CHECK(buffer.push(string));
     
     CHECK_EQUAL(std::strlen(string), buffer.getCount());
     CHECK_EQUAL(std::strlen(string), buffer.getCursor());
@@ -57,9 +57,9 @@ TEST(LineBufferTest, AddMoreThanSize)
     char c = 'A';
 
     for(size_t i = 0; i < LineBuffer::SIZE; i++)
-        CHECK(buffer.put(c++));
+        CHECK(buffer.push(c++));
     
-    CHECK_FALSE(buffer.put(c));
+    CHECK_FALSE(buffer.push(c));
     c--;
     
     CHECK_EQUAL(LineBuffer::SIZE, buffer.getCount());
@@ -74,7 +74,7 @@ TEST(LineBufferTest, Clear)
     char c = 'A';
 
     for(size_t i = 0; i < LineBuffer::SIZE; i++)
-        buffer.put(c++);
+        buffer.push(c++);
     
     CHECK_EQUAL(LineBuffer::SIZE, buffer.getCount());
     CHECK_EQUAL(LineBuffer::SIZE, buffer.getCursor());
@@ -91,9 +91,9 @@ TEST(LineBufferTest, MoveCursorLeft)
     char a = 'A';
     char b = 'B';
 
-    buffer.put(a);
+    buffer.push(a);
     CHECK(buffer.moveCursorLeft());
-    buffer.put(b);
+    buffer.push(b);
 
     CHECK_EQUAL(1, buffer.getCount());
     CHECK_EQUAL(1, buffer.getCursor());
@@ -115,14 +115,14 @@ TEST(LineBufferTest, MoveCursorRight)
     char b = 'B';
     char c = 'C';
 
-    buffer.put(a);
-    buffer.put(b);
+    buffer.push(a);
+    buffer.push(b);
 
     buffer.moveCursorLeft();
 
     CHECK(buffer.moveCursorRight());
 
-    buffer.put(c);
+    buffer.push(c);
 
     CHECK_EQUAL(3, buffer.getCount());
     CHECK_EQUAL(3, buffer.getCursor());
@@ -136,8 +136,8 @@ TEST(LineBufferTest, MoveCursorRight_IsOnTheEnd)
     char a = 'A';
     char b = 'B';
     
-    buffer.put(a);
-    buffer.put(b);
+    buffer.push(a);
+    buffer.push(b);
 
     CHECK_FALSE(buffer.moveCursorRight());
 }
@@ -148,8 +148,8 @@ TEST(LineBufferTest, remove)
     char a = 'A';
     char b = 'B';
     
-    buffer.put(a);
-    buffer.put(b);
+    buffer.push(a);
+    buffer.push(b);
     buffer.moveCursorLeft();
 
     CHECK(buffer.remove());
@@ -166,9 +166,9 @@ TEST(LineBufferTest, remove_InTheMiddle)
     char b = 'B';
     char c = 'C';
     
-    buffer.put(a);
-    buffer.put(b);
-    buffer.put(c);
+    buffer.push(a);
+    buffer.push(b);
+    buffer.push(c);
     buffer.moveCursorLeft();
     buffer.moveCursorLeft();
 
@@ -185,7 +185,7 @@ TEST(LineBufferTest, remove_OneChar)
     LineBuffer buffer;
     char a = 'A';
     
-    buffer.put(a);
+    buffer.push(a);
     buffer.moveCursorLeft();
 
     CHECK(buffer.remove());
@@ -206,7 +206,7 @@ TEST(LineBufferTest, remove_OnTheEnd)
     LineBuffer buffer;
     char a = 'A';
     
-    buffer.put(a);
+    buffer.push(a);
     CHECK_FALSE(buffer.remove());
 }
 
@@ -215,7 +215,7 @@ TEST(LineBufferTest, MoveCursorMaxLeft)
     const char text[] = "0123456789";
     LineBuffer buffer;
     
-    buffer.putString(text);
+    buffer.push(text);
     CHECK_EQUAL(9, buffer.moveCursorMaxLeft());
     CHECK_EQUAL(1, buffer.getCursor());
     CHECK_EQUAL(1, buffer.moveCursorMaxLeft());
@@ -228,7 +228,7 @@ TEST(LineBufferTest, MoveCursorMaxRight)
     const char text[] = "0123456789";
     LineBuffer buffer;
     
-    buffer.putString(text);
+    buffer.push(text);
     buffer.moveCursorMaxLeft();
     buffer.moveCursorMaxLeft();
 

@@ -25,7 +25,8 @@ namespace cli::internal
     public:
         TerminalImpl(Output&,
             CommandObserver&,
-            etl::string_view userName);
+            etl::string_view userName,
+            language::Dictionary);
 
         void receivedCharCallback(char) override;
         void receivedStringCallback(const char *) override;
