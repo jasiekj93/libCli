@@ -20,7 +20,8 @@ namespace cli
 
     protected:
         bool readFrom(char& c, size_t position) override;
-        bool readFrom(etl::istring& str, size_t count, size_t position) override;
+        bool readFrom(etl::istring&, size_t count, size_t position) override;
+        bool readFrom(char*, size_t count, size_t position) override;
 
     private:
         etl::string<Configuration::IO_STREAM_SIZE> buffer;

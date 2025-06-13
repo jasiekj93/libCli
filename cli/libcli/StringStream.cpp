@@ -45,3 +45,16 @@ bool StringStream::readFrom(etl::istring& str, size_t count, size_t position)
     str.insert(str.end(), begin, etl::next(begin, count));
     return true;
 }
+
+bool StringStream::readFrom(char* str, size_t count, size_t position)
+{
+    if((position + count) > buffer.size())
+        return false;
+
+    if(str == nullptr)
+        return false;
+
+    auto begin = etl::next(this->buffer.begin(), position);
+    etl::copy_n(begin, count, str);
+    return true;
+}

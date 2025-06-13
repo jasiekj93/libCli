@@ -51,7 +51,7 @@ InputStream& InputStream::operator>>(char& c)
 
 InputStream& InputStream::operator>>(etl::istring& str)
 {
-    auto readSize = (str.available() < size()) ? str.available() : size();
+    auto readSize = (str.available() < available()) ? str.available() : available();
 
     read(str, readSize);
     return *this;
@@ -70,6 +70,9 @@ bool InputStream::seekg(size_t pos)
 
 bool InputStream::read(char& c)
 {
+    if(available() == 0)
+        return false;
+
     if (readFrom(c, position))
     {
         ++position;
@@ -81,6 +84,9 @@ bool InputStream::read(char& c)
 
 bool InputStream::read(etl::istring& str, size_t count)
 {
+    if(count > available())
+        return false;
+
     if (readFrom(str, count, position))
     {
         position += count;
@@ -90,3 +96,16 @@ bool InputStream::read(etl::istring& str, size_t count)
     return false;
 }
 
+bool InputStream::read(char* buffer, size_t limit)
+{
+    if(limit > available())
+        limit = available();
+
+    if(readFrom(buffer, limit, position))
+    {
+        position += limit;
+        return true;
+    }
+
+    return false;
+}   

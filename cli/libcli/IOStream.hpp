@@ -40,6 +40,7 @@ namespace cli
 
         bool read(char& c);
         bool read(etl::istring& str, size_t count);
+        bool read(char*, size_t limit);
 
         size_t available() const { return size() - position; }
 
@@ -49,6 +50,7 @@ namespace cli
     protected:
         virtual bool readFrom(char& c, size_t position) = 0;
         virtual bool readFrom(etl::istring& str, size_t count, size_t position) = 0;
+        virtual bool readFrom(char* buffer, size_t count, size_t position) = 0;
 
     private:
         size_t position = 0; 
