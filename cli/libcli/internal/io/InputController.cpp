@@ -86,11 +86,17 @@ bool InputController::processNewLine()
 
 bool InputController::processBackspace()
 {
-    if(buffer.getCount() == buffer.getCursor() &&
-        (buffer.moveCursorLeft() == true))
+    if(buffer.moveCursorLeft())
     {
         buffer.remove();
         output << backspace();
+
+        if(not buffer.isCursorAtEnd())
+        {
+            output << buffer.getDataAfterCursor();
+            output << ' ';
+            output << cursorLeft(buffer.getCursorCount() + 1);
+        }
     }
 
     return true;

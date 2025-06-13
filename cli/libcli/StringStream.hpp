@@ -12,7 +12,6 @@ namespace cli
 
         void write(char c) override;
         void write(etl::string_view str) override;
-        void flush() override { clear(); }
 
         size_t size() const override;
 
