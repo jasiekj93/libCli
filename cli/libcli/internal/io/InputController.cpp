@@ -100,7 +100,7 @@ bool InputController::processTab()
 {
     auto result = observer.receivedAutoCompleteCallback(buffer.getData());
 
-    if(result != nullptr)
+    if(result != "")
     {
         clearLine();
         
