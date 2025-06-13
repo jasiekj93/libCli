@@ -36,6 +36,7 @@ namespace cli::internal::io
         bool processEscapeChar();
         bool processNewLine();
         bool processBackspace();
+        bool processDelete();
         bool processTab();
         bool processConrolSequence(char c);
         bool processControlSequenceByType();

@@ -102,6 +102,23 @@ bool InputController::processBackspace()
     return true;
 }
 
+bool InputController::processDelete()
+{
+    if(buffer.remove())
+    {
+        output << deleteChar();
+
+        if(not buffer.isCursorAtEnd())
+        {
+            output << buffer.getDataAfterCursor();
+            output << ' ';
+            output << cursorLeft(buffer.getCursorCount() + 1);
+        }
+    }
+
+    return true;
+} 
+
 bool InputController::processTab()
 {
     auto result = observer.receivedAutoCompleteCallback(buffer.getData());
@@ -140,8 +157,7 @@ bool InputController::processControlSequenceByType()
     switch(type)
     {
         case ControlSequence::Type::DELETE:
-            if(buffer.remove() == true)
-                output << deleteChar();
+            processDelete();
             break;
         case ControlSequence::Type::ARROW_LEFT:
             if(buffer.moveCursorLeft())
