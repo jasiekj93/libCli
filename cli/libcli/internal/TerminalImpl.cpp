@@ -43,19 +43,12 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
     while (end != etl::string_view::npos)
     {
         model::Command command(line.substr(start, end - start));
-
-        if(command.isNull())
+        if(not executeCommand(command, *in, *out))
         {
             presenter.prompt(false);
+            inputEnabledFlag = true;
             return;
         }
-
-        if(verifier.verify(command) == false)
-            return;
-
-        inputEnabledFlag = false;
-        observer.receivedCommandCallback(command, *in, *out);
-        //TODO zabezpieczenie flag
 
         start = end + 1;
         start = line.find_first_not_of(' ', start);
@@ -65,19 +58,8 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
     }
 
     model::Command command(line.substr(start, line.size() - start));
-
-    if(command.isNull())
-    {
-        presenter.prompt(false);
-        return;
-    }
-
-    if(verifier.verify(command) == false)
-        return;
-
-    inputEnabledFlag = false;
-    observer.receivedCommandCallback(command, *in, *this);
-    presenter.prompt();
+    auto result = executeCommand(command, *in, *this);
+    presenter.prompt(result);
     inputEnabledFlag = true;
 }
 
@@ -105,6 +87,22 @@ void TerminalImpl::write(etl::string_view string)
 void TerminalImpl::flush()
 {
     //TODO
+}
+
+bool TerminalImpl::executeCommand(const model::Command& command, InputStream& in, OutputStream& out)
+{
+    if(command.isNull())
+    {
+        presenter.prompt(false);
+        return false;
+    }
+
+    if(verifier.verify(command) == false)
+        return false;
+
+    inputEnabledFlag = false;
+    observer.receivedCommandCallback(command, in, out);
+    return true;
 }
 
 void TerminalImpl::disableInput()
