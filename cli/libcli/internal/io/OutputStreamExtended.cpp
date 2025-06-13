@@ -36,12 +36,22 @@ OutputStreamExtended& OutputStreamExtended::operator<<(const formatspec::Repeate
 
 void OutputStreamExtended::moveCursorLeft(unsigned int times)
 {
-    write(ControlSequence(ControlSequence::Type::ARROW_LEFT, times).getData().data());
+    while(times > 0)
+    {
+        auto moves = (times > ControlSequence::MAX_ARROW_REPEAT) ? ControlSequence::MAX_ARROW_REPEAT : times;
+        write(ControlSequence(ControlSequence::Type::ARROW_LEFT, moves).getData().data());
+        times -= moves;
+    }
 }
 
 void OutputStreamExtended::moveCursorRight(unsigned int times)
 {
-    write(ControlSequence(ControlSequence::Type::ARROW_RIGHT, times).getData().data());
+    while(times > 0)
+    {
+        auto moves = (times > ControlSequence::MAX_ARROW_REPEAT) ? ControlSequence::MAX_ARROW_REPEAT : times;
+        write(ControlSequence(ControlSequence::Type::ARROW_RIGHT, moves).getData().data());
+        times -= moves;
+    }
 }
 
 void OutputStreamExtended::backspace(unsigned int times)

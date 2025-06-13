@@ -27,10 +27,7 @@ void InputController::receivedCharCallback(char c)
             if(not buffer.isCursorAtEnd())
             {
                 output << buffer.getDataAfterCursor();
-
-                auto count = buffer.getCursorCount();
-                for(unsigned int i = 0; i < count; ++i)
-                    output << cursorLeft();
+                output << cursorLeft(buffer.getCursorCount());
             }
         }
     }
@@ -45,7 +42,7 @@ void InputController::receivedStringCallback(etl::string_view string)
 void InputController::restoreLine()
 {
     output << buffer.getData();
-    buffer.moveCursorMaxRight();
+    buffer.moveCursorEnd();
 }
 
 void InputController::clearLine(unsigned int extraChars)
@@ -179,22 +176,12 @@ bool InputController::processControlSequenceByType()
 
 void InputController::moveHome()
 {
-    auto times = buffer.moveCursorMaxLeft();
-
-    while(times > 0)
-    {
-        output << cursorLeft(times);
-        times = buffer.moveCursorMaxLeft();
-    }
+    auto times = buffer.moveCursorHome();
+    output << cursorLeft(times);
 }
 
 void InputController::moveEnd()
 {
-    auto times = buffer.moveCursorMaxRight();
-
-    while(times > 0)
-    {
-        output << cursorRight(times);
-        times = buffer.moveCursorMaxRight();
-    }
+    auto times = buffer.moveCursorEnd();
+    output << cursorRight(times);
 }

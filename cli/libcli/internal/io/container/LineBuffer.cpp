@@ -58,26 +58,40 @@ bool LineBuffer::moveCursorRight()
     return true;
 }
 
-unsigned int LineBuffer::moveCursorMaxLeft()
+// unsigned int LineBuffer::moveCursorMaxLeft()
+// {
+//     auto times = etl::distance(buffer.begin(), cursor);
+
+//     if(times > MAX_CURSOR_MOVE_SIZE)
+//         times = MAX_CURSOR_MOVE_SIZE;
+
+//     cursor -= times;
+//     return times;
+// }
+
+// unsigned int LineBuffer::moveCursorMaxRight()
+// {
+//     auto times = etl::distance(cursor, buffer.end());
+    
+//     if(times > MAX_CURSOR_MOVE_SIZE)
+//         times = MAX_CURSOR_MOVE_SIZE;
+
+//     cursor += times;
+//     return times;
+// }
+
+size_t LineBuffer::moveCursorHome()
 {
-    auto times = etl::distance(buffer.begin(), cursor);
-
-    if(times > MAX_CURSOR_MOVE_SIZE)
-        times = MAX_CURSOR_MOVE_SIZE;
-
-    cursor -= times;
-    return times;
+    auto result = etl::distance(buffer.begin(), cursor);
+    cursor = buffer.begin();
+    return result;
 }
 
-unsigned int LineBuffer::moveCursorMaxRight()
+size_t LineBuffer::moveCursorEnd()
 {
-    auto times = etl::distance(cursor, buffer.end());
-    
-    if(times > MAX_CURSOR_MOVE_SIZE)
-        times = MAX_CURSOR_MOVE_SIZE;
-
-    cursor += times;
-    return times;
+    auto result = etl::distance(cursor, buffer.end());
+    cursor = buffer.end();
+    return result;
 }
 
 bool LineBuffer::remove()

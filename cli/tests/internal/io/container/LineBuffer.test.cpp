@@ -210,31 +210,26 @@ TEST(LineBufferTest, remove_OnTheEnd)
     CHECK_FALSE(buffer.remove());
 }
 
-TEST(LineBufferTest, MoveCursorMaxLeft)
+TEST(LineBufferTest, MoveCursorHome)
 {
     const char text[] = "0123456789";
     LineBuffer buffer;
     
     buffer.push(text);
-    CHECK_EQUAL(9, buffer.moveCursorMaxLeft());
-    CHECK_EQUAL(1, buffer.getCursor());
-    CHECK_EQUAL(1, buffer.moveCursorMaxLeft());
+    CHECK_EQUAL(10, buffer.moveCursorHome());
     CHECK_EQUAL(0, buffer.getCursor());
-    CHECK_EQUAL(0, buffer.moveCursorMaxLeft());
+    CHECK_EQUAL(0, buffer.moveCursorHome());
 }
 
-TEST(LineBufferTest, MoveCursorMaxRight)
+TEST(LineBufferTest, MoveCursorEnd)
 {
     const char text[] = "0123456789";
     LineBuffer buffer;
     
     buffer.push(text);
-    buffer.moveCursorMaxLeft();
-    buffer.moveCursorMaxLeft();
+    buffer.moveCursorHome();
 
-    CHECK_EQUAL(9, buffer.moveCursorMaxRight());
-    CHECK_EQUAL(9, buffer.getCursor());
-    CHECK_EQUAL(1, buffer.moveCursorMaxRight());
+    CHECK_EQUAL(10, buffer.moveCursorEnd());
     CHECK_EQUAL(10, buffer.getCursor());
-    CHECK_EQUAL(0, buffer.moveCursorMaxRight());
+    CHECK_EQUAL(0, buffer.moveCursorEnd());
 }
