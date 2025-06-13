@@ -4,7 +4,7 @@
 using namespace cli;
 using namespace cli::internal;
 
-PresenterImpl::PresenterImpl(OutputController& output, etl::string_view string, language::Dictionary dictionary)
+PresenterImpl::PresenterImpl(OutputStream& output, etl::string_view string, language::Dictionary dictionary)
     : output(output)
     , helper(output, dictionary)
     , userName("")

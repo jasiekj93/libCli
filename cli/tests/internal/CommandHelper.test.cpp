@@ -7,7 +7,7 @@
  */
 
 #include <libcli/internal/CommandHelper.hpp>
-#include <tests/mock/OutputControllerLarge.hpp>
+#include <tests/mock/OutputStreamLarge.hpp>
 #include <cstring>
 
 #include <CppUTest/CommandLineTestRunner.h>
@@ -27,7 +27,7 @@ TEST(CommandHelperTest, OnlyName)
 
     templates::Command command("hello");
 
-    mock::OutputControllerLarge output;
+    mock::OutputStreamLarge output;
     CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
@@ -42,7 +42,7 @@ TEST(CommandHelperTest, NameWithHelp)
 
     templates::Command command("hello", "This is help");
 
-    mock::OutputControllerLarge output;
+    mock::OutputStreamLarge output;
     CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
@@ -61,7 +61,7 @@ TEST(CommandHelperTest, OneArgument_Mandatory)
         { 'a', { model::Argument::Type::DECIMAL, true, "This is number" }}
     });
 
-    mock::OutputControllerLarge output;
+    mock::OutputStreamLarge output;
     CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
@@ -80,7 +80,7 @@ TEST(CommandHelperTest, OneArgument_Optional)
         { 'a', { model::Argument::Type::DECIMAL, false, "This is number" } }
     });
 
-    mock::OutputControllerLarge output;
+    mock::OutputStreamLarge output;
     CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
@@ -98,7 +98,7 @@ TEST(CommandHelperTest, OneArgument_NoCommandHelp)
         { 'a', { model::Argument::Type::DECIMAL, true, "This is number" } }
     });
 
-    mock::OutputControllerLarge output;
+    mock::OutputStreamLarge output;
     CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);
@@ -125,7 +125,7 @@ TEST(CommandHelperTest, ManyArguments)
         { 'e', { model::Argument::Type::STRING, true, "This is string" } },
     });
 
-    mock::OutputControllerLarge output;
+    mock::OutputStreamLarge output;
     CommandHelper helper(output, language::polish);
 
     helper.displayHelp(command);

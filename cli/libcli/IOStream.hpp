@@ -31,7 +31,6 @@ namespace cli
     {
     public:
         InputStream(); 
-        virtual ~InputStream() = default;
 
         InputStream& operator>>(char&);
         InputStream& operator>>(etl::istring&);

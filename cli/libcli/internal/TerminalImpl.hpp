@@ -9,11 +9,10 @@
  */
 
 #include <libcli/Terminal.hpp>
-#include <libcli/Output.hpp>
 #include <libcli/CommandObserver.hpp>
 #include <libcli/StringStream.hpp>
 #include <libcli/internal/io/InputController.hpp>
-#include <libcli/internal/io/OutputControllerExtendedImpl.hpp>
+#include <libcli/internal/io/OutputStreamExtended.hpp>
 #include <libcli/internal/CommandVerifier.hpp>
 #include <libcli/internal/PresenterImpl.hpp>
 
@@ -24,7 +23,7 @@ namespace cli::internal
         , public io::InputLineObserver
     {
     public:
-        TerminalImpl(Output&,
+        TerminalImpl(OutputStream&,
             CommandObserver&,
             etl::string_view userName,
             language::Dictionary);
@@ -41,7 +40,6 @@ namespace cli::internal
 
     protected:
         void receivedInputLineCallback(etl::string_view) override;
-        void putString(etl::string_view);
         void write(char c) override;
         void write(etl::string_view) override;
         void flush() override;
@@ -50,7 +48,7 @@ namespace cli::internal
         CommandObserver& observer;
 
         io::container::LineBufferWithMemory inputBuffer;
-        io::OutputControllerExtendedImpl outputController;
+        io::OutputStreamExtended output;
         io::InputController inputController;
         
         PresenterImpl presenter;

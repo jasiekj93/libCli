@@ -4,7 +4,7 @@
 
 using namespace cli::internal::io;
 
-InputController::InputController(OutputControllerExtended& output, 
+InputController::InputController(OutputStreamExtended& output, 
     InputLineObserver& observer,
     container::LineBufferWithMemory& buffer)
     : output(output)

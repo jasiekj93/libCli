@@ -3,7 +3,7 @@
 
 using namespace cli;
 
-std::shared_ptr<Terminal> Factory::createNewTerminal(Output& output, 
+std::shared_ptr<Terminal> Factory::createNewTerminal(OutputStream& output, 
     CommandObserver& observer, 
     etl::string_view userName,
     language::Dictionary dictionary)

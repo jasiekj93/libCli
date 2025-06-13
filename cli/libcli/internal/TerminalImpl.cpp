@@ -4,17 +4,17 @@
 using namespace cli;
 using namespace cli::internal;
 
-TerminalImpl::TerminalImpl(Output &output,
+TerminalImpl::TerminalImpl(OutputStream &out,
     CommandObserver &observer,
     etl::string_view userName,
     language::Dictionary dictionary)
     : observer(observer)
     , inputBuffer()
-    , outputController(output)
-    , inputController(outputController,
+    , output(out)
+    , inputController(output,
         *this,
         inputBuffer)
-    , presenter(outputController, userName, dictionary)
+    , presenter(output, userName, dictionary)
     , verifier(presenter)
     , inputEnabledFlag(true)
 {
@@ -61,28 +61,23 @@ etl::string_view TerminalImpl::receivedAutoCompleteCallback(etl::string_view sub
 
 void TerminalImpl::write(char c)
 {
-    putString(etl::string_view(&c, 1));
+    write(etl::string_view(&c, 1));
 }
 
 void TerminalImpl::write(etl::string_view string)
 {
-    putString(string);
+    if(isInputEnabled())
+        output << newLine;
+
+    output << string;
+
+    if(isInputEnabled())
+        enableInput();
 }
 
 void TerminalImpl::flush()
 {
     //TODO
-}
-
-void TerminalImpl::putString(etl::string_view string)
-{
-    if(isInputEnabled())
-        outputController << newLine;
-
-    outputController << string;
-
-    if(isInputEnabled())
-        enableInput();
 }
 
 void TerminalImpl::disableInput()

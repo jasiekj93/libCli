@@ -11,9 +11,9 @@
 #include <etl/string.h>
 #include <etl/span.h>
 
-#include <libcli/Output.hpp>
+#include <libcli/IOStream.hpp>
 
-class Serial : public cli::Output
+class Serial : public cli::OutputStream
 {
 public:
     Serial(std::string_view path);

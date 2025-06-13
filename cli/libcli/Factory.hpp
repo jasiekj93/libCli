@@ -14,12 +14,12 @@
 
 #include <libcli/Terminal.hpp>
 #include <libcli/CommandObserver.hpp>
-#include <libcli/Output.hpp>
+#include <libcli/IOStream.hpp>
 #include <libcli/Language.hpp>
 
 namespace cli::Factory
 {
-    std::shared_ptr<Terminal> createNewTerminal(Output&, 
+    std::shared_ptr<Terminal> createNewTerminal(OutputStream&, 
         CommandObserver&,
         etl::string_view userName = "",
         language::Dictionary = language::english);

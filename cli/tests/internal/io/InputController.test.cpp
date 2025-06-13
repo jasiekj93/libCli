@@ -7,33 +7,35 @@
  * @details
  */
 
-#include <libcli/internal/io/InputController.hpp>
-#include <tests/mock/InputLineObserver.hpp>
-#include <tests/mock/OutputControllerExtended.hpp>
 #include <cstring>
+#include <memory>
+
+#include <libcli/internal/io/InputController.hpp>
+
+#include <tests/mock/InputLineObserver.hpp>
+#include <tests/mock/OutputStreamLarge.hpp>
 
 #include <CppUTest/CommandLineTestRunner.h>
 
 using namespace cli::internal::io;
 
-mock::InputLineObserver *inputObserver;
-mock::OutputControllerExtended *output;
-container::LineBufferWithMemory *buffer;
-
 TEST_GROUP(InputControllerTest)
 {
+    std::shared_ptr<mock::InputLineObserver> inputObserver;
+    std::shared_ptr<mock::OutputStreamLarge> output;
+    std::shared_ptr<OutputStreamExtended> outputExtended;
+    std::shared_ptr<container::LineBufferWithMemory> buffer;
+
     void setup()
     {
-        inputObserver = new mock::InputLineObserver();
-        output = new mock::OutputControllerExtended();
-        buffer = new container::LineBufferWithMemory();
+        inputObserver = std::make_shared<mock::InputLineObserver>();
+        output = std::make_shared<mock::OutputStreamLarge>();
+        outputExtended = std::make_shared<OutputStreamExtended>(*output);
+        buffer = std::make_shared<container::LineBufferWithMemory>();
     }
 
     void teardown()
     {
-        delete inputObserver;
-        delete output;
-        delete buffer;
     }
 };
 
@@ -41,24 +43,24 @@ TEST(InputControllerTest, OneChar)
 {   
     char c = 'A';
 
-    InputController controller(*output, *inputObserver, *buffer);
+    InputController controller(*outputExtended, *inputObserver, *buffer);
 
     controller.receivedCharCallback(c);
 
     CHECK_EQUAL(c, (*buffer)[0]);
-    CHECK_EQUAL(c, output->base.line[0]);
+    CHECK_EQUAL(c, output->line[0]);
 }
 
 TEST(InputControllerTest, OneChar_NotPrintable)
 {
     char c = '\t';
 
-    InputController controller(*output, *inputObserver, *buffer);
+    InputController controller(*outputExtended, *inputObserver, *buffer);
 
     controller.receivedCharCallback(c);
 
     CHECK_EQUAL(0, buffer->getCount());
-    CHECK_EQUAL(0, output->base.line.getCount());
+    CHECK_EQUAL(0, output->line.size());
 }
 
 // TEST(InputControllerTest, ArrowLeft)
@@ -155,48 +157,51 @@ TEST(InputControllerTest, OneChar_NotPrintable)
 
 TEST(InputControllerTest, Backspace)
 {
-    const char expected[] = "Tex";
-    const char text[] = "Text";
+    const char expectedOutput[] = { 'T', 'e', 'x', 't', ControlChar::BACKSPACE, '\0' }; 
+    auto expectedBuffer = "Tex";
+    auto text = "Text";
 
-    InputController controller(*output, *inputObserver, *buffer);
+    InputController controller(*outputExtended, *inputObserver, *buffer);
 
     controller.receivedStringCallback(text);
     controller.receivedCharCallback(ControlChar::BACKSPACE);
 
-    STRCMP_EQUAL(expected, buffer->getData().c_str());
-    STRCMP_EQUAL(expected, output->base.line.getData().c_str());
+    STRCMP_EQUAL(expectedBuffer, buffer->getData().c_str());
+    STRCMP_EQUAL(expectedOutput, output->line.c_str());
 }
 
 TEST(InputControllerTest, Enter)
 {
+    const char expectedOutput[] = "Text\r\n";
     const char text[] = "Text";
 
-    InputController controller(*output, *inputObserver, *buffer);
+    InputController controller(*outputExtended, *inputObserver, *buffer);
 
     controller.receivedStringCallback(text);
     controller.receivedCharCallback(ControlChar::NEW_LINE);
 
     CHECK_EQUAL(0, buffer->getCount());
-    CHECK_EQUAL(0, output->base.line.getCount());
-    STRCMP_EQUAL(text, output->base.previousLine.c_str());
+    STRCMP_EQUAL(expectedOutput, output->line.c_str());
 }
 
 TEST(InputControllerTest, ArrowUp)
 {
     const char text1[] = "Text1";
     const char text2[] = "Text2";
+    const char expectedOutput[] = { 'T', 'e', 'x', 't', '1', '\r', '\n', 'T', 'e', 'x', 't', '2',  
+        ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE,
+        'T', 'e', 'x', 't', '1', '\0' };
 
     ControlSequence arrowUp(ControlSequence::Type::ARROW_UP);
 
-    InputController controller(*output, *inputObserver, *buffer);
+    InputController controller(*outputExtended, *inputObserver, *buffer);
 
     controller.receivedStringCallback(text1);
     controller.receivedCharCallback(ControlChar::NEW_LINE);
     controller.receivedStringCallback(text2);
     controller.receivedStringCallback(arrowUp.getData());
 
-    STRCMP_EQUAL(text1, output->base.previousLine.c_str());
-    STRCMP_EQUAL(text1, output->base.line.getData().c_str());
+    STRCMP_EQUAL(expectedOutput, output->line.c_str());
     STRCMP_EQUAL(text1, buffer->getData().c_str());
 }
 
@@ -204,11 +209,16 @@ TEST(InputControllerTest, ArrowDown)
 {
     const char text1[] = "Text1";
     const char text2[] = "Text2";
+    const char expectedOutput[] = { 'T', 'e', 'x', 't', '1', '\r', '\n', 'T', 'e', 'x', 't', '2',  
+        ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE,
+        'T', 'e', 'x', 't', '1', 
+        ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE, ControlChar::BACKSPACE,
+        'T', 'e', 'x', 't', '2', '\0' };
 
     ControlSequence arrowUp(ControlSequence::Type::ARROW_UP);
     ControlSequence arrowDown(ControlSequence::Type::ARROW_DOWN);
 
-    InputController controller(*output, *inputObserver, *buffer);
+    InputController controller(*outputExtended, *inputObserver, *buffer);
 
     controller.receivedStringCallback(text1);
     controller.receivedCharCallback(ControlChar::NEW_LINE);
@@ -216,7 +226,6 @@ TEST(InputControllerTest, ArrowDown)
     controller.receivedStringCallback(arrowUp.getData());
     controller.receivedStringCallback(arrowDown.getData());
 
-    STRCMP_EQUAL(text1, output->base.previousLine.c_str());
-    STRCMP_EQUAL(text2, output->base.line.getData().c_str());
+    STRCMP_EQUAL(expectedOutput, output->line.c_str());
     STRCMP_EQUAL(text2, buffer->getData().c_str());
 }

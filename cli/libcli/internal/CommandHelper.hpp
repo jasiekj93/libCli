@@ -9,7 +9,7 @@
  */
 
 #include <libcli/templates/Command.hpp>
-#include <libcli/OutputController.hpp>
+#include <libcli/IOStream.hpp>
 #include <libcli/Language.hpp>
 
 namespace cli::internal
@@ -17,7 +17,7 @@ namespace cli::internal
     class CommandHelper
     {
     public:
-        CommandHelper(OutputController&, language::Dictionary = language::english);
+        CommandHelper(OutputStream&, language::Dictionary = language::english);
 
         void displayHelp(const templates::Command&);
 
@@ -29,7 +29,7 @@ namespace cli::internal
         void printArgumentType(const templates::Argument&);
     
     private:
-        OutputController& output;
+        OutputStream& output;
         language::Dictionary dictionary;
     };
 }

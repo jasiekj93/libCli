@@ -4,7 +4,7 @@
 using namespace cli;
 using namespace cli::internal;
 
-CommandHelper::CommandHelper(OutputController& output, language::Dictionary dictionary)
+CommandHelper::CommandHelper(OutputStream& output, language::Dictionary dictionary)
     : output(output)
     , dictionary(dictionary)
 {
