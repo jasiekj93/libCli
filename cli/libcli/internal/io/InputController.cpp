@@ -27,9 +27,11 @@ void InputController::receivedCharCallback(char c)
             if(not buffer.isCursorAtEnd())
             {
                 output << buffer.getDataAfterCursor();
-                output << cursorLeft(buffer.getCursorCount());
+
+                auto count = buffer.getCursorCount();
+                for(unsigned int i = 0; i < count; ++i)
+                    output << cursorLeft();
             }
-            
         }
     }
 }
@@ -147,10 +149,10 @@ bool InputController::processControlSequenceByType()
                 output << cursorRight();
             break;
         case ControlSequence::Type::END:
-            // moveEnd();
+            moveEnd();
             break;
         case ControlSequence::Type::HOME:
-            // moveHome();
+            moveHome();
             break;
         case ControlSequence::Type::ARROW_UP:
             if(buffer.hasPrevious() == true)
@@ -177,28 +179,22 @@ bool InputController::processControlSequenceByType()
 
 void InputController::moveHome()
 {
-    while(buffer.moveCursorLeft())
-        output << cursorLeft();
+    auto times = buffer.moveCursorMaxLeft();
 
-    // auto times = buffer.moveCursorMaxLeft();
-
-    // while(times != 0)
-    // {
-    //     output << cursorLeft(times);
-    //     times = buffer.moveCursorMaxLeft();
-    // }
+    while(times > 0)
+    {
+        output << cursorLeft(times);
+        times = buffer.moveCursorMaxLeft();
+    }
 }
 
 void InputController::moveEnd()
 {
-    while(buffer.moveCursorRight())
-        output << cursorRight();
+    auto times = buffer.moveCursorMaxRight();
 
-    // auto times = buffer.moveCursorMaxRight();
-
-    // while(times != 0)
-    // {
-    //     output << cursorRight(times);
-    //     times = buffer.moveCursorMaxRight();
-    // }
+    while(times > 0)
+    {
+        output << cursorRight(times);
+        times = buffer.moveCursorMaxRight();
+    }
 }
