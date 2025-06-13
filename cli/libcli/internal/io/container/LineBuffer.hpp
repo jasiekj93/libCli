@@ -38,6 +38,10 @@ namespace cli::internal::io::container
         inline const auto getCount() const { return buffer.size(); }
         inline const auto getCursor() const { return etl::distance(buffer.begin(), (const char*)cursor); }
 
+        etl::string_view getDataAfterCursor() const;
+        inline bool isCursorAtEnd() const { return cursor == buffer.end(); }
+        inline const auto getCursorCount() const { return etl::distance((const char*)cursor, buffer.end()); }
+
         inline auto operator[](size_t i) const { return buffer[i]; }
 
     protected:

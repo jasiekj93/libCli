@@ -95,10 +95,10 @@ TEST(LineBufferTest, MoveCursorLeft)
     CHECK(buffer.moveCursorLeft());
     buffer.push(b);
 
-    CHECK_EQUAL(1, buffer.getCount());
+    CHECK_EQUAL(2, buffer.getCount());
     CHECK_EQUAL(1, buffer.getCursor());
     CHECK_EQUAL(b, buffer[0]);
-    CHECK_EQUAL('\0', buffer[1]);
+    CHECK_EQUAL(a, buffer[1]);
 }
 
 TEST(LineBufferTest, MoveCursorLeft_IsEmpty)

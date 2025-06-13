@@ -21,7 +21,16 @@ void InputController::receivedCharCallback(char c)
     if(std::isprint(c))
     {
         if(buffer.push(c) == true)
+        {
             output << c;
+
+            if(not buffer.isCursorAtEnd())
+            {
+                output << buffer.getDataAfterCursor();
+                output << cursorLeft(buffer.getCursorCount());
+            }
+            
+        }
     }
 }
 
@@ -129,20 +138,20 @@ bool InputController::processControlSequenceByType()
             if(buffer.remove() == true)
                 output << deleteChar();
             break;
-        // case ControlSequence::Type::ArrowLeft:
-        //     if(_buffer.MoveCursorLeft() == true)
-        //         _output.MoveCursorLeft();
-        //     break;
-        // case ControlSequence::Type::ArrowRight:
-        //     if (_buffer.MoveCursorRight() == true)
-        //         _output.MoveCursorRight();
-        //     break;
-        // case ControlSequence::Type::End:
-        //     _MoveEnd();
-        //     break;
-        // case ControlSequence::Type::Home:
-        //     _MoveHome();
-        //     break;
+        case ControlSequence::Type::ARROW_LEFT:
+            if(buffer.moveCursorLeft())
+                output << cursorLeft();
+            break;
+        case ControlSequence::Type::ARROW_RIGHT:
+            if (buffer.moveCursorRight())
+                output << cursorRight();
+            break;
+        case ControlSequence::Type::END:
+            // moveEnd();
+            break;
+        case ControlSequence::Type::HOME:
+            // moveHome();
+            break;
         case ControlSequence::Type::ARROW_UP:
             if(buffer.hasPrevious() == true)
             {
@@ -168,28 +177,28 @@ bool InputController::processControlSequenceByType()
 
 void InputController::moveHome()
 {
-    // while(_buffer.MoveCursorLeft())
-    //     _output.MoveCursorLeft();
+    while(buffer.moveCursorLeft())
+        output << cursorLeft();
 
-    auto times = buffer.moveCursorMaxLeft();
+    // auto times = buffer.moveCursorMaxLeft();
 
-    while(times != 0)
-    {
-        output << cursorLeft(times);
-        times = buffer.moveCursorMaxLeft();
-    }
+    // while(times != 0)
+    // {
+    //     output << cursorLeft(times);
+    //     times = buffer.moveCursorMaxLeft();
+    // }
 }
 
 void InputController::moveEnd()
 {
-    // while(_buffer.MoveCursorRight())
-    //     _output.MoveCursorRight();
+    while(buffer.moveCursorRight())
+        output << cursorRight();
 
-    auto times = buffer.moveCursorMaxRight();
+    // auto times = buffer.moveCursorMaxRight();
 
-    while(times != 0)
-    {
-        output << cursorRight(times);
-        times = buffer.moveCursorMaxRight();
-    }
+    // while(times != 0)
+    // {
+    //     output << cursorRight(times);
+    //     times = buffer.moveCursorMaxRight();
+    // }
 }

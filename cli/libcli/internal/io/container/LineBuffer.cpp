@@ -15,8 +15,10 @@ bool LineBuffer::push(char c)
 
     if(cursor == buffer.end())
         buffer.push_back(c);
+    // else
+        // *cursor = c;
     else
-        *cursor = c;
+        cursor = buffer.insert(cursor, c);
 
     cursor++;
     return true;
@@ -87,7 +89,12 @@ bool LineBuffer::remove()
     return true;
 }
 
-void LineBuffer::copyTo(etl::istring& output) const
+etl::string_view LineBuffer::getDataAfterCursor() const
+{
+    return etl::string_view(cursor, buffer.end());
+}
+
+void LineBuffer::copyTo(etl::istring &output) const
 {
     output = buffer;
 }
