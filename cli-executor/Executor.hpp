@@ -19,7 +19,7 @@ public:
     void setTerminal(const std::shared_ptr<cli::Terminal>&);
 
 protected:
-    void executeCommand(std::string_view command);
+    void executeCommand(std::string_view command, etl::string_view name,  cli::InputStream&, cli::OutputStream&);
 
 private:
     std::shared_ptr<cli::Terminal> terminal;

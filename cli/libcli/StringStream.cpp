@@ -14,7 +14,7 @@ void StringStream::write(etl::string_view str)
 
 size_t StringStream::size() const
 {
-    return buffer.max_size();
+    return buffer.size();
 }
 
 bool StringStream::readFrom(char& c, size_t position)

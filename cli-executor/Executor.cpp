@@ -35,7 +35,7 @@ void Executor::receivedCommandCallback(const cli::model::Command& command,
         cmd += ' ';
     }
 
-    executeCommand(cmd);
+    executeCommand(cmd, command.getName(), input, output);
 }
 
 void Executor::setTerminal(const std::shared_ptr<cli::Terminal>& term)
@@ -44,13 +44,21 @@ void Executor::setTerminal(const std::shared_ptr<cli::Terminal>& term)
     terminal->templates() = templates;  // Set the command templates in the terminal
 }
 
-void Executor::executeCommand(std::string_view command)
+void Executor::executeCommand(std::string_view command, etl::string_view name, cli::InputStream& in, cli::OutputStream& out)
 {
+    etl::string<2048> inputBuffer;
+    in >> inputBuffer;
+
+    out << "Executing command: " << name << cli::newLine;
+    out << name << " in: " << cli::newLine 
+        << inputBuffer << cli::newLine
+        << name << " out: " << cli::newLine;
+
     FILE* pipe = popen(command.data(), "r");
 
     if (not pipe)
     {
-        *terminal << "Failed to execute command" << cli::newLine;
+        out << "Failed to execute command" << cli::newLine;
         return;
     }
 
@@ -67,7 +75,7 @@ void Executor::executeCommand(std::string_view command)
     pclose(pipe);
 
     result = replaceNewlineWithCarriageReturn(result);
-    *terminal << result.c_str();
+    out << result.c_str();
 }
 
 static std::string replaceNewlineWithCarriageReturn(std::string input)

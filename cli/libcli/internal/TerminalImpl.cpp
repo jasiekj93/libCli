@@ -34,10 +34,37 @@ void TerminalImpl::receivedStringCallback(const char *string)
 
 void TerminalImpl::receivedInputLineCallback(etl::string_view line)
 {
-    InputStream& input = stream1;
-    OutputStream& output = stream2;
+    IOStream* in = &stream1;
+    IOStream* out = &stream2;
 
-    model::Command command(line);
+    auto start = 0;
+    auto end = line.find('|', start);
+
+    while (end != etl::string_view::npos)
+    {
+        model::Command command(line.substr(start, end - start));
+
+        if(command.isNull())
+        {
+            presenter.prompt(false);
+            return;
+        }
+
+        if(verifier.verify(command) == false)
+            return;
+
+        inputEnabledFlag = false;
+        observer.receivedCommandCallback(command, *in, *out);
+        //TODO zabezpieczenie flag
+
+        start = end + 1;
+        start = line.find_first_not_of(' ', start);
+        end = line.find('|', start);
+        std::swap(in, out);
+        in->seekg(0);
+    }
+
+    model::Command command(line.substr(start, line.size() - start));
 
     if(command.isNull())
     {
@@ -49,7 +76,7 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
         return;
 
     inputEnabledFlag = false;
-    observer.receivedCommandCallback(command, input, output);
+    observer.receivedCommandCallback(command, *in, *this);
     presenter.prompt();
     inputEnabledFlag = true;
 }
