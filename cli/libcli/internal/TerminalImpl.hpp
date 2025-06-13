@@ -44,6 +44,7 @@ namespace cli::internal
         void write(etl::string_view) override;
         void flush() override;
         bool executeCommand(const model::Command&, InputStream&, OutputStream&);
+        void cleanAfterExecutions();
 
     private:
         CommandObserver& observer;
@@ -54,7 +55,7 @@ namespace cli::internal
         
         PresenterImpl presenter;
         CommandVerifier verifier;
-        StringStream stream1, stream2;
+        StringStream streams[2];
         bool inputEnabledFlag;
     };
 }

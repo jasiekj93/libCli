@@ -34,8 +34,11 @@ void TerminalImpl::receivedStringCallback(const char *string)
 
 void TerminalImpl::receivedInputLineCallback(etl::string_view line)
 {
-    IOStream* in = &stream1;
-    IOStream* out = &stream2;
+    if(line.empty())
+        return presenter.prompt(false);
+
+    IOStream* in = &streams[0];
+    IOStream* out = &streams[1];
 
     auto start = 0;
     auto end = line.find('|', start);
@@ -44,11 +47,7 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
     {
         model::Command command(line.substr(start, end - start));
         if(not executeCommand(command, *in, *out))
-        {
-            presenter.prompt(false);
-            inputEnabledFlag = true;
-            return;
-        }
+            return cleanAfterExecutions();
 
         start = end + 1;
         start = line.find_first_not_of(' ', start);
@@ -58,9 +57,10 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
     }
 
     model::Command command(line.substr(start, line.size() - start));
-    auto result = executeCommand(command, *in, *this);
-    presenter.prompt(result);
-    inputEnabledFlag = true;
+    if(executeCommand(command, *in, *this))
+        presenter.prompt();
+
+    return cleanAfterExecutions();
 }
 
 etl::string_view TerminalImpl::receivedAutoCompleteCallback(etl::string_view substring)
@@ -103,6 +103,15 @@ bool TerminalImpl::executeCommand(const model::Command& command, InputStream& in
     inputEnabledFlag = false;
     observer.receivedCommandCallback(command, in, out);
     return true;
+}
+
+void TerminalImpl::cleanAfterExecutions()
+{
+    inputEnabledFlag = true;
+    for(auto& stream : streams)
+    {
+        stream.clear();
+    }
 }
 
 void TerminalImpl::disableInput()

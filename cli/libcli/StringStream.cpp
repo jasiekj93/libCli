@@ -17,6 +17,12 @@ size_t StringStream::size() const
     return buffer.size();
 }
 
+void StringStream::clear()
+{
+    buffer.clear();
+    seekg(0);
+}
+
 bool StringStream::readFrom(char& c, size_t position)
 {
     if (position >= buffer.size())
