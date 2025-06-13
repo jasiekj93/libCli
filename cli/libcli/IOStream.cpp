@@ -20,9 +20,11 @@ OutputStream& OutputStream::operator<<(const formatspec::Base& format)
     {
     case formatspec::Type::NEW_LINE:
         write("\r\n");
+        flush();
         break;
     case formatspec::Type::CLEAR_SCREEN:
         write('\f');
+        flush();
         break;
     case formatspec::Type::FLUSH:
         flush();
