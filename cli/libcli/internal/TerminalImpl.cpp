@@ -34,8 +34,6 @@ void TerminalImpl::receivedStringCallback(const char *string)
 
 void TerminalImpl::receivedInputLineCallback(etl::string_view line)
 {
-    output << "Enter: " << line << newLine;
-
     if(line.empty())
         return presenter.prompt(false);
 
@@ -49,10 +47,7 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
     {
         model::Command command(line.substr(start, end - start));
         if(not executeCommand(command, *in, *out))
-        {
-            output << "not a commend" << newLine;
             return cleanAfterExecutions();
-        }
 
         start = end + 1;
         start = line.find_first_not_of(' ', start);
