@@ -1,13 +1,16 @@
 #include "Executor.hpp"
-#include <cstdio>  // For popen and fgets
-#include <memory>  // For std::shared_ptr
-#include <string>  // For std::string
+#include "Donut.hpp"
+
+#include <cstdio>  
+#include <memory>  
+#include <string>  
 
 static std::string replaceNewlineWithCarriageReturn(std::string input);
 
 Executor::Executor()
     : terminal(nullptr)
 {
+    templates["donut"] = cli::templates::Command("donut", "Display a rotating donut");
     templates["pwd"] = cli::templates::Command("pwd", "Print working directory");
     templates["whoami"] = cli::templates::Command("whoami", "Print current user name");
     templates["clear"] = cli::templates::Command("clear", "Clear the terminal screen");
@@ -46,6 +49,12 @@ void Executor::setTerminal(const std::shared_ptr<cli::Terminal>& term)
 
 void Executor::executeCommand(std::string_view command, etl::string_view name, cli::InputStream& in, cli::OutputStream& out)
 {
+    if(name == "donut")
+    {
+        donut(out);
+        return;
+    }
+
     etl::string<2048> inputBuffer;
     in >> inputBuffer;
 
