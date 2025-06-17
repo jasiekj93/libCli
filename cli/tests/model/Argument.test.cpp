@@ -21,39 +21,31 @@ TEST_GROUP(ArgumentTest)
 
 TEST(ArgumentTest, DefaultConstuctor)
 {
-    double d;
-    unsigned long long ul;
-
     Argument arg;
 
     CHECK(Argument::Type::EMPTY == arg.getType());
     CHECK_EQUAL(Argument::INVALID_NAME, arg.getName());
     CHECK(nullptr == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK_FALSE(arg.asHex(ul));
-    CHECK_FALSE(arg.asDouble(d));
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK_FALSE(arg.asHex().has_value());
+    CHECK_FALSE(arg.asDouble().has_value());
 }
 
 TEST(ArgumentTest, NullPointer)
 {
-    double d;
-    unsigned long long ul;
     char name = 'a';
-
     Argument arg(name, nullptr);
 
     CHECK(Argument::Type::EMPTY == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(nullptr == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK_FALSE(arg.asHex(ul));
-    CHECK_FALSE(arg.asDouble(d));
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK_FALSE(arg.asHex().has_value());
+    CHECK_FALSE(arg.asDouble().has_value());
 }
 
-TEST(ArgumentTest, DECIMAL)
+TEST(ArgumentTest, Decimal)
 {
-    double d;
-    unsigned long ul;
     char name = 'a';
     char stringNumber[] = "5423876";
     unsigned long number = 5423876;
@@ -65,18 +57,16 @@ TEST(ArgumentTest, DECIMAL)
     CHECK(Argument::Type::DECIMAL == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK(arg.asDecimal(ul));
-    CHECK_EQUAL(ul, number);
-    CHECK(arg.asHex(ul));
-    CHECK_EQUAL(ul, hexNumber);
-    CHECK(arg.asDouble(d));
-    CHECK_EQUAL(doubleNumber, d);
+    CHECK(arg.asDecimal().has_value());
+    CHECK_EQUAL(arg.asDecimal().value(), number);
+    CHECK(arg.asHex().has_value());
+    CHECK_EQUAL(arg.asHex().value(), hexNumber);
+    CHECK(arg.asDouble().has_value());
+    CHECK_EQUAL(arg.asDouble().value(), doubleNumber);
 }
 
 TEST(ArgumentTest, Hex_WithPrefix)
 {
-    double d;
-    unsigned long ul;
     char name = 'a';
     char stringNumber[] = "0x5423876";
     unsigned long hexNumber = 0x5423876;
@@ -86,16 +76,14 @@ TEST(ArgumentTest, Hex_WithPrefix)
     CHECK(Argument::Type::HEX == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK(arg.asHex(ul));
-    CHECK_EQUAL(ul, hexNumber);
-    CHECK_FALSE(arg.asDouble(d));
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK(arg.asHex().has_value());
+    CHECK_EQUAL(arg.asHex().value(), hexNumber);
+    CHECK_FALSE(arg.asDouble().has_value());
 }
 
 TEST(ArgumentTest, Hex_WithLetters)
 {
-    double d;
-    unsigned long ul;
     char name = 'a';
     char stringNumber[] = "54238FC";
     unsigned long hexNumber = 0x54238FC;
@@ -105,10 +93,10 @@ TEST(ArgumentTest, Hex_WithLetters)
     CHECK(Argument::Type::HEX == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK(arg.asHex(ul));
-    CHECK_EQUAL(ul, hexNumber);
-    CHECK_FALSE(arg.asDouble(d));
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK(arg.asHex().has_value());
+    CHECK_EQUAL(arg.asHex().value(), hexNumber);
+    CHECK_FALSE(arg.asDouble().has_value());
 }
 
 TEST(ArgumentTest, NotAHex)
@@ -123,15 +111,13 @@ TEST(ArgumentTest, NotAHex)
     CHECK(Argument::Type::STRING == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK_FALSE(arg.asHex(ul));
-    CHECK_FALSE(arg.asDouble(d));
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK_FALSE(arg.asHex().has_value());
+    CHECK_FALSE(arg.asDouble().has_value());
 }
 
-TEST(ArgumentTest, STRING)
+TEST(ArgumentTest, String)
 {
-    double d;
-    unsigned long ul;
     char name = 'a';
     char stringNumber[] = "Hello";
 
@@ -140,15 +126,13 @@ TEST(ArgumentTest, STRING)
     CHECK(Argument::Type::STRING == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK_FALSE(arg.asHex(ul));
-    CHECK_FALSE(arg.asDouble(d));
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK_FALSE(arg.asHex().has_value());
+    CHECK_FALSE(arg.asDouble().has_value());
 }
 
-TEST(ArgumentTest, DOUBLE)
+TEST(ArgumentTest, Double)
 {
-    double d;
-    unsigned long ul;
     char name = 'a';
     char stringNumber[] = "55.12345";
     double number = 55.12345;
@@ -158,16 +142,14 @@ TEST(ArgumentTest, DOUBLE)
     CHECK(Argument::Type::DOUBLE == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK_FALSE(arg.asHex(ul));
-    CHECK(arg.asDouble(d));
-    CHECK_EQUAL(number, d);
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK_FALSE(arg.asHex().has_value());
+    CHECK(arg.asDouble().has_value());
+    CHECK_EQUAL(number, arg.asDouble().value());
 }
 
 TEST(ArgumentTest, Double_TwoDots)
 {
-    double d;
-    unsigned long ul;
     char name = 'a';
     char stringNumber[] = "55.123.45";
 
@@ -176,15 +158,13 @@ TEST(ArgumentTest, Double_TwoDots)
     CHECK(Argument::Type::STRING == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK_FALSE(arg.asHex(ul));
-    CHECK_FALSE(arg.asDouble(d));
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK_FALSE(arg.asHex().has_value());
+    CHECK_FALSE(arg.asDouble().has_value());
 }
 
 TEST(ArgumentTest, Double_DotAtBeginning)
 {
-    double d;
-    unsigned long ul;
     char name = 'a';
     char stringNumber[] = ".45";
     double number = 0.45;
@@ -194,16 +174,14 @@ TEST(ArgumentTest, Double_DotAtBeginning)
     CHECK(Argument::Type::DOUBLE == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK_FALSE(arg.asHex(ul));
-    CHECK(arg.asDouble(d));
-    CHECK_EQUAL(number, d);
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK_FALSE(arg.asHex().has_value());
+    CHECK(arg.asDouble().has_value());
+    CHECK_EQUAL(number, arg.asDouble().value());
 }
 
 TEST(ArgumentTest, Double_DotAtEnd)
 {
-    double d;
-    unsigned long ul;
     char name = 'a';
     char stringNumber[] = "45.";
     double number = 45;
@@ -213,8 +191,8 @@ TEST(ArgumentTest, Double_DotAtEnd)
     CHECK(Argument::Type::DOUBLE == arg.getType());
     CHECK_EQUAL(name, arg.getName());
     CHECK(stringNumber == arg.asString());
-    CHECK_FALSE(arg.asDecimal(ul));
-    CHECK_FALSE(arg.asHex(ul));
-    CHECK(arg.asDouble(d));
-    CHECK_EQUAL(number, d);
+    CHECK_FALSE(arg.asDecimal().has_value());
+    CHECK_FALSE(arg.asHex().has_value());
+    CHECK(arg.asDouble().has_value());
+    CHECK_EQUAL(number, arg.asDouble().value());
 }

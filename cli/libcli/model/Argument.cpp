@@ -10,83 +10,83 @@ Argument::Argument()
     , value("")
     , type(Type::EMPTY)
 {
-
 }
 
 Argument::Argument(char c, etl::string_view val)
     : name(c)
     , value("")
+    , type(Type::EMPTY)
 {
-    if(val != nullptr)
+    if(val.data() == nullptr)
+        return;
+    else
         value = val;
-
-    unsigned long long output;
 
     if(value.empty())
         type = Type::EMPTY;
-    else if(asDecimal(output) == true)
+    else if(isDecimal())
         type = Type::DECIMAL;
-    else if(asHex(output) == true)
+    else if(isHex())
         type = Type::HEX;
-    else if(asDouble((double &)output) == true)
+    else if(isDouble())
         type = Type::DOUBLE;
     else
         type = Type::STRING;
 }
 
-bool Argument::asDecimal(unsigned long &output) const
+std::optional<unsigned long> Argument::asDecimal() const
 {
-    if(isDecimal() == false)
-        return false;
+    if(not isDecimal())
+        return std::nullopt;
 
     char *end;
-    output = std::strtoul(value.data(), &end, 10);
+    auto output = std::strtoul(value.data(), &end, 10);
 
-    return (value.data() != end);
+    return ((value.data() != end) ? std::optional<unsigned long>(output) : std::nullopt);
 }
 
-bool Argument::asDecimal(unsigned long long &output) const
+std::optional<unsigned long long> Argument::asLongDecimal() const
 {
-    if(isDecimal() == false)
-        return false;
+    if(not isDecimal())
+        return std::nullopt;
 
     char *end;
-    output = std::strtoull(value.data(), &end, 10);
+    auto output = std::strtoull(value.data(), &end, 10);
 
-    return (value.data() != end);
+    return ((value.data() != end) ? std::optional<unsigned long long>(output) : std::nullopt);
 }
 
-bool Argument::asHex(unsigned long &output) const
+std::optional<unsigned long> Argument::asHex() const
 {
-    if(isHex() == false)
-        return false;
+    if(not isHex())
+        return std::nullopt;
 
     char *end;
-    output = std::strtoul(value.data(), &end, 16);
+    auto output = std::strtoul(value.data(), &end, 16);
 
-    return (value.data() != end);
+    return ((value.data() != end) ? std::optional<unsigned long>(output) : std::nullopt);
 }
 
-bool Argument::asHex(unsigned long long &output) const
+std::optional<unsigned long long> Argument::asLongHex() const
 {
-    if(isHex() == false)
-        return false;
+    if(not isHex())
+        return std::nullopt;
 
     char *end;
-    output = std::strtoull(value.data(), &end, 16);
+    auto output = std::strtoull(value.data(), &end, 16);
 
-    return (value.data() != end);
+    return ((value.data() != end) ? std::optional<unsigned long long>(output) : std::nullopt);
 }
 
-bool Argument::asDouble(double &output) const
+std::optional<double> Argument::asDouble() const
 {
-    if(isDouble() == false)
-        return false;
+    if(not isDouble())
+        return std::nullopt;
 
     char *end;
-    output = std::strtod(value.data(), &end);
+    auto output = std::strtod(value.data(), &end);
 
-    return (value.data() != end);
+    return ((value.data() != end) ? std::optional<double>(output) : std::nullopt);
 }
 
 bool Argument::containsHexPrefix() const
@@ -127,7 +127,6 @@ bool Argument::isHex() const
     
     if(containsHexPrefix() == true)
         pointer += 2;
-
 
     for(auto it = pointer; it != value.end(); ++it)
     {

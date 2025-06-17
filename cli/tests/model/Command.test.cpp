@@ -128,7 +128,6 @@ TEST(CommandTest, TwoArguments)
 {
     const char text[] = "hello -aarg -u5F";
     const char expectedName[] = "hello";
-    unsigned long hex;
 
     Command command(text);
 
@@ -142,8 +141,8 @@ TEST(CommandTest, TwoArguments)
 
     CHECK(command.getArguments().contains('u'));
     CHECK(Argument::Type::HEX == command.getArguments().at('u').getType());
-    CHECK(command.getArguments().at('u').asHex(hex));
-    CHECK_EQUAL(0x5F, hex);
+    CHECK(command.getArguments().at('u').asHex().has_value());
+    CHECK_EQUAL(0x5F, command.getArguments().at('u').asHex().value());
 }
 
 TEST(CommandTest, TwoArguments_OneEmpty)

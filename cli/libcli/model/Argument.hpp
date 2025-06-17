@@ -8,6 +8,8 @@
  * @details
  */
 
+#include <optional>
+
 #include <etl/string.h> 
 
 namespace cli::model
@@ -32,11 +34,11 @@ namespace cli::model
         inline auto getName() const { return name; }
         inline auto getType() const { return type; }
 
-        bool asDecimal(unsigned long &) const;
-        bool asDecimal(unsigned long long &) const;
-        bool asHex(unsigned long &) const;
-        bool asHex(unsigned long long &) const; 
-        bool asDouble(double &) const;
+        std::optional<unsigned long> asDecimal() const;
+        std::optional<unsigned long long> asLongDecimal() const;
+        std::optional<unsigned long> asHex() const;
+        std::optional<unsigned long long> asLongHex() const; 
+        std::optional<double> asDouble() const;
 
         inline auto asString() const { return value; }
 
