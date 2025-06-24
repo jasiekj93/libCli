@@ -30,6 +30,6 @@ bool Argument::operator==(const Argument& arg) const
 
 bool Argument::operator!=(const Argument& arg) const
 {
-    return ((*this == arg) == false);
+    return (not (*this == arg));
 }
 

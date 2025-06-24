@@ -48,7 +48,7 @@ void PresenterImpl::help(const templates::Command& command)
 
 void PresenterImpl::prompt(bool addNewLine)
 {
-    if(addNewLine == true)
+    if(addNewLine)
         output << newLine;
 
     output << userName.data() << PROMPT_CHAR << ' ';

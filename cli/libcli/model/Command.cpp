@@ -19,10 +19,10 @@ Command::Command(etl::string_view string)
 
     std::strcpy(buffer.data(), string.data());
 
-    if(findName() == false)
+    if(not findName())
         return;
 
-    if(findArguments() == false)
+    if(not findArguments())
         arguments.clear();
 }
 

@@ -57,7 +57,7 @@ void TerminalImpl::receivedInputLineCallback(etl::string_view line)
     }
 
     model::Command command(line.substr(start, line.size() - start));
-    if(executeCommand(command, *in, *this))
+    if(executeCommand(command, *in, this->output))
         presenter.prompt();
 
     return cleanAfterExecutions();
@@ -97,7 +97,7 @@ bool TerminalImpl::executeCommand(const model::Command& command, InputStream& in
         return false;
     }
 
-    if(verifier.verify(command) == false)
+    if(not verifier.verify(command))
         return false;
 
     inputEnabledFlag = false;
@@ -108,10 +108,9 @@ bool TerminalImpl::executeCommand(const model::Command& command, InputStream& in
 void TerminalImpl::cleanAfterExecutions()
 {
     inputEnabledFlag = true;
+
     for(auto& stream : streams)
-    {
         stream.clear();
-    }
 }
 
 void TerminalImpl::disableInput()

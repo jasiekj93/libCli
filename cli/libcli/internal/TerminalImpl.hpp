@@ -43,6 +43,7 @@ namespace cli::internal
         void write(char c) override;
         void write(etl::string_view) override;
         void flush() override;
+
         bool executeCommand(const model::Command&, InputStream&, OutputStream&);
         void cleanAfterExecutions();
 

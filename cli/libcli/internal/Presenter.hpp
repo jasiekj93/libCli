@@ -17,7 +17,7 @@ namespace cli::internal
     class Presenter
     {
     public:
-        virtual ~Presenter() {}
+        virtual ~Presenter() = default;
 
         virtual void unknownCommand(etl::string_view) = 0;
         virtual void noMandatoryArguments(char argument, const templates::Command&) = 0;

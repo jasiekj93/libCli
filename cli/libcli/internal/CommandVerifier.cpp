@@ -13,13 +13,13 @@ CommandVerifier::CommandVerifier(Presenter &presenter)
 
 bool CommandVerifier::verify(const model::Command &command)
 {
-    if(buffer.contains(command.getName()) == false)
+    if(not buffer.contains(command.getName()))
     {
         presenter.unknownCommand(command.getName().data());
         return false;
     }
 
-    if(checkMandatoryArguments(command) == false)
+    if(not checkMandatoryArguments(command))
         return false;
         
     return checkOptionalArguments(command);

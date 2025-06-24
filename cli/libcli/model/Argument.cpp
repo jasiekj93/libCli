@@ -109,7 +109,7 @@ bool Argument::operator==(const Argument &arg) const
 
 bool Argument::isDecimal() const
 {
-    if(containsHexPrefix() == true)
+    if(containsHexPrefix())
         return false;
 
     for(auto& c : value)
@@ -125,7 +125,7 @@ bool Argument::isHex() const
 {
     auto pointer = value.begin();
     
-    if(containsHexPrefix() == true)
+    if(containsHexPrefix())
         pointer += 2;
 
     for(auto it = pointer; it != value.end(); ++it)
@@ -139,7 +139,7 @@ bool Argument::isHex() const
 
 bool Argument::isDouble() const
 {
-    if(containsHexPrefix() == true)
+    if(containsHexPrefix())
         return false;
 
     auto dotCount = 0U;

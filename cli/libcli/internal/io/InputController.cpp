@@ -174,7 +174,7 @@ bool InputController::processControlSequenceByType()
             moveHome();
             break;
         case ControlSequence::Type::ARROW_UP:
-            if(buffer.hasPrevious() == true)
+            if(buffer.hasPrevious())
             {
                 clearLine();
                 buffer.setPrevious();
@@ -182,7 +182,7 @@ bool InputController::processControlSequenceByType()
             }
             break;
         case ControlSequence::Type::ARROW_DOWN:
-            if(buffer.hasNext() == true)
+            if(buffer.hasNext())
             {
                 clearLine();
                 buffer.setNext();
